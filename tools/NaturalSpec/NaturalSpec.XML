@@ -2,9 +2,6 @@
 <doc>
 <assembly><name>NaturalSpec</name></assembly>
 <members>
-<member name="T:AssemblyInfo">
-
-</member>
 <member name="">
 
 </member>
@@ -60,6 +57,49 @@
 
 </member>
 <member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:NaturalSpec.AssemblyInfo">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="P:NaturalSpec.Expectations.expectations">
+<summary>
+ All expectations
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="M:NaturalSpec.Expectations.findScenario">
+<summary>
+ Try to find scenario in call stack
+</summary>
+</member>
+<member name="T:NaturalSpec.Expectations">
 
 </member>
 <member name="M:NaturalSpec.File.same_file_as(System.String,System.String)">
@@ -73,6 +113,24 @@
 </summary>
 </member>
 <member name="T:NaturalSpec.File">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:NaturalSpec.IlHelper">
 
 </member>
 <member name="M:NaturalSpec.Math.calculating``2(Microsoft.FSharp.Core.FSharpFunc`2{``0,``1},``0)">
@@ -109,6 +167,48 @@
 
 </member>
 <member name="T:NaturalSpec.Math">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:NaturalSpec.Mock">
 
 </member>
 <member name="M:NaturalSpec.SequenceFunctions.contain_no_other_elements_than``2(System.Collections.Generic.IEnumerable{``0},``1)">
@@ -237,13 +337,6 @@
  Use it as in &quot;|&gt; It should equal 5&quot;              
 </summary>
 </member>
-<member name="M:NaturalSpec.Syntax.called``2(System.String,``0,``1)">
-<summary>
- Fluid helper - prints &quot;called &quot;
- Tests for boolean condition
- Use it as in &quot;|&gt; It should have called&quot;  
-</summary>
-</member>
 <member name="M:NaturalSpec.Syntax.have``1(Microsoft.FSharp.Core.FSharpFunc`2{``0,System.Boolean},``0)">
 <summary>
  Fluid helper - prints &quot;have &quot;
@@ -256,6 +349,11 @@
  Fluid helper - prints &quot;be &quot;
  Tests for boolean condition
  Use it as in &quot;|&gt; It should be true&quot;    
+</summary>
+</member>
+<member name="M:NaturalSpec.Syntax.castingAs``1(System.Object)">
+<summary>
+ Fluid helper - prints &quot;casting as type &quot;
 </summary>
 </member>
 <member name="M:NaturalSpec.Syntax.equal``1(``0,``0)">
@@ -322,16 +420,6 @@
 <member name="M:NaturalSpec.Syntax.initScenario">
 <summary>
  Inits a scenario    
-</summary>
-</member>
-<member name="M:NaturalSpec.Syntax.calling``1(System.String,``0)">
-<summary>
- Register a expected call
-</summary>
-</member>
-<member name="P:NaturalSpec.Syntax.calls">
-<summary>
- Calls  
 </summary>
 </member>
 <member name="M:NaturalSpec.Syntax.printMethod(System.Object)">
