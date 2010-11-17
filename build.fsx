@@ -5,7 +5,7 @@ open Fake.MSBuild
 
 (* properties *)
 let projectName = "FSharp.Reactive"
-let version = "0.8"  
+let version = "1.0"  
 
 (* Directories *)
 let buildDir = "./build/"
