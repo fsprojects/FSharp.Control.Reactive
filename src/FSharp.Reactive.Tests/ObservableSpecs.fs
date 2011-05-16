@@ -1,7 +1,8 @@
 ﻿module ReactiveSpecs
+
 open System
 open System.Collections.Generic
-open FSharp
+open FSharp.Reactive
 open NaturalSpec
 
 [<Scenario>]

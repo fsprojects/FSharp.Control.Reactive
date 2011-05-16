@@ -31,6 +31,11 @@
     <WarningLevel>3</WarningLevel>
     <DocumentationFile>bin\Release\FSharp.Reactive.XML</DocumentationFile>
   </PropertyGroup>
+  <Import Project="..\..\lib\FSharp\v4.0\bin\Microsoft.FSharp.Targets" />
+  <ItemGroup>
+    <None Include="packages.config" />
+    <Compile Include="Observable.fs" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core">
@@ -38,20 +43,11 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.CoreEx">
-      <HintPath>..\..\lib\rx\System.CoreEx.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Observable">
-      <HintPath>..\..\lib\rx\System.Observable.dll</HintPath>
-    </Reference>
     <Reference Include="System.Reactive">
-      <HintPath>..\..\lib\rx\System.Reactive.dll</HintPath>
+      <HintPath>..\..\packages\Rx-Main.1.1.10425\lib\Net4\System.Reactive.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Observable.fs" />
-  </ItemGroup>
-  <Import Project="..\..\lib\FSharp\v4.0\bin\Microsoft.FSharp.Targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.
 	<Target Name="BeforeBuild">

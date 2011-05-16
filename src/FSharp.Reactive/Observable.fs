@@ -1,8 +1,9 @@
-﻿namespace FSharp
+﻿namespace FSharp.Reactive
+
 module Observable =
   open System
-  open System.Linq
-  open System.Threading
+  open System.Reactive
+  open System.Reactive.Linq
 
   type 'a observable = IObservable<'a>
   type 'a observer = IObserver<'a>
@@ -26,8 +27,8 @@ module Observable =
 
   /// Creates an observable with a subscriber of type IObserver<'a> -> IDisposable
   let createWithDisposable f =
-    let subscriber = Func<_,_>(f)
-    Observable.CreateWithDisposable(subscriber)
+    let subscriber = Func<_,IDisposable>(f)
+    Observable.Create(subscriber)
   
   /// Creates an observer
   let createObserver next error completed =
@@ -123,7 +124,7 @@ module Observable =
   
   /// Concats (flattens) an observable of observables into an observable
   ///   ===> Observable.SelectMany(observable, Func<_,_>(fun (x:IObservable<'a>) -> x))
-  let concat observable = Observable.Concat(observable)
+  let concat (observable:'a IObservable IObservable) = Observable.Concat(observable)
   
   /// maps the given observable with the given function
   let map f observable = Observable.Select(observable,Func<_,_>(f))  
