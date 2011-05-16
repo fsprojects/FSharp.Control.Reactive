@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -11,6 +11,7 @@
     <AssemblyName>FSharp.Reactive</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <Name>FSharp.Reactive</Name>
+    <FscToolPath>..\..\lib\FSharp</FscToolPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,37 +29,31 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
+    <DocumentationFile>bin\Release\FSharp.Reactive.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core">
-      <HintPath>..\lib\FSharp\FSharp.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="NaturalSpec">
-      <HintPath>..\tools\NaturalSpec\NaturalSpec.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\tools\Nunit\nunit.framework.dll</HintPath>
+      <HintPath>..\..\lib\FSharp\FSharp.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.CoreEx">
-      <HintPath>..\lib\rx\System.CoreEx.dll</HintPath>
+      <HintPath>..\..\lib\rx\System.CoreEx.dll</HintPath>
     </Reference>
     <Reference Include="System.Observable">
-      <HintPath>..\lib\rx\System.Observable.dll</HintPath>
+      <HintPath>..\..\lib\rx\System.Observable.dll</HintPath>
     </Reference>
     <Reference Include="System.Reactive">
-      <HintPath>..\lib\rx\System.Reactive.dll</HintPath>
+      <HintPath>..\..\lib\rx\System.Reactive.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Observable.fs" />
-    <Compile Include="ObservableSpecs.fs" />
   </ItemGroup>
-  <Import Project="..\lib\FSharp\Microsoft.FSharp.Targets" />
+  <Import Project="..\..\lib\FSharp\Microsoft.FSharp.Targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.
 	<Target Name="BeforeBuild">

@@ -5,7 +5,7 @@ open Fake.MSBuild
 
 (* properties *)
 let projectName = "FSharp.Reactive"
-let version = "1.0"  
+let version = "1.1"  
 
 (* Directories *)
 let buildDir = "./build/"
@@ -20,9 +20,7 @@ let zipFileName = deployDir + sprintf "%s-%s.zip" projectName version
 
 (* files *)
 let appReferences =
-    !+ @"src\**\*.csproj" 
-      ++ @"src\**\*.fsproj"
-      -- "**\*_Spliced*" 
+    !+ @"src\**\*.fsproj" 
         |> Scan
 
 let filesToZip =
@@ -48,7 +46,6 @@ Target? BuildApp <-
                  OutputFileName = "./src/AssemblyInfo.fs"})
 
         appReferences
-          |> Seq.map (RemoveTestsFromProject AllNUnitReferences AllSpecAndTestDataFiles)
           |> MSBuildRelease buildDir "Build"
           |> Log "AppBuild-Output: "
 
