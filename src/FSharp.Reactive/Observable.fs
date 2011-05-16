@@ -164,24 +164,47 @@ module Observable =
    
   /// Generates an observable from an Async<_>.
   let fromAsync a = 
-    { new IObservable<_> with
-        member x.Subscribe(o) =
-          if o = null then nullArg "observer"
-          let cts = new System.Threading.CancellationTokenSource()
-          let invoked = ref 0
-          let cancelOrDispose cancel =
-            if System.Threading.Interlocked.CompareExchange(invoked, 1, 0) = 0 then
-              if cancel then cts.Cancel() else cts.Dispose()
-          let wrapper = async {
-            try
-              try
-                let! r = a
-                o.OnNext(r)
-                o.OnCompleted()
-              with e -> o.OnError(e)
-            finally cancelOrDispose false }
-          Async.StartImmediate(wrapper, cts.Token)
-          { new IDisposable with member x.Dispose() = cancelOrDispose true } }
+    create(fun o ->
+      if o = null then nullArg "observer"
+      let cts = new System.Threading.CancellationTokenSource()
+      let invoked = ref 0
+      let cancelOrDispose cancel =
+        if System.Threading.Interlocked.CompareExchange(invoked, 1, 0) = 0 then
+          if cancel then cts.Cancel() else cts.Dispose()
+      let wrapper = async {
+        try
+          try
+            let! r = a
+            o.OnNext(r)
+            o.OnCompleted()
+          with e -> o.OnError(e)
+        finally cancelOrDispose false }
+      Async.StartImmediate(wrapper, cts.Token)
+      fun () -> cancelOrDispose true)
+
+  /// Generates an observable from a tail-optimized loop, similar to AsyncSeq as defined at http://fssnip.net/1k
+  let fromAsyncSeries computation completed f =
+    create (fun o ->
+      if o = null then nullArg "observer"
+      let cts = new System.Threading.CancellationTokenSource()
+      let invoked = ref 0
+      let cancelOrDispose cancel =
+        if System.Threading.Interlocked.CompareExchange(invoked, 1, 0) = 0 then
+          if cancel then cts.Cancel() else cts.Dispose()
+      let wrapper = async {
+        let rec next() = async {
+          try
+            let! result = computation
+            if result |> completed
+              then o.OnCompleted()
+                   cancelOrDispose false
+              else o.OnNext(f result)
+                   return! next()
+          with e -> o.OnError(e)
+                    cancelOrDispose false }
+        return! next() }
+      Async.StartImmediate(wrapper, cts.Token)
+      fun () -> cancelOrDispose true)
 
   type IObservable<'a> with
     /// Subscribes to the Observable with just a next-function
