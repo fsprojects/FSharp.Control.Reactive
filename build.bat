@@ -1,4 +1,4 @@
 @echo off
 cls
-"tools\FAKE\Fake.exe" "build.fsx"
+"packages\FAKE.1.56.6\tools\Fake.exe" "build.fsx"
 pause

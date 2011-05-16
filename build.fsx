@@ -1,26 +1,39 @@
-#I "tools/FAKE"
+#I "./packages/FAKE.1.56.6/tools"
 #r "FakeLib.dll"
+
 open Fake 
-open Fake.MSBuild
 
 (* properties *)
 let projectName = "FSharp.Reactive"
 let version = "1.1"  
+let projectSummary = "A F#-friendly wrapper for the Reactive Extensions."
+let projectDescription = "A F#-friendly wrapper for the Reactive Extensions."
+let authors = ["Ryan Riley"]
+let mail = "ryan.riley@panesofglass.org"
+let homepage = "https://github.com/panesofglass/FSharp.Reactive"
 
 (* Directories *)
 let buildDir = "./build/"
+let packagesDir = "./packages/"
 let docsDir = "./docs/" 
 let deployDir = "./deploy/"
 let testDir = "./test/"
+let targetPlatformDir = getTargetPlatformDir "4.0.30319"
+
+(* Params *)
+let target = getBuildParamOrDefault "target" "All"
 
 (* Tools *)
+let fakePath = "./packages/FAKE.1.56.6/tools"
 let nunitPath = "./tools/Nunit"
-let nunitOutput = testDir + "TestResults.xml"
-let zipFileName = deployDir + sprintf "%s-%s.zip" projectName version
 
 (* files *)
 let appReferences =
-    !+ @"src\**\*.fsproj" 
+    !+ @"src\**\FSharp.Reactive.fsproj" 
+        |> Scan
+
+let testReferences =
+    !+ @"src\**\FSharp.Reactive.Tests.fsproj" 
         |> Scan
 
 let filesToZip =
@@ -29,74 +42,76 @@ let filesToZip =
       |> Scan      
 
 (* Targets *)
-Target? Clean <-
-    fun _ -> CleanDirs [buildDir; testDir; deployDir; docsDir]
+Target "Clean" (fun _ ->
+    CleanDirs [buildDir; testDir; deployDir; docsDir]
+)
 
-Target? BuildApp <-
-    fun _ -> 
-        if not isLocalBuild then
-          AssemblyInfo 
-           (fun p -> 
-              {p with
-                 CodeLanguage = FSharp;
-                 AssemblyVersion = buildVersion;
-                 AssemblyTitle = "FSharp.Reactive";
-                 AssemblyDescription = "A F# friendly wrapper for the Reactive Extensions.";
-                 Guid = "ED23F688-C0D0-4102-93D5-0D832633F66D";
-                 OutputFileName = "./src/AssemblyInfo.fs"})
+Target "BuildApp" (fun _ -> 
+    AssemblyInfo (fun p -> 
+          {p with
+             CodeLanguage = FSharp
+             AssemblyVersion = version
+             AssemblyTitle = projectName
+             AssemblyDescription = projectDescription
+             Guid = "ED23F688-C0D0-4102-93D5-0D832633F66D"
+             OutputFileName = "./src/FSharp.Reactive/AssemblyInfo.fs"})
 
-        appReferences
-          |> MSBuildRelease buildDir "Build"
-          |> Log "AppBuild-Output: "
+    MSBuildRelease buildDir "Build" appReferences
+      |> Log "AppBuild-Output: "
+)
 
-Target? BuildTest <-
-    fun _ -> 
-        appReferences
-          |> MSBuildDebug testDir "Build"
-          |> Log "TestBuild-Output: "
+Target "BuildTest" (fun _ -> 
+    MSBuildDebug testDir "Build" testReferences
+      |> Log "TestBuild-Output: "
+)
 
-Target? Test <-
-    fun _ ->
-        !+ (testDir + "/*.dll")
-          |> Scan
-          |> NUnit (fun p -> 
-                      {p with 
-                         ToolPath = nunitPath; 
-                         DisableShadowCopy = true; 
-                         OutputFile = nunitOutput}) 
+Target "Test" (fun _ ->
+    !+ (testDir + "/*.Tests.dll")
+      |> Scan
+      |> NUnit (fun p -> 
+          {p with 
+             ToolPath = nunitPath; 
+             DisableShadowCopy = true; 
+             OutputFile = testDir + "TestResults.xml" }) 
+)
 
-Target? GenerateDocumentation <-
-    fun _ ->
-      !+ (buildDir + "FSharp.Reactive.dll")      
+Target "GenerateDocumentation" (fun _ ->
+    !+ (buildDir + "*.dll")      
+      |> Scan
+      |> Docu (fun p ->
+          {p with
+             ToolPath = fakePath + "/docu.exe"
+             TemplatesPath = "./lib/templates"
+             OutputPath = docsDir })
+)
+
+Target "CopyLicense" (fun _ ->
+    [ "LICENSE.txt" ] |> CopyTo buildDir
+)
+
+Target "ZipDocumentation" (fun _ ->    
+    !+ (docsDir + "/**/*.*")
         |> Scan
-        |> Docu (fun p ->
-            {p with
-               ToolPath = "./tools/FAKE/docu.exe"
-               TemplatesPath = "./tools/FAKE/templates"
-               OutputPath = docsDir })
+        |> Zip docsDir (deployDir + sprintf "Documentation-%s.zip" version)
+)
 
-Target? BuildZip <-
-    fun _ -> Zip buildDir zipFileName filesToZip
+Target "Deploy" (fun _ ->
+    !+ (buildDir + "/**/*.*")
+        -- "*.zip"
+        |> Scan
+        |> Zip buildDir (deployDir + sprintf "%s-%s.zip" projectName version)
+)
 
-Target? ZipDocumentation <-
-    fun _ ->    
-        let docFiles = 
-          !+ (docsDir + "/**/*.*")
-            |> Scan
-        let zipFileName = deployDir + sprintf "Documentation-%s.zip" version
-        Zip docsDir zipFileName docFiles
+Target "All" DoNothing
 
-Target? Default <- DoNothing
-Target? Deploy <- DoNothing
+(* Build Order *)
+"Clean"
+  ==> "BuildApp" <=> "BuildTest" <=> "CopyLicense"
+  ==> "Test" <=> "GenerateDocumentation"
+  ==> "ZipDocumentation"
+  ==> "Deploy"
 
-// Dependencies
-For? BuildApp <- Dependency? Clean
-For? Test <- Dependency? BuildApp |> And? BuildTest
-For? GenerateDocumentation <- Dependency? BuildApp
-For? ZipDocumentation <- Dependency? GenerateDocumentation
-For? BuildZip <- Dependency? Test
-For? Deploy <- Dependency? ZipDocumentation |> And? BuildZip
-For? Default <- Dependency? Deploy
+"All" <== ["Deploy"]
 
 // start build
-Run? Default
+Run target
