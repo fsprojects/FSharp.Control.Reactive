@@ -1,12 +1,10 @@
 ﻿namespace FSharp.Reactive
 
-module Observable =
-  open System
-  open System.Reactive
-  open System.Reactive.Linq
+open System
+open System.Reactive
+open System.Reactive.Linq
 
-  type 'a observable = IObservable<'a>
-  type 'a observer = IObserver<'a>
+module DelegateConverters =
   
   /// converts a lambda from unit to unit to a System.Action
   let asAction f = Action(f)
@@ -19,7 +17,20 @@ module Observable =
   
   /// System.Action which does nothing
   let doNothing = Action(fun () -> ())
+
+module Observer =
+  open DelegateConverters
   
+  /// Creates an observer
+  let create next error completed =
+    let onNext = next |> asParamAction
+    let onError = error |> asExnAction
+    let onCompleted = completed |> asAction
+    Observer.Create(onNext, onError, onCompleted)
+  
+module Observable =
+  open DelegateConverters
+
   /// Creates an observable with a subscriber of type IObserver<'a> -> unit -> unit
   let create f =
     let subscriber = Func<_,_>(fun o -> Action(f o))
@@ -30,37 +41,9 @@ module Observable =
     let subscriber = Func<_,IDisposable>(f)
     Observable.Create(subscriber)
   
-  /// Creates an observer
-  let createObserver next error completed =
-    let onNext = next |> asParamAction
-    let onError = error |> asExnAction
-    let onCompleted = completed |> asAction
-    Observer.Create(onNext, onError, onCompleted)
-  
   /// Generates an observable from an IEvent<_>
   let fromEvent (event:IEvent<_,_>) =
     Observable.FromEvent(event.AddHandler, event.RemoveHandler)
-
-  /// Generates an observable from an Async<_>.
-  let fromAsync a = 
-    { new IObservable<_> with
-        member x.Subscribe(o) =
-          if o = null then nullArg "observer"
-          let cts = new System.Threading.CancellationTokenSource()
-          let invoked = ref 0
-          let cancelOrDispose cancel =
-            if System.Threading.Interlocked.CompareExchange(invoked, 1, 0) = 0 then
-              if cancel then cts.Cancel() else cts.Dispose()
-          let wrapper = async {
-            try
-              try
-                let! r = a
-                o.OnNext(r)
-                o.OnCompleted()
-              with e -> o.OnError(e)
-            finally cancelOrDispose false }
-          Async.StartImmediate(wrapper, cts.Token)
-          { new IDisposable with member x.Dispose() = cancelOrDispose true } }
   
   /// Generates an empty observable
   let empty<'a> = Observable.Empty<'a>()
@@ -69,7 +52,7 @@ module Observable =
   let head = Observable.First
   
   /// Merges the two observables
-  let merge (obs1: 'a observable) (obs2: 'a observable) = Observable.Merge(obs1, obs2)
+  let merge (obs1: 'a IObservable) (obs2: 'a IObservable) = Observable.Merge(obs1, obs2)
   
   /// Creates a range as an observable
   let range start count = Observable.Range(start, count)
@@ -78,11 +61,11 @@ module Observable =
   let toObservable (seq: 'a seq) = Observable.ToObservable(seq)
   
   /// Converts an observable into a seq
-  let toEnumerable (obs: 'a observable) = Observable.ToEnumerable(obs)
+  let toEnumerable (obs: 'a IObservable) = Observable.ToEnumerable(obs)
   
   /// Subscribes to the observable with all three callbacks
-  let subscribeAll next error completed (observable: 'a observable) =
-    observable.Subscribe(createObserver next error completed)
+  let subscribeAll next error completed (observable: 'a IObservable) =
+    observable.Subscribe(Observer.create next error completed)
   
   /// Subscribes to the Observable with a next and an error-function
   let subscribeWithError next error observable =
@@ -104,16 +87,16 @@ module Observable =
   let amb obsLeft obsRight = Observable.Amb(obsLeft, obsRight)
   
   /// Returns the observable sequence that reacts first
-  let ambFromSeq (obs: 'a observable seq) = Observable.Amb(obs)
+  let ambFromSeq (obs: 'a IObservable seq) = Observable.Amb(obs)
   
   /// Returns the observable sequence that reacts first
-  let ambFromArray (obs: 'a observable array) = Observable.Amb(obs)
+  let ambFromArray (obs: 'a IObservable array) = Observable.Amb(obs)
   
   /// Matches when both observable sequences have an available value
   let both obs1 obs2 = Observable.And(obs1, obs2)
   
   /// Merges two observable sequences into one observable sequence
-  let zip (obs1: 'a observable) (obs2: 'a observable) =
+  let zip (obs1: 'a IObservable) (obs2: 'a IObservable) =
     Observable.Zip(obs1, obs2, Func<_,_,_>(fun a b -> a, b))
   
   /// Merges two observable sequences into one observable sequence
@@ -164,7 +147,7 @@ module Observable =
    
   /// Continues an observable sequence that is terminated
   /// by an exception with the next observable sequence.
-  let catch (newObservable: 'a observable) failingObservable =
+  let catch (newObservable: 'a IObservable) failingObservable =
     Observable.Catch(failingObservable,newObservable) 
    
   /// Takes elements while the predicate is satisfied
@@ -179,6 +162,27 @@ module Observable =
   /// Folds the observable
   let fold f seed observable = Observable.Aggregate(observable, seed, Func<_,_,_>(f))  
    
+  /// Generates an observable from an Async<_>.
+  let fromAsync a = 
+    { new IObservable<_> with
+        member x.Subscribe(o) =
+          if o = null then nullArg "observer"
+          let cts = new System.Threading.CancellationTokenSource()
+          let invoked = ref 0
+          let cancelOrDispose cancel =
+            if System.Threading.Interlocked.CompareExchange(invoked, 1, 0) = 0 then
+              if cancel then cts.Cancel() else cts.Dispose()
+          let wrapper = async {
+            try
+              try
+                let! r = a
+                o.OnNext(r)
+                o.OnCompleted()
+              with e -> o.OnError(e)
+            finally cancelOrDispose false }
+          Async.StartImmediate(wrapper, cts.Token)
+          { new IDisposable with member x.Dispose() = cancelOrDispose true } }
+
   type IObservable<'a> with
     /// Subscribes to the Observable with just a next-function
     member this.Subscribe(next) = subscribe next this
