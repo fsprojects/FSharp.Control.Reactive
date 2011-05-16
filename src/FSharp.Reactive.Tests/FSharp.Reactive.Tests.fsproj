@@ -31,16 +31,34 @@
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
   </PropertyGroup>
+  <Import Project="..\..\lib\FSharp\v4.0\bin\Microsoft.FSharp.Targets" />
+  <ItemGroup>
+    <None Include="packages.config" />
+    <Compile Include="ObservableSpecs.fs" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">
       <HintPath>..\..\lib\FSharp\v4.0\bin\FSharp.Core.dll</HintPath>
     </Reference>
+    <Reference Include="FSharp.PowerPack">
+      <HintPath>..\..\packages\NaturalSpec.1.2.12.1\lib\FSharp.PowerPack.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="NaturalSpec">
-      <HintPath>..\..\tools\NaturalSpec\NaturalSpec.dll</HintPath>
+      <HintPath>..\..\packages\NaturalSpec.1.2.12.1\lib\NaturalSpec.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\tools\Nunit\nunit.framework.dll</HintPath>
+      <HintPath>..\..\packages\NaturalSpec.1.2.12.1\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.mocks">
+      <HintPath>..\..\packages\NUnit.2.5.10.11092\lib\nunit.mocks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="pnunit.framework">
+      <HintPath>..\..\packages\NUnit.2.5.10.11092\lib\pnunit.framework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -53,18 +71,12 @@
     <Reference Include="System.Reactive">
       <HintPath>..\..\lib\rx\System.Reactive.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ObservableSpecs.fs" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\FSharp.Reactive\FSharp.Reactive.fsproj">
       <Name>FSharp.Reactive</Name>
       <Project>{ed23f688-c0d0-4102-93d5-0d832633f66d}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="..\..\lib\FSharp\v4.0\bin\Microsoft.FSharp.Targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.
 	<Target Name="BeforeBuild">
