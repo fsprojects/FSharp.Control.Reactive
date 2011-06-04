@@ -33,7 +33,6 @@
   </PropertyGroup>
   <Import Project="..\..\lib\FSharp\v4.0\bin\Microsoft.FSharp.Targets" />
   <ItemGroup>
-    <None Include="packages.config" />
     <Compile Include="Observable.fs" />
   </ItemGroup>
   <ItemGroup>
@@ -44,8 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Reactive">
-      <HintPath>..\..\packages\Rx-Main.1.1.10425\lib\Net4\System.Reactive.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\lib\Rx\System.Reactive.dll</HintPath>
     </Reference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
