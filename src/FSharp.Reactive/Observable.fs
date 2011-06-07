@@ -253,7 +253,7 @@ type ObservableBuilder() =
       subscription.Dispose)
   member this.Using(res:#IDisposable, body) =
     this.TryFinally(body res, fun () -> match res with null -> () | disp -> disp.Dispose())
-  member this.Combine(comp1, comp2) = comp1 >>= fun () -> comp2
+  member this.Combine(comp1:IObservable<'a>, comp2:IObservable<'a>) = comp1 >>= fun _ -> comp2
   member this.While(guard, m) =
     if not (guard()) then this.Zero() else m >>= fun () -> this.While(guard, m)
   member this.For(sequence:seq<_>, body) =
