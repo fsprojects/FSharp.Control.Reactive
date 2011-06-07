@@ -32,6 +32,9 @@ type Observable with
     Observable.Create(Func<_,IDisposable> subscribe)
   
 module Observable =
+  /// Binds an observable to generate a subsequent observable.
+  let bind (f:'a -> IObservable<'b>) (m:IObservable<'a>) = m.SelectMany(Func<_,_> f)
+
   /// Creates an observable sequence from the specified Subscribe method implementation.
   let create (f:'a IObserver -> unit -> unit) = Observable.Create f
 
@@ -220,3 +223,43 @@ type IObservable<'a> with
   /// Subscribes to the Observable with all 3 callbacks.
   member this.Subscribe(onNext, onError, onCompleted) =
     this.Subscribe(Action<_> onNext, Action<_> onError, Action onCompleted)
+
+let inline mreturn x = Observable.Return x
+let inline (>>=) m f = Observable.bind f m
+let inline (<*>) f m = f >>= fun f' -> m >>= fun m' -> mreturn (f' m')
+let inline lift f m = Observable.map f m
+let inline (<!>) f m = lift f m
+let inline lift2 f a b = mreturn f <*> a <*> b
+let inline ( *>) x y = lift2 (fun _ z -> z) x y
+let inline ( <*) x y = lift2 (fun z _ -> z) x y
+
+type ObservableBuilder() =
+  member this.Return(x) = mreturn x
+  member this.ReturnFrom(m:IObservable<_>) = m
+  member this.Bind(m, f) = m >>= f
+  member this.Zero() = Observable.Empty()
+  member this.Delay(f) = Observable.Defer(Func<_> f)
+  member this.TryWith(m:IObservable<_>, h:exn -> IObservable<_>) =
+    Observable.create (fun o ->
+      let subscription =
+        try m.Subscribe(o)
+        with e -> (h e).Subscribe(o)
+      subscription.Dispose)
+  member this.TryFinally(m:IObservable<_>, compensation) =
+    Observable.create (fun o ->
+      let subscription =
+        try m.Subscribe(o)
+        finally compensation()
+      subscription.Dispose)
+  member this.Using(res:#IDisposable, body) =
+    this.TryFinally(body res, fun () -> match res with null -> () | disp -> disp.Dispose())
+  member this.Combine(comp1, comp2) = comp1 >>= fun () -> comp2
+  member this.While(guard, m) =
+    if not (guard()) then this.Zero() else m >>= fun () -> this.While(guard, m)
+  member this.For(sequence:seq<_>, body) =
+    this.Using(sequence.GetEnumerator(),
+               fun enum -> this.While(enum.MoveNext, this.Delay(fun () -> body enum.Current)))
+  member this.Yield(x) = mreturn x
+  member this.YieldFrom(m:IObservable<_>) = m
+
+let observe = ObservableBuilder()
