@@ -38,10 +38,6 @@ module Observable =
   /// Creates an observable sequence from the specified Subscribe method implementation.
   let create (f:'a IObserver -> unit -> unit) = Observable.Create f
 
-  /// Generates an observable from an IEvent<_>.
-  let fromEvent (event:IEvent<_,_>) =
-    Observable.FromEvent(Action<_> event.AddHandler, Action<_> event.RemoveHandler)
-
   /// Generates an observable from an IEvent<_> as an EventPattern.
   let fromEventPattern<'a> (target:obj) eventName =
     Observable.FromEventPattern(target, eventName)
