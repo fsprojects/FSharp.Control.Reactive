@@ -5,10 +5,10 @@ open Fake
 
 (* properties *)
 let projectName = "FSharp.Reactive"
-let version = "1.1"  
+let version = "1.1.1"
 let projectSummary = "A F#-friendly wrapper for the Reactive Extensions."
 let projectDescription = "A F#-friendly wrapper for the Reactive Extensions."
-let authors = ["Ryan Riley"]
+let authors = ["Ryan Riley"; "Steffen Forkmann"]
 let mail = "ryan.riley@panesofglass.org"
 let homepage = "https://github.com/panesofglass/FSharp.Reactive"
 
@@ -29,11 +29,11 @@ let nunitPath = "./packages/NUnit.2.5.10.11092/tools"
 
 (* files *)
 let appReferences =
-    !+ @"src\**\FSharp.Reactive.fsproj" 
+    !+ "src/**/*.fsproj" 
         |> Scan
 
 let testReferences =
-    !+ @"src\**\FSharp.Reactive.Tests.fsproj" 
+    !+ "tests/**/*.fsproj" 
         |> Scan
 
 let filesToZip =
@@ -54,7 +54,7 @@ Target "BuildApp" (fun _ ->
              AssemblyTitle = projectName
              AssemblyDescription = projectDescription
              Guid = "ED23F688-C0D0-4102-93D5-0D832633F66D"
-             OutputFileName = "./src/FSharp.Reactive/AssemblyInfo.fs"})
+             OutputFileName = "./src/AssemblyInfo.fs"})
 
     MSBuildRelease buildDir "Build" appReferences
       |> Log "AppBuild-Output: "

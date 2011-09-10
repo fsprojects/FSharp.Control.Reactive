@@ -11,7 +11,7 @@
     <AssemblyName>FSharp.Reactive</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <Name>FSharp.Reactive</Name>
-    <FscToolPath>..\..\lib\FSharp\v4.0\bin</FscToolPath>
+    <FscToolPath>..\lib\FSharp\v4.0\bin</FscToolPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,7 +31,7 @@
     <WarningLevel>3</WarningLevel>
     <DocumentationFile>bin\Release\FSharp.Reactive.XML</DocumentationFile>
   </PropertyGroup>
-  <Import Project="..\..\lib\FSharp\v4.0\bin\Microsoft.FSharp.Targets" />
+  <Import Project="..\lib\FSharp\v4.0\bin\Microsoft.FSharp.Targets" />
   <ItemGroup>
     <Compile Include="Observable.fs" />
     <None Include="packages.config" />
@@ -39,12 +39,12 @@
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core">
-      <HintPath>..\..\lib\FSharp\v4.0\bin\FSharp.Core.dll</HintPath>
+      <HintPath>..\lib\FSharp\v4.0\bin\FSharp.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Reactive">
-      <HintPath>..\..\packages\Rx-Main.1.0.10621\lib\Net4\System.Reactive.dll</HintPath>
+      <HintPath>..\packages\Rx-Main.1.0.10621\lib\Net4\System.Reactive.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
