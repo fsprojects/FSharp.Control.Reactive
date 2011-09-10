@@ -12,7 +12,7 @@ let ``should be`` expectedNext expectedError expectedCompleted (observable:'a IO
   let error = ref false
   let completed = ref false
 
-  let subscription = observable.Subscribe((fun _ -> incr next), (fun _ -> error := true), (fun () -> completed := true))
+  let subscription = observable |> Observable.subscribe (fun _ -> incr next) (fun _ -> error := true) (fun () -> completed := true)
 
   Assert.That(!next, Is.EqualTo(expectedNext))
   Assert.That(!error, Is.EqualTo(expectedError))
@@ -23,35 +23,12 @@ let ``When subscribing to a single value observable, OnNext and OnCompleted shou
   Observable.Return(1) |> ``should be`` 1 false true
 
 [<Test>]
-let ``When subscribing to a single value observable using the ObservableBuilder, OnNext and OnCompleted should be fired``() =
-  let builder = observe { return 1 }
-  builder |> ``should be`` 1 false true
-
-[<Test>]
 let ``When subscribing to an empty observable, only OnCompleted should be fired``() =
   Observable.Empty() |> ``should be`` 0 false true
 
 [<Test>]
-let ``When subscribing to an empty observable using the ObservableBuilder, only OnCompleted should be fired``() =
-  let builder = observe { do () }
-  builder |> ``should be`` 0 false true
-
-[<Test>]
 let ``When subscribing to an observable that fires an exception, only OnError should be fired``() =
   Observable.Throw(Exception()) |> ``should be`` 0 true false
-
-[<Test>]
-let ``When subscribing to an observable that fires an exception using the ObservableBuilder, only OnError should be fired``() =
-  let builder = observe {
-    failwith "Test"
-    return 1 }
-  builder |> ``should be`` 0 true false
-
-[<Test>]
-[<Ignore>]
-let ``When subscribing to an observable async workflow, it should only raise one item before completion``() =
-  let testAsync = async { return 1 }
-  Observable.fromAsync testAsync |> ``should be`` 1 false false
 
 [<Test>]
 let ``When subscribing to an F# event, only OnNext should be called``() =
@@ -73,21 +50,27 @@ type TestType() =
   member this.Trigger() = testEvent.Trigger(this, EventArgs())
 
 [<Test>]
-[<Ignore>]
-let ``When subscribing to an event, only OnNext should be fired once``() =
+let ``When subscribing to an event, only OnNext should be fired once.``() =
   let next = ref 0
   let error = ref false
   let completed = ref false
 
   let tester = TestType()
 //  let subscription = tester.TestEvent.Subscribe((fun _ -> incr next), (fun _ -> error := true), (fun () -> completed := true))
-  let observable = Observable.fromEvent tester.TestEvent
+  let observable = Observable.fromEventPattern tester "TestEvent"
   let subscription = observable.Subscribe((fun _ -> incr next), (fun _ -> error := true), (fun () -> completed := true))
   tester.Trigger()
 
   Assert.That(!next, Is.EqualTo(1))
   Assert.That(!error, Is.False)
   Assert.That(!completed, Is.False)
+
+[<Test>]
+let ``When subscribing to an observable that fires an exception using the ObservableBuilder, only OnError should be fired``() =
+  let builder = observe {
+    failwith "Test"
+    return 1 }
+  builder |> ``should be`` 0 true false
 
 [<Test>]
 let ``When zip is defined with the applicative, it should match the result of Observable_zip``() =

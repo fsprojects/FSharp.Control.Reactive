@@ -33,8 +33,8 @@
   </PropertyGroup>
   <Import Project="..\..\lib\FSharp\v4.0\bin\Microsoft.FSharp.Targets" />
   <ItemGroup>
-    <None Include="packages.config" />
     <Compile Include="ObservableSpecs.fs" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">
@@ -43,6 +43,11 @@
     <Reference Include="FSharp.PowerPack">
       <HintPath>..\..\packages\NaturalSpec.1.2.12.1\lib\FSharp.PowerPack.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Reactive.Testing">
+      <HintPath>..\..\packages\Rx-Testing.1.0.10621\lib\Net4-Full\Microsoft.Reactive.Testing.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
     <Reference Include="mscorlib" />
     <Reference Include="NaturalSpec">
       <HintPath>..\..\packages\NaturalSpec.1.2.12.1\lib\NaturalSpec.dll</HintPath>
@@ -68,7 +73,8 @@
       <Private>True</Private>
     </ProjectReference>
     <Reference Include="System.Reactive">
-      <HintPath>..\..\lib\Rx\System.Reactive.dll</HintPath>
+      <HintPath>..\..\packages\Rx-Main.1.0.10621\lib\Net4\System.Reactive.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
