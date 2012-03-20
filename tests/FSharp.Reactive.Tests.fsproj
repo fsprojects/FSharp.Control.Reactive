@@ -33,6 +33,23 @@
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug 4.5|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <Tailcalls>false</Tailcalls>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <WarningLevel>3</WarningLevel>
+    <OutputPath>bin\Debug 4.5\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release 4.5|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <Tailcalls>true</Tailcalls>
+    <DefineConstants>TRACE</DefineConstants>
+    <WarningLevel>3</WarningLevel>
+    <OutputPath>bin\Release 4.5\</OutputPath>
+  </PropertyGroup>
   <Import Project="..\lib\FSharp\v4.0\bin\Microsoft.FSharp.Targets" />
   <ItemGroup>
     <Compile Include="ObservableSpecs.fs" />
@@ -42,34 +59,30 @@
     <Reference Include="FSharp.Core">
       <HintPath>..\lib\FSharp\v4.0\bin\FSharp.Core.dll</HintPath>
     </Reference>
-    <Reference Include="FSharp.PowerPack">
-      <HintPath>..\packages\NaturalSpec.1.2.12.1\lib\FSharp.PowerPack.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Reactive.Testing">
-      <HintPath>..\packages\Rx-Testing.1.0.10621\lib\Net4-Full\Microsoft.Reactive.Testing.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Rx-Testing.1.0.11226\lib\Net4-Full\Microsoft.Reactive.Testing.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
     <Reference Include="mscorlib" />
     <Reference Include="NaturalSpec">
-      <HintPath>..\packages\NaturalSpec.1.2.12.1\lib\NaturalSpec.dll</HintPath>
+      <HintPath>..\packages\NaturalSpec.1.4.2.1\lib\NaturalSpec.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\packages\NaturalSpec.1.2.12.1\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Reactive">
+      <HintPath>..\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\src\FSharp.Reactive.fsproj">
       <Name>FSharp.Reactive</Name>
       <Project>{ed23f688-c0d0-4102-93d5-0d832633f66d}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <Reference Include="System.Reactive">
-      <HintPath>..\packages\Rx-Main.1.0.10621\lib\Net4\System.Reactive.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
