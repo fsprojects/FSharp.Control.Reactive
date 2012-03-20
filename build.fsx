@@ -1,4 +1,4 @@
-#I "./packages/FAKE.1.56.6/tools"
+#I "./packages/FAKE.1.64.5/tools"
 #r "FakeLib.dll"
 
 open Fake 
@@ -24,7 +24,7 @@ let targetPlatformDir = getTargetPlatformDir "4.0.30319"
 let target = getBuildParamOrDefault "target" "All"
 
 (* Tools *)
-let fakePath = "./packages/FAKE.1.56.6/tools"
+let fakePath = "./packages/FAKE.1.64.5/tools"
 let nunitPath = "./packages/NUnit.2.5.10.11092/tools"
 
 (* files *)
