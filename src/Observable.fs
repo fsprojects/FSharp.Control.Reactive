@@ -166,7 +166,8 @@ type IObservable<'a> with
 
 let inline mreturn x = Observable.Return x
 let inline (>>=) m f = Observable.bind f m
-let inline (<*>) f m = f >>= fun f' -> m >>= fun m' -> mreturn (f' m')
+let inline ap f m = f >>= fun f' -> m >>= fun m' -> mreturn (f' m')
+let inline (<*>) f m = ap f m
 let inline lift f m = Observable.map f m
 let inline (<!>) f m = lift f m
 let inline lift2 f a b = mreturn f <*> a <*> b
@@ -177,28 +178,14 @@ type ObservableBuilder() =
   member this.Return(x) = mreturn x
   member this.ReturnFrom(m:IObservable<_>) = m
   member this.Bind(m, f) = m >>= f
+  member this.Combine(comp1:IObservable<'a>, comp2:IObservable<'a>) = Observable.Concat(comp1, comp2)
+  member this.Delay(f) = Observable.Defer f
   member this.Zero() = Observable.Empty()
-  member this.Delay(f) = Observable.Defer(Func<_> f)
-  member this.TryWith(m:IObservable<_>, h:exn -> IObservable<_>) =
-    Observable.create (fun o ->
-      let subscription =
-        try m.Subscribe(o)
-        with e -> (h e).Subscribe(o)
-      subscription.Dispose)
-  member this.TryFinally(m:IObservable<_>, compensation) =
-    Observable.create (fun o ->
-      let subscription =
-        try m.Subscribe(o)
-        finally compensation()
-      subscription.Dispose)
-  member this.Using(res:#IDisposable, body) =
-    this.TryFinally(body res, fun () -> match res with null -> () | disp -> disp.Dispose())
-  member this.Combine(comp1:IObservable<'a>, comp2:IObservable<'a>) = comp1 >>= fun _ -> comp2
-  member this.While(guard, m) =
-    if not (guard()) then this.Zero() else m >>= fun () -> this.While(guard, m)
-  member this.For(sequence:seq<_>, body) =
-    this.Using(sequence.GetEnumerator(),
-               fun enum -> this.While(enum.MoveNext, this.Delay(fun () -> body enum.Current)))
+  member this.TryWith(m:IObservable<_>, h:exn -> IObservable<_>) = Observable.Catch(m, h)
+  member this.TryFinally(m:IObservable<_>, compensation: unit -> unit) = Observable.Finally(m, Action(compensation))
+  member this.Using(res:#IDisposable, body) = this.TryFinally(body res, fun () -> match res with null -> () | disp -> disp.Dispose())
+  member this.While(guard, m) = if not (guard()) then this.Zero() else m >>= fun () -> this.While(guard, m)
+  member this.For(sequence, body) = Observable.ForEach(sequence, body)
   member this.Yield(x) = mreturn x
   member this.YieldFrom(m:IObservable<_>) = m
 
