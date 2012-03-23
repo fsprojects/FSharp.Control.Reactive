@@ -9,10 +9,10 @@
     <OutputType>Library</OutputType>
     <RootNamespace>FSharp.Reactive.Tests</RootNamespace>
     <AssemblyName>FSharp.Reactive.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <Name>FSharp.Reactive.Tests</Name>
     <TargetFrameworkProfile />
-    <FscToolPath>..\lib\FSharp\Net40</FscToolPath>
+    <FscToolPath>..\lib\FSharp\Net45</FscToolPath>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -33,27 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug 4.5|AnyCPU' ">
-    <FscToolPath>..\lib\FSharp\Net45</FscToolPath>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <Tailcalls>false</Tailcalls>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <WarningLevel>3</WarningLevel>
-    <OutputPath>bin\Debug 4.5\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release 4.5|AnyCPU' ">
-    <FscToolPath>..\lib\FSharp\Net45</FscToolPath>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <Tailcalls>true</Tailcalls>
-    <DefineConstants>TRACE</DefineConstants>
-    <WarningLevel>3</WarningLevel>
-    <OutputPath>bin\Release 4.5\</OutputPath>
-  </PropertyGroup>
-  <Import Condition="$(TargetFrameworkVersion) == 'v4.0'" Project="..\lib\FSharp\Net40\Microsoft.FSharp.Targets" />
-  <Import Condition="$(TargetFrameworkVersion) == 'v4.5'" Project="..\lib\FSharp\Net45\Microsoft.FSharp.Targets" />
+  <Import Project="..\lib\FSharp\Net45\Microsoft.FSharp.Targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <ItemGroup>
     <Compile Include="ObservableSpecs.fs" />
@@ -72,27 +52,6 @@
       <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-  </ItemGroup>
-  <ItemGroup Condition="$(TargetFrameworkVersion) == 'v4.0'">
-    <Reference Include="FSharp.Core">
-      <HintPath>..\lib\FSharp\Net40\FSharp.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Reactive.Testing">
-      <HintPath>..\packages\Rx-Testing.1.0.11226\lib\Net4-Full\Microsoft.Reactive.Testing.dll</HintPath>
-    </Reference>
-    <Reference Include="NaturalSpec">
-      <HintPath>..\packages\NaturalSpec.1.4.2.1\lib\NaturalSpec.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reactive">
-      <HintPath>..\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup Condition="$(TargetFrameworkVersion) == 'v4.5'">
     <Reference Include="FSharp.Core">
       <HintPath>..\lib\FSharp\Net45\FSharp.Core.dll</HintPath>
     </Reference>

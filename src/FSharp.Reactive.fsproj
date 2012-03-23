@@ -9,11 +9,12 @@
     <OutputType>Library</OutputType>
     <RootNamespace>FSharp.Reactive</RootNamespace>
     <AssemblyName>FSharp.Reactive</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <Name>FSharp.Reactive</Name>
-    <FscToolPath>..\lib\FSharp\Net40</FscToolPath>
+    <FscToolPath>..\lib\FSharp\Net45</FscToolPath>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,28 +34,7 @@
     <WarningLevel>3</WarningLevel>
     <DocumentationFile>bin\Release\FSharp.Reactive.XML</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug 4.5|AnyCPU' ">
-    <FscToolPath>..\lib\FSharp\Net45</FscToolPath>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <Tailcalls>false</Tailcalls>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <WarningLevel>3</WarningLevel>
-    <OutputPath>bin\Debug4.5\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release 4.5|AnyCPU' ">
-    <FscToolPath>..\lib\FSharp\Net45</FscToolPath>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <Tailcalls>true</Tailcalls>
-    <DefineConstants>TRACE</DefineConstants>
-    <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Release\FSharp.Reactive.XML</DocumentationFile>
-    <OutputPath>bin\Release4.5\</OutputPath>
-  </PropertyGroup>
-  <Import Condition="$(TargetFrameworkVersion) == 'v4.0'" Project="..\lib\FSharp\Net40\Microsoft.FSharp.Targets" />
-  <Import Condition="$(TargetFrameworkVersion) == 'v4.5'" Project="..\lib\FSharp\Net45\Microsoft.FSharp.Targets" />
+  <Import Project="..\lib\FSharp\Net45\Microsoft.FSharp.Targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <ItemGroup>
     <Compile Include="Observable.fs" />
@@ -65,16 +45,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-  </ItemGroup>
-  <ItemGroup Condition="$(TargetFrameworkVersion) == 'v4.0'">
-    <Reference Include="FSharp.Core">
-      <HintPath>..\lib\FSharp\Net40\FSharp.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive">
-      <HintPath>..\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup Condition="$(TargetFrameworkVersion) == 'v4.5'">
     <Reference Include="FSharp.Core">
       <HintPath>..\lib\FSharp\Net45\FSharp.Core.dll</HintPath>
     </Reference>
