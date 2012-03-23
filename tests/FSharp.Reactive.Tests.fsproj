@@ -12,7 +12,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <Name>FSharp.Reactive.Tests</Name>
     <TargetFrameworkProfile />
-    <FscToolPath>..\lib\FSharp\v4.0\bin</FscToolPath>
+    <FscToolPath>..\lib\FSharp\Net40</FscToolPath>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -50,14 +50,14 @@
     <WarningLevel>3</WarningLevel>
     <OutputPath>bin\Release 4.5\</OutputPath>
   </PropertyGroup>
-  <Import Project="..\lib\FSharp\v4.0\bin\Microsoft.FSharp.Targets" />
+  <Import Project="..\lib\FSharp\Net40\Microsoft.FSharp.Targets" />
   <ItemGroup>
     <Compile Include="ObservableSpecs.fs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">
-      <HintPath>..\lib\FSharp\v4.0\bin\FSharp.Core.dll</HintPath>
+      <HintPath>..\lib\FSharp\Net40\FSharp.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Reactive.Testing">
       <HintPath>..\packages\Rx-Testing.1.0.11226\lib\Net4-Full\Microsoft.Reactive.Testing.dll</HintPath>

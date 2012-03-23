@@ -11,7 +11,7 @@
     <AssemblyName>FSharp.Reactive</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <Name>FSharp.Reactive</Name>
-    <FscToolPath>..\lib\FSharp\v4.0\bin</FscToolPath>
+    <FscToolPath>..\lib\FSharp\Net40</FscToolPath>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -51,7 +51,7 @@
     <DocumentationFile>bin\Release\FSharp.Reactive.XML</DocumentationFile>
     <OutputPath>bin\Release4.5\</OutputPath>
   </PropertyGroup>
-  <Import Project="..\lib\FSharp\v4.0\bin\Microsoft.FSharp.Targets" />
+  <Import Project="..\lib\FSharp\Net40\Microsoft.FSharp.Targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <ItemGroup>
     <Compile Include="Observable.fs" />
@@ -60,7 +60,7 @@
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core">
-      <HintPath>..\lib\FSharp\v4.0\bin\FSharp.Core.dll</HintPath>
+      <HintPath>..\lib\FSharp\Net40\FSharp.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
