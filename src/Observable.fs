@@ -46,7 +46,7 @@ module Observable =
   let empty<'a> = Observable.Empty<'a>()
   
   /// Takes the head of the elements
-  let head = Observable.First
+  let head obs = Observable.FirstAsync(obs)
   
   /// Merges the two observables
   let merge (second:'a IObservable) (first:'a IObservable) = Observable.Merge(first, second)
@@ -185,7 +185,7 @@ type ObservableBuilder() =
   member this.TryFinally(m:IObservable<_>, compensation: unit -> unit) = Observable.Finally(m, Action(compensation))
   member this.Using(res:#IDisposable, body) = this.TryFinally(body res, fun () -> match res with null -> () | disp -> disp.Dispose())
   member this.While(guard, m) = if not (guard()) then this.Zero() else m >>= fun () -> this.While(guard, m)
-  member this.For(sequence, body) = Observable.ForEach(sequence, body)
+  member this.For(sequence, body) = Observable.For(sequence, body)
   member this.Yield(x) = mreturn x
   member this.YieldFrom(m:IObservable<_>) = m
 
