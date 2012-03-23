@@ -85,3 +85,13 @@ let ``When zip is defined with the applicative, it should match the result of Ob
   (Observable.zip a b).Subscribe(fun x -> expected := x) |> ignore
 
   Assert.That(!actual, Is.EqualTo(!expected))
+
+[<Test>]
+let ``Test should show the stack overflow is fixed with Rx 2 beta``() =
+  let test() =
+    let rec g x = observe {
+      yield x
+      if x < 100000 then
+        yield! g (x + 1) }
+    g 5 |> Observable.subscribe ignore ignore ignore |> ignore
+  Assert.DoesNotThrow(TestDelegate(fun () -> test()))
