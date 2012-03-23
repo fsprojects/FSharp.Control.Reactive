@@ -34,6 +34,7 @@
     <DocumentationFile>bin\Release\FSharp.Reactive.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug 4.5|AnyCPU' ">
+    <FscToolPath>..\lib\FSharp\Net45</FscToolPath>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -43,6 +44,7 @@
     <OutputPath>bin\Debug4.5\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release 4.5|AnyCPU' ">
+    <FscToolPath>..\lib\FSharp\Net45</FscToolPath>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <Tailcalls>true</Tailcalls>
@@ -51,7 +53,8 @@
     <DocumentationFile>bin\Release\FSharp.Reactive.XML</DocumentationFile>
     <OutputPath>bin\Release4.5\</OutputPath>
   </PropertyGroup>
-  <Import Project="..\lib\FSharp\Net40\Microsoft.FSharp.Targets" />
+  <Import Condition="$(TargetFrameworkVersion) == 'v4.0'" Project="..\lib\FSharp\Net40\Microsoft.FSharp.Targets" />
+  <Import Condition="$(TargetFrameworkVersion) == 'v4.5'" Project="..\lib\FSharp\Net45\Microsoft.FSharp.Targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <ItemGroup>
     <Compile Include="Observable.fs" />
@@ -59,11 +62,22 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+  </ItemGroup>
+  <ItemGroup Condition="$(TargetFrameworkVersion) == 'v4.0'">
     <Reference Include="FSharp.Core">
       <HintPath>..\lib\FSharp\Net40\FSharp.Core.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <Reference Include="System.Reactive">
+      <HintPath>..\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="$(TargetFrameworkVersion) == 'v4.5'">
+    <Reference Include="FSharp.Core">
+      <HintPath>..\lib\FSharp\Net45\FSharp.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System.Reactive">
       <HintPath>..\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
