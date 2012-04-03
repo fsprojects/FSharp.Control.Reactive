@@ -26,7 +26,7 @@ let target = getBuildParamOrDefault "target" "All"
 (* Tools *)
 let fakePath = "./packages/FAKE.1.64.5/tools"
 
-let nunitPath = "./packages/NUnit.2.6.0.12054/lib"
+let nunitPath = "./packages/NUnit.Runners.2.6.0.12051/tools"
 
 (* files *)
 let appReferences =
