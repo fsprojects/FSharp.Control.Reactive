@@ -99,7 +99,7 @@ module Observable =
     Observable.Where(source, Func<_,_> f)
    
   /// Skips n elements
-  let skip n source = Observable.Skip(source, n)
+  let skip (n: int) source = Observable.Skip(source, n)
    
   /// Skips elements while the predicate is satisfied
   let skipWhile f source = Observable.SkipWhile(source, Func<_,_> f)
@@ -108,7 +108,7 @@ module Observable =
   let count source = Observable.Count(source)
    
   /// Takes n elements
-  let take n source = Observable.Take(source, n)  
+  let take (n: int) source = Observable.Take(source, n)  
 
   /// Determines whether the given observable is empty 
   let isEmpty source = source = Observable.Empty()
