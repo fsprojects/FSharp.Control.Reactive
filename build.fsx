@@ -5,7 +5,7 @@ open Fake
 
 (* properties *)
 let projectName = "FSharp.Reactive"
-let version = "1.1.1"
+let version = if isLocalBuild then "1.1" + System.DateTime.UtcNow.ToString("yMMdd") else buildVersion
 let projectSummary = "A F#-friendly wrapper for the Reactive Extensions."
 let projectDescription = "A F#-friendly wrapper for the Reactive Extensions."
 let authors = ["Ryan Riley"; "Steffen Forkmann"]
@@ -18,14 +18,21 @@ let packagesDir = "./packages/"
 let docsDir = "./docs/" 
 let deployDir = "./deploy/"
 let testDir = "./test/"
+
 let targetPlatformDir = getTargetPlatformDir "4.0.30319"
+
+let nugetDir = "./nuget/"
+let nugetLibDir = nugetDir @@ "lib"
+let nugetDocsDir = nugetDir @@ "docs"
+
+let rxVersion = GetPackageVersion packagesDir "Rx-Main"
 
 (* Params *)
 let target = getBuildParamOrDefault "target" "All"
 
 (* Tools *)
 let fakePath = "./packages/FAKE.1.64.5/tools"
-
+let nugetPath = "./.nuget/nuget.exe"
 let nunitPath = "./packages/NUnit.Runners.2.6.0.12051/tools"
 
 (* files *)
@@ -48,6 +55,9 @@ Target "Clean" (fun _ ->
 )
 
 Target "BuildApp" (fun _ -> 
+    if isLocalBuild then
+        Git.Submodule.init "" ""
+
     AssemblyInfo (fun p -> 
           {p with
              CodeLanguage = FSharp
@@ -96,13 +106,40 @@ Target "ZipDocumentation" (fun _ ->
         |> Zip docsDir (deployDir + sprintf "Documentation-%s.zip" version)
 )
 
-Target "Deploy" (fun _ ->
-    !+ (buildDir + "/**/*.*")
-        -- "*.zip"
-        |> Scan
-        |> Zip buildDir (deployDir + sprintf "%s-%s.zip" projectName version)
+Target "BuildNuGet" (fun _ ->
+    CleanDirs [nugetDir; nugetLibDir; nugetDocsDir]
+
+    XCopy (docsDir |> FullName) nugetDocsDir
+    [buildDir + "*.dll"]
+        |> CopyTo nugetLibDir
+
+    NuGet (fun p ->
+        {p with
+            Authors = authors
+            Project = projectName
+            Description = projectDescription
+            Version = version
+            OutputPath = nugetDir
+            Dependencies = ["Rx-Main", RequireExactly rxVersion]
+            AccessKey = getBuildParamOrDefault "nugetkey" ""
+            ToolPath = nugetPath
+            Publish = hasBuildParam "nugetkey" })
+        "FSharp.Reactive.nuspec"
+
+    [nugetDir + sprintf "FSharp.Reactive.%s.nupkg" version]
+        |> CopyTo deployDir
 )
 
+Target "DeployZip" (fun _ ->
+    !! (buildDir + "/**/*.*")
+    |> Zip buildDir (deployDir + sprintf "%s-%s.zip" projectName version)
+)
+
+FinalTarget "CloseTestRunner" (fun _ ->
+    ProcessHelper.killProcess "nunit-agent.exe"
+)
+
+Target "Deploy" DoNothing
 Target "All" DoNothing
 
 (* Build Order *)
@@ -110,6 +147,8 @@ Target "All" DoNothing
   ==> "BuildApp" <=> "BuildTest" <=> "CopyLicense"
   ==> "Test" <=> "GenerateDocumentation"
   ==> "ZipDocumentation"
+  ==> "BuildNuGet"
+  ==> "DeployZip"
   ==> "Deploy"
 
 "All" <== ["Deploy"]
