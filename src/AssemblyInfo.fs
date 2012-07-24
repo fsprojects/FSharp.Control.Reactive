@@ -24,9 +24,9 @@ exception ReturnNoneException183c26a427ae489c8fd92ec21a0c9a59
 
 [<assembly: AssemblyProduct ("FSharp.Reactive")>]
 
-[<assembly: AssemblyVersion ("1.1.1")>]
+[<assembly: AssemblyVersion ("1.1120724")>]
 
-[<assembly: AssemblyFileVersion ("1.1.1")>]
+[<assembly: AssemblyFileVersion ("1.1120724")>]
 
 [<assembly: AssemblyDelaySign (false)>]
 

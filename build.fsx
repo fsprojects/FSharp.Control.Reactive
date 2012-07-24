@@ -1,4 +1,4 @@
-#I "./packages/FAKE.1.64.5/tools"
+#I "./packages/FAKE.1.64.6/tools"
 #r "FakeLib.dll"
 
 open Fake 
@@ -31,7 +31,7 @@ let rxVersion = GetPackageVersion packagesDir "Rx-Main"
 let target = getBuildParamOrDefault "target" "All"
 
 (* Tools *)
-let fakePath = "./packages/FAKE.1.64.5/tools"
+let fakePath = "./packages/FAKE.1.64.6/tools"
 let nugetPath = "./.nuget/nuget.exe"
 let nunitPath = "./packages/NUnit.Runners.2.6.0.12051/tools"
 
@@ -106,11 +106,6 @@ Target "ZipDocumentation" (fun _ ->
         |> Zip docsDir (deployDir + sprintf "Documentation-%s.zip" version)
 )
 
-Target "DeployZip" (fun _ ->
-    !! (buildDir + "/**/*.*")
-    |> Zip buildDir (deployDir + sprintf "%s-%s.zip" projectName version)
-)
-
 Target "BuildNuGet" (fun _ ->
     CleanDirs [nugetDir; nugetLibDir; nugetDocsDir]
 
@@ -135,6 +130,11 @@ Target "BuildNuGet" (fun _ ->
         |> CopyTo deployDir
 )
 
+Target "DeployZip" (fun _ ->
+    !! (buildDir + "/**/*.*")
+    |> Zip buildDir (deployDir + sprintf "%s-%s.zip" projectName version)
+)
+
 FinalTarget "CloseTestRunner" (fun _ ->
     ProcessHelper.killProcess "nunit-agent.exe"
 )
@@ -147,8 +147,8 @@ Target "All" DoNothing
   ==> "BuildApp" <=> "BuildTest" <=> "CopyLicense"
   ==> "Test" <=> "GenerateDocumentation"
   ==> "ZipDocumentation"
-  ==> "DeployZip"
   ==> "BuildNuGet"
+  ==> "DeployZip"
   ==> "Deploy"
 
 "All" <== ["Deploy"]
