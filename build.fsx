@@ -87,7 +87,7 @@ Target "Test" (fun _ ->
 )
 
 Target "GenerateDocumentation" (fun _ ->
-    !+ (buildDir + "*.dll")      
+    !+ (buildDir + "FSharp.Reactive.dll")      
       |> Scan
       |> Docu (fun p ->
           {p with
@@ -106,6 +106,11 @@ Target "ZipDocumentation" (fun _ ->
         |> Zip docsDir (deployDir + sprintf "Documentation-%s.zip" version)
 )
 
+Target "DeployZip" (fun _ ->
+    !! (buildDir + "/**/*.*")
+    |> Zip buildDir (deployDir + sprintf "%s-%s.zip" projectName version)
+)
+
 Target "BuildNuGet" (fun _ ->
     CleanDirs [nugetDir; nugetLibDir; nugetDocsDir]
 
@@ -120,7 +125,7 @@ Target "BuildNuGet" (fun _ ->
             Description = projectDescription
             Version = version
             OutputPath = nugetDir
-            Dependencies = ["Rx-Main", RequireExactly rxVersion]
+            Dependencies = ["Reactive Extensions - Main Library", RequireExactly rxVersion]
             AccessKey = getBuildParamOrDefault "nugetkey" ""
             ToolPath = nugetPath
             Publish = hasBuildParam "nugetkey" })
@@ -128,11 +133,6 @@ Target "BuildNuGet" (fun _ ->
 
     [nugetDir + sprintf "FSharp.Reactive.%s.nupkg" version]
         |> CopyTo deployDir
-)
-
-Target "DeployZip" (fun _ ->
-    !! (buildDir + "/**/*.*")
-    |> Zip buildDir (deployDir + sprintf "%s-%s.zip" projectName version)
 )
 
 FinalTarget "CloseTestRunner" (fun _ ->
@@ -147,8 +147,8 @@ Target "All" DoNothing
   ==> "BuildApp" <=> "BuildTest" <=> "CopyLicense"
   ==> "Test" <=> "GenerateDocumentation"
   ==> "ZipDocumentation"
-  ==> "BuildNuGet"
   ==> "DeployZip"
+  ==> "BuildNuGet"
   ==> "Deploy"
 
 "All" <== ["Deploy"]
