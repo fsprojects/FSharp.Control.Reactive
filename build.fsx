@@ -5,7 +5,7 @@ open Fake
 
 (* properties *)
 let projectName = "FSharp.Reactive"
-let version = if isLocalBuild then "1.1" + System.DateTime.UtcNow.ToString("yMMdd") else buildVersion
+let version = if isLocalBuild then "2.0." + System.DateTime.UtcNow.ToString("yMMdd") + "-rc" else buildVersion
 let projectSummary = "A F#-friendly wrapper for the Reactive Extensions."
 let projectDescription = "A F#-friendly wrapper for the Reactive Extensions."
 let authors = ["Ryan Riley"; "Steffen Forkmann"]
@@ -22,7 +22,7 @@ let testDir = "./test/"
 let targetPlatformDir = getTargetPlatformDir "4.0.30319"
 
 let nugetDir = "./nuget/"
-let nugetLibDir = nugetDir @@ "lib"
+let nugetLibDir = nugetDir @@ "lib/net40"
 let nugetDocsDir = nugetDir @@ "docs"
 
 let rxVersion = GetPackageVersion packagesDir "Rx-Main"
@@ -110,7 +110,12 @@ Target "BuildNuGet" (fun _ ->
     CleanDirs [nugetDir; nugetLibDir; nugetDocsDir]
 
     XCopy (docsDir |> FullName) nugetDocsDir
-    [buildDir + "*.dll"]
+    [ buildDir + "FSharp.Reactive.dll"
+      buildDir + "FSharp.Reactive.pdb"
+      buildDir + "System.Reactive.Core.dll"
+      buildDir + "System.Reactive.Interfaces.dll"
+      buildDir + "System.Reactive.Linq.dll"
+      buildDir + "System.Reactive.PlatformServices.dll" ]
         |> CopyTo nugetLibDir
 
     NuGet (fun p ->
@@ -120,7 +125,7 @@ Target "BuildNuGet" (fun _ ->
             Description = projectDescription
             Version = version
             OutputPath = nugetDir
-            Dependencies = ["Reactive Extensions - Main Library", RequireExactly rxVersion]
+            Dependencies = ["Rx-Main", RequireExactly rxVersion]
             AccessKey = getBuildParamOrDefault "nugetkey" ""
             ToolPath = nugetPath
             Publish = hasBuildParam "nugetkey" })

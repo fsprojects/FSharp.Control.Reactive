@@ -30,6 +30,7 @@ _ReSharper*/
 build/
 deploy/
 docs/
+nuget/
 packages/
 test/
-!tools/
+tools/
