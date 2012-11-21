@@ -87,11 +87,7 @@ Target "Test" (fun _ ->
 )
 
 Target "GenerateDocumentation" (fun _ ->
-<<<<<<< HEAD
-    !+ (buildDir + "FSharp.Reactive.dll")      
-=======
     !+ (buildDir + "FSharp.Reactive.dll")
->>>>>>> Minor updates to build script.
       |> Scan
       |> Docu (fun p ->
           {p with
@@ -118,8 +114,7 @@ Target "BuildNuGet" (fun _ ->
       buildDir + "FSharp.Reactive.pdb"
       buildDir + "System.Reactive.Core.dll"
       buildDir + "System.Reactive.Interfaces.dll"
-      buildDir + "System.Reactive.Linq.dll"
-      buildDir + "System.Reactive.PlatformServices.dll" ]
+      buildDir + "System.Reactive.Linq.dll" ]
         |> CopyTo nugetLibDir
 
     NuGet (fun p ->
@@ -129,7 +124,7 @@ Target "BuildNuGet" (fun _ ->
             Description = projectDescription
             Version = version
             OutputPath = nugetDir
-            Dependencies = ["Rx-Main", RequireExactly rxVersion]
+            Dependencies = ["Rx-Linq", RequireExactly rxVersion]
             AccessKey = getBuildParamOrDefault "nugetkey" ""
             ToolPath = nugetPath
             Publish = hasBuildParam "nugetkey" })
