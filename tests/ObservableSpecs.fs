@@ -74,8 +74,10 @@ let ``When subscribing to an observable that fires an exception using the Observ
 
 [<Test>]
 let ``When zip is defined with the applicative, it should match the result of Observable_zip``() =
-  let a = mreturn 1
-  let b = mreturn 2
+  let inline (<*>) f m = Observable.apply f m
+  let inline (<!>) f m = Observable.map f m
+  let a = Observable.Return 1
+  let b = Observable.Return 2
   let zip b a = (fun x y -> x,y) <!> a <*> b // allows you to call a |> zip b, similar to Observable.zip
 
   let actual = ref (0,0)
