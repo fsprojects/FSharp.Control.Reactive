@@ -5,7 +5,7 @@ open Fake
 
 (* properties *)
 let projectName = "FSharp.Reactive"
-let version = if isLocalBuild then "2.0." + System.DateTime.UtcNow.ToString("yMMdd") + "-rc" else buildVersion
+let version = if isLocalBuild then "2.0." + System.DateTime.UtcNow.ToString("yMMdd") else buildVersion
 let projectSummary = "A F#-friendly wrapper for the Reactive Extensions."
 let projectDescription = "A F#-friendly wrapper for the Reactive Extensions."
 let authors = ["Ryan Riley"; "Steffen Forkmann"]
@@ -82,12 +82,16 @@ Target "Test" (fun _ ->
       |> NUnit (fun p -> 
           {p with 
              ToolPath = nunitPath; 
-             DisableShadowCopy = true; 
-             OutputFile = testDir + "TestResults.xml" }) 
+             DisableShadowCopy = true;
+             OutputFile = testDir + "TestResults.xml" })
 )
 
 Target "GenerateDocumentation" (fun _ ->
+<<<<<<< HEAD
     !+ (buildDir + "FSharp.Reactive.dll")      
+=======
+    !+ (buildDir + "FSharp.Reactive.dll")
+>>>>>>> Minor updates to build script.
       |> Scan
       |> Docu (fun p ->
           {p with
@@ -100,7 +104,7 @@ Target "CopyLicense" (fun _ ->
     [ "LICENSE.txt" ] |> CopyTo buildDir
 )
 
-Target "ZipDocumentation" (fun _ ->    
+Target "ZipDocumentation" (fun _ ->
     !+ (docsDir + "/**/*.*")
         |> Scan
         |> Zip docsDir (deployDir + sprintf "Documentation-%s.zip" version)
