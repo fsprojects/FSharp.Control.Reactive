@@ -179,7 +179,7 @@ type ObservableBuilder() =
   member this.ReturnFrom(m:IObservable<_>) = m
   member this.Bind(m, f) = m >>= f
   member this.Combine(comp1:IObservable<'a>, comp2:IObservable<'a>) = Observable.Concat(comp1, comp2)
-  member this.Delay(f) = Observable.Defer f
+  member this.Delay(f) = Observable.Defer(f: Func<IObservable<'a>>)
   member this.Zero() = Observable.Empty()
   member this.TryWith(m:IObservable<_>, h:exn -> IObservable<_>) = Observable.Catch(m, h)
   member this.TryFinally(m:IObservable<_>, compensation: unit -> unit) = Observable.Finally(m, Action(compensation))
