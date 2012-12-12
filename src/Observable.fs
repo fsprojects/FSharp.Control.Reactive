@@ -25,7 +25,9 @@ type Observer with
 type Observable with
   /// Creates an observable sequence from the specified Subscribe method implementation.
   static member Create (subscribe:'a IObserver -> unit -> unit) =
-    Observable.Create(Func<_,_>(fun o -> Action(subscribe o)))
+    Observable.Create(Func<_,_>(fun o ->
+      let action = subscribe o
+      Action(action)))
 
   /// Creates an observable sequence from the specified Subscribe method implementation.
   static member Create subscribe =
@@ -36,7 +38,7 @@ module Observable =
   let bind (f:'a -> IObservable<'b>) (m:IObservable<'a>) = m.SelectMany(Func<_,_> f)
 
   /// Creates an observable sequence from the specified Subscribe method implementation.
-  let create (f:'a IObserver -> unit -> unit) = Observable.Create f
+  let create (f:'a IObserver -> (unit -> unit)) = Observable.Create f
 
   /// Generates an observable from an IEvent<_> as an EventPattern.
   let fromEventPattern<'a> (target:obj) eventName =
