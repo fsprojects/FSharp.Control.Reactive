@@ -14,7 +14,7 @@ exception ReturnNoneException183c26a427ae489c8fd92ec21a0c9a59
 
 [<assembly: ComVisible (false)>]
 
-[<assembly: CLSCompliant (false)>]
+//[<assembly: CLSCompliant (false)>]
 
 [<assembly: Guid ("ED23F688-C0D0-4102-93D5-0D832633F66D")>]
 
