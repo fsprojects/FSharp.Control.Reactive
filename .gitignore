@@ -34,3 +34,5 @@ nuget/
 packages/
 test/
 tools/
+
+*.userprefs

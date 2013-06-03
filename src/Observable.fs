@@ -1,6 +1,7 @@
 ﻿module FSharp.Reactive
 
 open System
+open System.Threading.Tasks
 open System.Reactive
 open System.Reactive.Linq
 open System.Reactive.Concurrency
@@ -131,6 +132,12 @@ module Observable =
   /// by an exception with the next observable sequence.
   let catch (second:'a IObservable) first =
     Observable.Catch(first, second) 
+    
+  let defer f = 
+     Observable.Defer(Func<IObservable<_>> f)
+     
+  let deferTask f = 
+     Observable.Defer(Func<Task<_>> f)
    
   /// Takes elements while the predicate is satisfied
   let takeWhile f source = Observable.TakeWhile(source, Func<_,_> f)
@@ -142,12 +149,19 @@ module Observable =
    
   /// Invokes the finally action after source observable sequence terminates normally or by an exception.
   let performFinally f source = Observable.Finally(source, Action f)
-   
+  
   /// Folds the observable
   let fold f seed source = Observable.Aggregate(source, seed, Func<_,_,_> f)
 
   /// Reduces the observable
   let reduce f source = Observable.Aggregate(source, Func<_,_,_> f)
+  
+  ///Repeats the observable
+  let repeat f = Observable.Repeat(source = f)
+  let repeatBy i f= Observable.Repeat(source = f, repeatCount = i)
+  
+  let repeatValue v = Observable.Repeat(value = v)
+  let repeatValueBy i v = Observable.Repeat(value = v, repeatCount = i)
 
 type IObservable<'a> with
   /// Subscribes to the Observable with just a next-function.
