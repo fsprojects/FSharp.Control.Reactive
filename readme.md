@@ -4,7 +4,7 @@ This library is a small wrapper around reactive extensions that allow easier usa
 
 ###Windows
 
-Under Windows this should build as using either [Fake][1] or using Visual Studio.  
+Under Windows you should build using either [Fake][1] or using Visual Studio.  
 
 ###Mono
 
