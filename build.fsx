@@ -30,9 +30,9 @@ let rxVersion = GetPackageVersion packagesDir "Rx-Main"
 let target = getBuildParamOrDefault "target" "All"
 
 (* Tools *)
-let fakePath = "./packages/FAKE.1.64.6/tools"
-let nugetPath = "./.nuget/nuget.exe"
-let nunitPath = "./packages/NUnit.Runners.2.6.0.12051/tools"
+let nugetPath = "./lib/Nuget/nuget.exe"
+let nunitVersion = GetPackageVersion packagesDir "NUnit.Runners"
+let nunitPath = sprintf "%sNUnit.Runners.%s/Tools" packagesDir nunitVersion
 
 (* files *)
 let appReferences =
@@ -90,7 +90,7 @@ Target "GenerateDocumentation" (fun _ ->
       |> Scan
       |> Docu (fun p ->
           {p with
-             ToolPath = fakePath + "/docu.exe"
+             ToolPath = "./lib/FAKE/tools/docu.exe"
              TemplatesPath = "./lib/templates"
              OutputPath = docsDir })
 )
