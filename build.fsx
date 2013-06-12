@@ -2,7 +2,8 @@
 
 open Fake 
 
-RestorePackages()
+!! "./**/packages.config"
+|> Seq.iter (RestorePackage (fun t -> { t with ToolPath = ".nuget/nuget.exe" }))
 
 (* properties *)
 let projectName = "FSharp.Reactive"
