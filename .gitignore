@@ -34,3 +34,4 @@ nuget/
 packages/
 test/
 tools/
+*.nupkg
