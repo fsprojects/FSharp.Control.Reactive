@@ -2,6 +2,8 @@
 
 open Fake 
 
+RestorePackages()
+
 (* properties *)
 let projectName = "FSharp.Reactive"
 let version = if isLocalBuild then "2.0." + System.DateTime.UtcNow.ToString("yMMdd") else buildVersion
@@ -30,7 +32,7 @@ let rxVersion = GetPackageVersion packagesDir "Rx-Main"
 let target = getBuildParamOrDefault "target" "All"
 
 (* Tools *)
-let nugetPath = "./lib/Nuget/nuget.exe"
+let nugetPath = ".Nuget/nuget.exe"
 let nunitVersion = GetPackageVersion packagesDir "NUnit.Runners"
 let nunitPath = sprintf "%sNUnit.Runners.%s/Tools" packagesDir nunitVersion
 
