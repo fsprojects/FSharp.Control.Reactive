@@ -1,6 +1,8 @@
 #r @"lib\FAKE\tools\FakeLib.dll"
 
 open Fake 
+open Fake.AssemblyInfoFile
+open Fake.MSBuild
 
 !! "./**/packages.config"
 |> Seq.iter (RestorePackage (fun t -> { t with ToolPath = ".nuget/nuget.exe" }))
@@ -21,16 +23,9 @@ let docsDir = "./docs/"
 let deployDir = "./deploy/"
 let testDir = "./test/"
 
-let targetPlatformDir = getTargetPlatformDir "4.0.30319"
-
 let nugetDir = "./nuget/"
 let nugetLibDir = nugetDir @@ "lib/net40"
 let nugetDocsDir = nugetDir @@ "docs"
-
-let rxVersion = GetPackageVersion packagesDir "Rx-Main"
-
-(* Params *)
-let target = getBuildParamOrDefault "target" "All"
 
 (* Tools *)
 let nugetPath = ".Nuget/nuget.exe"
@@ -47,55 +42,51 @@ let testReferences =
         |> Scan
 
 let filesToZip =
-  !+ (buildDir + "/**/*.*")     
+  !+ (buildDir + "/**/*.*")
       -- "*.zip"
-      |> Scan      
+      |> Scan
 
 (* Targets *)
 Target "Clean" (fun _ ->
-    CleanDirs [buildDir; testDir; deployDir; docsDir]
+    CleanDirs [buildDir; testDir; deployDir; docsDir; nugetDir; nugetLibDir; nugetDocsDir]
 )
 
 Target "BuildApp" (fun _ -> 
-    if isLocalBuild then
-        Git.Submodule.init "" ""
-
-    AssemblyInfo (fun p -> 
-          {p with
-             CodeLanguage = FSharp
-             AssemblyVersion = version
-             AssemblyTitle = projectName
-             AssemblyDescription = projectDescription
-             Guid = "ED23F688-C0D0-4102-93D5-0D832633F66D"
-             OutputFileName = "./src/AssemblyInfo.fs"})
+    if not isLocalBuild then
+        [ Attribute.Version(version)
+          Attribute.Title(projectName)
+          Attribute.Description(projectDescription)
+          Attribute.Guid("ED23F688-C0D0-4102-93D5-0D832633F66D")
+        ]
+        |> CreateFSharpAssemblyInfo "src/AssemblyInfo.fs"
 
     MSBuildRelease buildDir "Build" appReferences
-      |> Log "AppBuild-Output: "
+        |> Log "AppBuild-Output: "
 )
 
 Target "BuildTest" (fun _ -> 
     MSBuildDebug testDir "Build" testReferences
-      |> Log "TestBuild-Output: "
+        |> Log "TestBuild-Output: "
 )
 
 Target "Test" (fun _ ->
     !+ (testDir + "/*.Tests.dll")
-      |> Scan
-      |> NUnit (fun p -> 
-          {p with 
-             ToolPath = nunitPath; 
-             DisableShadowCopy = true;
-             OutputFile = testDir + "TestResults.xml" })
+        |> Scan
+        |> NUnit (fun p -> 
+            {p with 
+                ToolPath = nunitPath; 
+                DisableShadowCopy = true;
+                OutputFile = testDir + "TestResults.xml" })
 )
 
 Target "GenerateDocumentation" (fun _ ->
     !+ (buildDir + "FSharp.Reactive.dll")
-      |> Scan
-      |> Docu (fun p ->
-          {p with
-             ToolPath = "./lib/FAKE/tools/docu.exe"
-             TemplatesPath = "./lib/templates"
-             OutputPath = docsDir })
+        |> Scan
+        |> Docu (fun p ->
+            {p with
+                ToolPath = "./lib/FAKE/tools/docu.exe"
+                TemplatesPath = "./lib/templates"
+                OutputPath = docsDir })
 )
 
 Target "CopyLicense" (fun _ ->
@@ -109,8 +100,6 @@ Target "ZipDocumentation" (fun _ ->
 )
 
 Target "BuildNuGet" (fun _ ->
-    CleanDirs [nugetDir; nugetLibDir; nugetDocsDir]
-
     XCopy (docsDir |> FullName) nugetDocsDir
     [ buildDir + "FSharp.Reactive.dll"
       buildDir + "FSharp.Reactive.pdb"
@@ -118,6 +107,8 @@ Target "BuildNuGet" (fun _ ->
       buildDir + "System.Reactive.Interfaces.dll"
       buildDir + "System.Reactive.Linq.dll" ]
         |> CopyTo nugetLibDir
+
+    let rxVersion = GetPackageVersion packagesDir "Rx-Main"
 
     NuGet (fun p ->
         {p with
@@ -146,18 +137,19 @@ FinalTarget "CloseTestRunner" (fun _ ->
 )
 
 Target "Deploy" DoNothing
-Target "All" DoNothing
+Target "Default" DoNothing
 
 (* Build Order *)
 "Clean"
-  ==> "BuildApp" <=> "BuildTest" <=> "CopyLicense"
-  ==> "Test" <=> "GenerateDocumentation"
-  ==> "ZipDocumentation"
-  ==> "BuildNuGet"
-  ==> "DeployZip"
-  ==> "Deploy"
+    ==> "BuildApp" <=> "BuildTest" <=> "CopyLicense"
+    ==> "Test" <=> "GenerateDocumentation"
+    ==> "ZipDocumentation"
+    ==> "BuildNuGet"
+    ==> "DeployZip"
+    ==> "Deploy"
 
-"All" <== ["Deploy"]
+"Default" <== ["Deploy"]
 
 // start build
-Run target
+RunTargetOrDefault "Default"
+
