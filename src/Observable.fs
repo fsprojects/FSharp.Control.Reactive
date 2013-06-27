@@ -6,6 +6,7 @@ open System.Reactive.Linq
 open System.Reactive.Concurrency
 
 [<AutoOpen>]
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Core =
 
     type Observer with
@@ -84,6 +85,7 @@ module Core =
     let observe = ObservableBuilder()
 
 /// The Observable module provides operators for working with IObservable<_> in F#.
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Observable =
 
     /// Binds an observable to generate a subsequent observable.
