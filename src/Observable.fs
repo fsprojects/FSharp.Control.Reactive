@@ -72,7 +72,7 @@ module Core =
             this.TryFinally(body res, fun () -> match res with null -> () | disp -> disp.Dispose())
         member this.While(guard, m: IObservable<_>) =
             if not (guard()) then
-                this.Zero()
+                Observable.Empty()
             else
                 m.SelectMany(Func<_,_>(fun () -> this.While(guard, m)))
         member this.For(sequence, body) =
