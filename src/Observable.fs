@@ -28,24 +28,24 @@ module Core =
 
     type Observable with
         /// Creates an observable sequence from the specified Subscribe method implementation.
-        static member Create (subscribe:'a IObserver -> unit -> unit) =
+        static member Create (subscribe: IObserver<'T> -> unit -> unit) =
             Observable.Create(Func<_,_>(fun o -> Action(subscribe o)))
 
         /// Creates an observable sequence from the specified Subscribe method implementation.
         static member Create subscribe =
             Observable.Create(Func<_,IDisposable> subscribe)
         
-    type IObservable<'a> with
+    type IObservable<'T> with
         /// Subscribes to the Observable with just a next-function.
-        member this.Subscribe(onNext:'a -> unit) =
+        member this.Subscribe(onNext: 'T -> unit) =
             this.Subscribe(Action<_> onNext)
 
         /// Subscribes to the Observable with a next and an error-function.
-        member this.Subscribe(onNext:'a -> unit, onError:exn -> unit) =
+        member this.Subscribe(onNext: 'T -> unit, onError: exn -> unit) =
             this.Subscribe(Action<_> onNext, Action<exn> onError)
      
         /// Subscribes to the Observable with a next and a completion callback.
-        member this.Subscribe(onNext:'a -> unit, onCompleted:unit -> unit) =
+        member this.Subscribe(onNext: 'T -> unit, onCompleted: unit -> unit) =
             this.Subscribe(Action<_> onNext, Action onCompleted)
 
         /// Subscribes to the Observable with all 3 callbacks.
@@ -55,20 +55,20 @@ module Core =
     type ObservableBuilder() =
         member this.Return(x) =
             Observable.Return x
-        member this.ReturnFrom(m:IObservable<_>) = m
-        member this.Bind(m: IObservable<'a>, f: 'a -> IObservable<'b>) =
+        member this.ReturnFrom(m: IObservable<_>) = m
+        member this.Bind(m: IObservable<'T>, f: 'T -> IObservable<'TNext>) =
             m.SelectMany(Func<_,_> f)
-        member this.Combine(comp1:IObservable<'a>, comp2:IObservable<'a>) =
+        member this.Combine(comp1: IObservable<'T>, comp2: IObservable<'T>) =
             Observable.Concat(comp1, comp2)
         member this.Delay(f) =
-            Observable.Defer(f: Func<IObservable<'a>>)
+            Observable.Defer(f: Func<IObservable<'T>>)
         member this.Zero() =
             Observable.Empty()
-        member this.TryWith(m:IObservable<_>, h:exn -> IObservable<_>) =
+        member this.TryWith(m: IObservable<_>, h: exn -> IObservable<_>) =
             Observable.Catch(m, h)
-        member this.TryFinally(m:IObservable<_>, compensation: unit -> unit) =
+        member this.TryFinally(m: IObservable<_>, compensation: unit -> unit) =
             Observable.Finally(m, Action(compensation))
-        member this.Using(res:#IDisposable, body) =
+        member this.Using(res: #IDisposable, body) =
             this.TryFinally(body res, fun () -> match res with null -> () | disp -> disp.Dispose())
         member this.While(guard, m: IObservable<_>) =
             if not (guard()) then
@@ -80,7 +80,7 @@ module Core =
         // TODO: Are these the correct implementation? Are they necessary?
         member this.Yield(x) =
             Observable.Return x
-        member this.YieldFrom(m:IObservable<_>) = m
+        member this.YieldFrom(m: IObservable<_>) = m
 
     let observe = ObservableBuilder()
 
@@ -89,35 +89,35 @@ module Core =
 module Observable =
 
     /// Binds an observable to generate a subsequent observable.
-    let bind (f:'a -> IObservable<'b>) (m:IObservable<'a>) = m.SelectMany(Func<_,_> f)
+    let bind (f: 'T -> IObservable<'TNext>) (m: IObservable<'T>) = m.SelectMany(Func<_,_> f)
 
     /// Creates an observable sequence from the specified Subscribe method implementation.
-    let create (f:'a IObserver -> (unit -> unit)) = Observable.Create f
+    let create (f: IObserver<'T> -> (unit -> unit)) = Observable.Create f
 
     /// Generates an observable from an IEvent<_> as an EventPattern.
-    let fromEventPattern<'a> (target:obj) eventName =
+    let fromEventPattern<'T> (target:obj) eventName =
         Observable.FromEventPattern(target, eventName)
     
     /// Generates an empty observable
-    let empty<'a> = Observable.Empty<'a>()
+    let empty<'T> = Observable.Empty<'T>()
     
     /// Takes the head of the elements
     let head obs = Observable.FirstAsync(obs)
     
     /// Merges the two observables
-    let merge (second:'a IObservable) (first:'a IObservable) = Observable.Merge(first, second)
+    let merge (second: IObservable<'T>) (first: IObservable<'T>) = Observable.Merge(first, second)
     
     /// Creates a range as an observable
     let range start count = Observable.Range(start, count)
     
     /// Converts a seq into an observable
-    let toObservable (source:'a seq) = Observable.ToObservable(source)
+    let toObservable (source: seq<'T>) = Observable.ToObservable(source)
     
     /// Converts an observable into a seq
-    let toEnumerable (source:'a IObservable) = Observable.ToEnumerable(source)
+    let toEnumerable (source: IObservable<'T>) = Observable.ToEnumerable(source)
     
     /// Subscribes to the observable with all three callbacks
-    let subscribe onNext onError onCompleted (observable: 'a IObservable) =
+    let subscribe onNext onError onCompleted (observable: IObservable<'T>) =
         observable.Subscribe(Observer.Create(Action<_> onNext, Action<_> onError, Action onCompleted))
     
     /// Returns the observable sequence that reacts first
@@ -127,7 +127,7 @@ module Observable =
     let both second first = Observable.And(first, second)
 
     /// Merges two observable sequences into one observable sequence
-    let zip (second:'a IObservable) (first:'a IObservable) =
+    let zip (second: IObservable<'T>) (first: IObservable<'T>) =
         let inner a b = a, b
         Observable.Zip(first, second, Func<_,_,_> inner)
 
@@ -139,13 +139,13 @@ module Observable =
         Observable.CombineLatest(first, second, Func<_,_,_> inner)
     
     /// Concats (flattens) an observable of observables into an observable
-    /// ===> Observable.SelectMany(observable, Func<_,_>(fun (x:IObservable<'a>) -> x))
-    let concat (second:'a IObservable) (first:'a IObservable) = Observable.Concat(first, second)
+    /// ===> Observable.SelectMany(observable, Func<_,_>(fun (x:IObservable<'T>) -> x))
+    let concat (second: IObservable<'T>) (first: IObservable<'T>) = Observable.Concat(first, second)
     
-    /// maps the given observable with the given function
+    /// Maps the given observable with the given function
     let map f source = Observable.Select(source, Func<_,_>(f))    
      
-    /// maps the given observable with the given function
+    /// Maps the given observable with the given function
     let mapi f source =
         let inner x i = f i x
         Observable.Select(source, Func<_,_,_> inner)
@@ -180,16 +180,16 @@ module Observable =
     let exists f source = source |> skipWhile (not << f) |> (not << isEmpty)
 
     /// Throttles the observable for the given interval
-    let throttle (interval:TimeSpan) source =
+    let throttle (interval: TimeSpan) source =
         Observable.Throttle(source, interval)
     
     /// Samples the observable at the given interval
-    let sample (interval:TimeSpan) source =
+    let sample (interval: TimeSpan) source =
         Observable.Sample(source, interval)
 
     /// Continues an observable sequence that is terminated
     /// by an exception with the next observable sequence.
-    let catch (second:'a IObservable) first =
+    let catch (second: IObservable<'T>) first =
         Observable.Catch(first, second) 
      
     /// Takes elements while the predicate is satisfied
@@ -208,4 +208,3 @@ module Observable =
 
     /// Reduces the observable
     let reduce f source = Observable.Aggregate(source, Func<_,_,_> f)
-
