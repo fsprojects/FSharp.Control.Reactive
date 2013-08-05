@@ -19,13 +19,11 @@ let homepage = "https://github.com/panesofglass/FSharp.Reactive"
 (* Directories *)
 let buildDir = "./build/"
 let packagesDir = "./packages/"
-let docsDir = "./docs/" 
 let deployDir = "./deploy/"
 let testDir = "./test/"
 
 let nugetDir = "./nuget/"
 let nugetLibDir = nugetDir @@ "lib/net40"
-let nugetDocsDir = nugetDir @@ "docs"
 
 (* Tools *)
 let nugetPath = ".Nuget/nuget.exe"
@@ -48,7 +46,7 @@ let filesToZip =
 
 (* Targets *)
 Target "Clean" (fun _ ->
-    CleanDirs [buildDir; testDir; deployDir; docsDir; nugetDir; nugetLibDir; nugetDocsDir]
+    CleanDirs [buildDir; testDir; deployDir; nugetDir; nugetLibDir]
 )
 
 Target "BuildApp" (fun _ -> 
@@ -79,37 +77,16 @@ Target "Test" (fun _ ->
                 OutputFile = testDir + "TestResults.xml" })
 )
 
-Target "GenerateDocumentation" (fun _ ->
-    !+ (buildDir + "FSharp.Reactive.dll")
-        |> Scan
-        |> Docu (fun p ->
-            {p with
-                ToolPath = "./lib/FAKE/tools/docu.exe"
-                TemplatesPath = "./lib/templates"
-                OutputPath = docsDir })
-)
-
 Target "CopyLicense" (fun _ ->
     [ "LICENSE.txt" ] |> CopyTo buildDir
 )
 
-Target "ZipDocumentation" (fun _ ->
-    !+ (docsDir + "/**/*.*")
-        |> Scan
-        |> Zip docsDir (deployDir + sprintf "Documentation-%s.zip" version)
-)
-
 Target "BuildNuGet" (fun _ ->
-    XCopy (docsDir |> FullName) nugetDocsDir
     [ buildDir + "FSharp.Reactive.dll"
-      buildDir + "FSharp.Reactive.pdb"
-      buildDir + "System.Reactive.Core.dll"
-      buildDir + "System.Reactive.Interfaces.dll"
-      buildDir + "System.Reactive.Linq.dll" ]
+      buildDir + "FSharp.Reactive.pdb" ]
         |> CopyTo nugetLibDir
 
-    let rxVersion = GetPackageVersion packagesDir "Rx-Main"
-
+    let rxVersion = GetPackageVersion packagesDir "Rx-Linq"
     NuGet (fun p ->
         {p with
             Authors = authors
@@ -117,7 +94,7 @@ Target "BuildNuGet" (fun _ ->
             Description = projectDescription
             Version = version
             OutputPath = nugetDir
-            Dependencies = ["Rx-Linq", RequireExactly rxVersion]
+            Dependencies = ["Rx-Linq", rxVersion]
             AccessKey = getBuildParamOrDefault "nugetkey" ""
             ToolPath = nugetPath
             Publish = hasBuildParam "nugetkey" })
@@ -142,8 +119,7 @@ Target "Default" DoNothing
 (* Build Order *)
 "Clean"
     ==> "BuildApp" <=> "BuildTest" <=> "CopyLicense"
-    ==> "Test" <=> "GenerateDocumentation"
-    ==> "ZipDocumentation"
+    ==> "Test"
     ==> "BuildNuGet"
     ==> "DeployZip"
     ==> "Deploy"
