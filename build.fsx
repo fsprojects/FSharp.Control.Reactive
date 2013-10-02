@@ -9,12 +9,12 @@ open Fake.MSBuild
 
 (* properties *)
 let projectName = "FSharp.Reactive"
-let version = if isLocalBuild then "2.0." + System.DateTime.UtcNow.ToString("yMMdd") else buildVersion
+let version = if isLocalBuild then "2.1." + System.DateTime.UtcNow.ToString("yMMdd") else buildVersion
 let projectSummary = "A F#-friendly wrapper for the Reactive Extensions."
 let projectDescription = "A F#-friendly wrapper for the Reactive Extensions."
 let authors = ["Ryan Riley"; "Steffen Forkmann"]
 let mail = "ryan.riley@panesofglass.org"
-let homepage = "https://github.com/panesofglass/FSharp.Reactive"
+let homepage = "https://github.com/fsharp/FSharp.Reactive"
 
 (* Directories *)
 let buildDir = "./build/"
