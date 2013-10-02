@@ -119,6 +119,10 @@ module Observable =
     /// Subscribes to the observable with all three callbacks
     let subscribe onNext onError onCompleted (observable: IObservable<'T>) =
         observable.Subscribe(Observer.Create(Action<_> onNext, Action<_> onError, Action onCompleted))
+
+    /// Subscribes to the observable with the given observer
+    let subscribeObserver observer (observable: IObservable<'T>) =
+        observable.Subscribe observer
     
     /// Returns the observable sequence that reacts first
     let amb second first = Observable.Amb(first, second)
