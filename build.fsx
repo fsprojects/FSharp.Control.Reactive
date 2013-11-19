@@ -32,17 +32,13 @@ let nunitPath = sprintf "%sNUnit.Runners.%s/Tools" packagesDir nunitVersion
 
 (* files *)
 let appReferences =
-    !+ "src/**/*.fsproj" 
-        |> Scan
+    !! "src/**/*.fsproj" 
 
 let testReferences =
-    !+ "tests/**/*.fsproj" 
-        |> Scan
+    !! "tests/**/*.fsproj" 
 
 let filesToZip =
-  !+ (buildDir + "/**/*.*")
-      -- "*.zip"
-      |> Scan
+    !! (buildDir + "/**/*.*") -- "*.zip"
 
 (* Targets *)
 Target "Clean" (fun _ ->
@@ -68,8 +64,7 @@ Target "BuildTest" (fun _ ->
 )
 
 Target "Test" (fun _ ->
-    !+ (testDir + "/*.Tests.dll")
-        |> Scan
+    !! (testDir + "/*.Tests.dll")
         |> NUnit (fun p -> 
             {p with 
                 ToolPath = nunitPath; 
