@@ -9,7 +9,7 @@ open Fake.MSBuild
 
 (* properties *)
 let projectName = "FSharp.Reactive"
-let version = if isLocalBuild then "2.1." + System.DateTime.UtcNow.ToString("yMMdd") else buildVersion
+let version = if isLocalBuild then "2.2." + System.DateTime.UtcNow.ToString("yMMdd") else buildVersion
 let projectSummary = "A F#-friendly wrapper for the Reactive Extensions."
 let projectDescription = "A F#-friendly wrapper for the Reactive Extensions."
 let authors = ["Ryan Riley"; "Steffen Forkmann"]
@@ -89,7 +89,7 @@ Target "BuildNuGet" (fun _ ->
             Description = projectDescription
             Version = version
             OutputPath = nugetDir
-            Dependencies = ["Rx-Linq", rxVersion]
+            Dependencies = ["Rx-Core", rxVersion; "Rx-Interfaces", rxVersion; "Rx-Linq", rxVersion]
             AccessKey = getBuildParamOrDefault "nugetkey" ""
             ToolPath = nugetPath
             Publish = hasBuildParam "nugetkey" })
