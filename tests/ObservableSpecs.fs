@@ -98,3 +98,12 @@ let ``Test should show the stack overflow is fixed with Rx 2 beta``() =
         g 5 |> Observable.subscribe ignore ignore ignore |> ignore
     Assert.DoesNotThrow(TestDelegate(fun () -> test()))
 
+[<Test>]
+let ``Zipping two observable sequences of different types creates a single zipped observable`` =
+   let obs1 = Observable.Return 1
+   let obs2 = Observable.Return "A"
+   let zipped = obs1 |> Observable.zip obs2
+   let result = zipped |> Observable.First
+   let expected = ( 1, "A" )
+
+   Assert.That(result, Is.EqualTo(expected))

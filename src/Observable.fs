@@ -131,7 +131,7 @@ module Observable =
     let both second first = Observable.And(first, second)
 
     /// Merges two observable sequences into one observable sequence
-    let zip (second: IObservable<'T>) (first: IObservable<'T>) =
+    let zip (second: IObservable<'U>) (first: IObservable<'T>) =
         let inner a b = a, b
         Observable.Zip(first, second, Func<_,_,_> inner)
 
