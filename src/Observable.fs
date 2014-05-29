@@ -7,50 +7,7 @@ open System.Reactive.Concurrency
 
 [<AutoOpen>]
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module Core =
-
-    type Observer with
-        /// Creates an observer from the specified onNext function.
-        static member Create(onNext) =
-            Observer.Create(Action<_> onNext)
-
-        /// Creates an observer from the specified onNext and onError functions.
-        static member Create(onNext, onError) =
-            Observer.Create(Action<_> onNext, Action<_> onError)
-
-        /// Creates an observer from the specified onNext and onCompleted functions.
-        static member Create(onNext, onCompleted) =
-            Observer.Create(Action<_> onNext, Action onCompleted)
-
-        /// Creates an observer from the specified onNext, onError, and onCompleted functions.
-        static member Create(onNext, onError, onCompleted) =
-            Observer.Create(Action<_> onNext, Action<_> onError, Action onCompleted)
-
-    type Observable with
-        /// Creates an observable sequence from the specified Subscribe method implementation.
-        static member Create (subscribe: IObserver<'T> -> unit -> unit) =
-            Observable.Create(Func<_,_>(fun o -> Action(subscribe o)))
-
-         /// Creates an observable sequence from the specified Subscribe method implementation.
-        static member Create subscribe =
-            Observable.Create(Func<_,IDisposable> subscribe)
-
-    type IObservable<'T> with
-        /// Subscribes to the Observable with just a nextfunction.
-        member this.Subscribe(onNext: 'T -> unit) =
-            this.Subscribe(Action<_> onNext)
-
-        /// Subscribes to the Observable with a next and an errorfunction.
-        member this.Subscribe(onNext: 'T -> unit, onError: exn -> unit) =
-            this.Subscribe(Action<_> onNext, Action<exn> onError)
-
-        /// Subscribes to the Observable with a next and a completion callback.
-        member this.Subscribe(onNext: 'T -> unit, onCompleted: unit -> unit) =
-            this.Subscribe(Action<_> onNext, Action onCompleted)
-
-        /// Subscribes to the Observable with all 3 callbacks.
-        member this.Subscribe(onNext, onError, onCompleted) =
-            this.Subscribe(Action<_> onNext, Action<_> onError, Action onCompleted)
+module Builders =
 
     /// An Observable computation builder.
     type ObservableBuilder() =
@@ -140,11 +97,13 @@ module Core =
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Observable =
 
+    let private flipApply f x i = f i x
+
     /// Binds an observable to generate a subsequent observable.
-    let bind (f: 'T -> IObservable<'TNext>) (m: IObservable<'T>) = m.SelectMany(Func<_,_> f)
+    let bind (f: 'T -> IObservable<'TNext>) (m: IObservable<'T>) = m.SelectMany(f)
 
     /// Creates an observable sequence from the specified Subscribe method implementation.
-    let create (f: IObserver<'T> -> (unit -> unit)) = Observable.Create f
+    let create (f: IObserver<'T> -> (unit -> unit)) = Observable.Create(Func<_,_>(fun o -> Action(f o)))
 
     /// Generates an observable from an IEvent<_> as an EventPattern.
     let fromEventPattern<'T> (target:obj) eventName =
@@ -185,14 +144,14 @@ module Observable =
     /// Merges two observable sequences into one observable sequence
     let zip (second: IObservable<'U>) (first: IObservable<'T>) =
         let inner a b = a, b
-        Observable.Zip(first, second, Func<_,_,_> inner)
+        Observable.Zip(first, second, inner)
 
     /// Merges two observable sequences into one observable sequence
     /// whenever one of the observable sequences has a new value
     /// ===> More results than zip
     let combineLatest second first =
         let inner a b = a, b
-        Observable.CombineLatest(first, second, Func<_,_,_> inner)
+        Observable.CombineLatest(first, second, inner)
     
     /// Concats (flattens) an observable of observables into an observable
     /// ===> Observable.SelectMany(observable, Func<_,_>(fun (x:IObservable<'T>) -> x))
@@ -202,9 +161,7 @@ module Observable =
     let map f source = Observable.Select(source, Func<_,_>(f))    
      
     /// Maps the given observable with the given function
-    let mapi f source =
-        let inner x i = f i x
-        Observable.Select(source, Func<_,_,_> inner)
+    let mapi f source = Observable.Select(source, flipApply f)
 
     /// Lifts the values of f and m and applies f to m, returning an IObservable of the result.
     let apply f m = f |> bind (fun f' -> m |> bind (fun m' -> Observable.Return(f' m')))
@@ -213,14 +170,19 @@ module Observable =
     let map2 f a b = apply (apply f a) b
      
     /// Filters all elements where the given predicate is satisfied
-    let filter f source =
-        Observable.Where(source, Func<_,_> f)
+    let filter f source = Observable.Where(source, Func<_,_> f)
+
+    /// Filters all elements where the given predicate is satisfied
+    let filteri f source = Observable.Where(source, flipApply f)
      
     /// Skips n elements
     let skip (n: int) source = Observable.Skip(source, n)
      
     /// Skips elements while the predicate is satisfied
     let skipWhile f source = Observable.SkipWhile(source, Func<_,_> f)
+
+    /// Skips elements while the predicate is satisfied
+    let skipWhilei f source = Observable.SkipWhile(source, flipApply f)
      
     /// Counts the elements
     let count source = Observable.Count(source)
@@ -233,34 +195,32 @@ module Observable =
 
     /// Determines whether an observable sequence contains a specified value
     /// which satisfies the given predicate
-    let exists f source = source |> skipWhile (not << f) |> (not << isEmpty)
+    let exists f source = Observable.Any(source, f)
 
     /// Throttles the observable for the given interval
-    let throttle (interval: TimeSpan) source =
-        Observable.Throttle(source, interval)
+    let throttle (interval: TimeSpan) source = Observable.Throttle(source, interval)
     
     /// Samples the observable at the given interval
-    let sample (interval: TimeSpan) source =
-        Observable.Sample(source, interval)
+    let sample (interval: TimeSpan) source = Observable.Sample(source, interval)
 
     /// Continues an observable sequence that is terminated
     /// by an exception with the next observable sequence.
-    let catch (second: IObservable<'T>) first =
-        Observable.Catch(first, second) 
+    let catch (second: IObservable<'T>) first = Observable.Catch(first, second) 
      
     /// Takes elements while the predicate is satisfied
     let takeWhile f source = Observable.TakeWhile(source, Func<_,_> f)
+
+    /// Takes elements while the predicate is satisfied
+    let takeWhilei f source = Observable.TakeWhile(source, flipApply f)
      
     /// Iterates through the observable and performs the given side-effect
-    let perform f source =
-        let inner x = f x
-        Observable.Do(source, inner)
+    let perform f source = Observable.Do(source, Action<_> f)
      
     /// Invokes the finally action after source observable sequence terminates normally or by an exception.
     let performFinally f source = Observable.Finally(source, Action f)
      
     /// Folds the observable
-    let fold f seed source = Observable.Aggregate(source, seed, Func<_,_,_> f)
+    let fold f seed source = Observable.Aggregate(source, seed, f)
 
     /// Reduces the observable
-    let reduce f source = Observable.Aggregate(source, Func<_,_,_> f)
+    let reduce f source = Observable.Aggregate(source, f)
