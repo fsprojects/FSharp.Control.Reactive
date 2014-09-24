@@ -81,7 +81,7 @@ Target "BuildNuGet" (fun _ ->
       buildDir + "FSharp.Reactive.pdb" ]
         |> CopyTo nugetLibDir
 
-    let rxVersion = GetPackageVersion packagesDir "Rx-Linq"
+    let rxVersion = GetPackageVersion packagesDir "Rx-Experimental"
     NuGet (fun p ->
         {p with
             Authors = authors
@@ -89,7 +89,7 @@ Target "BuildNuGet" (fun _ ->
             Description = projectDescription
             Version = version
             OutputPath = nugetDir
-            Dependencies = ["Rx-Core", rxVersion; "Rx-Interfaces", rxVersion; "Rx-Linq", rxVersion]
+            Dependencies = ["Rx-Experimental", rxVersion]
             AccessKey = getBuildParamOrDefault "nugetkey" ""
             ToolPath = nugetPath
             Publish = hasBuildParam "nugetkey" })
@@ -123,4 +123,3 @@ Target "Default" DoNothing
 
 // start build
 RunTargetOrDefault "Default"
-
