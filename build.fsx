@@ -1,125 +1,215 @@
-#r @"lib\FAKE\tools\FakeLib.dll"
+// --------------------------------------------------------------------------------------
+// FAKE build script 
+// --------------------------------------------------------------------------------------
 
+#I "packages/FAKE/tools"
+#r "FakeLib.dll"
+
+#if MONO
+#else
+#load "packages/SourceLink.Fake/tools/SourceLink.fsx"
+#endif
+
+open System
+open System.IO
 open Fake 
 open Fake.AssemblyInfoFile
-open Fake.MSBuild
+open Fake.Git
+open Fake.ReleaseNotesHelper
 
-!! "./**/packages.config"
-|> Seq.iter (RestorePackage (fun t -> { t with ToolPath = ".nuget/nuget.exe" }))
+Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
+let (!!) includes = (!! includes).SetBaseDirectory __SOURCE_DIRECTORY__
 
-(* properties *)
-let projectName = "FSharp.Reactive"
-let version = if isLocalBuild then "2.2." + System.DateTime.UtcNow.ToString("yMMdd") else buildVersion
-let projectSummary = "A F#-friendly wrapper for the Reactive Extensions."
-let projectDescription = "A F#-friendly wrapper for the Reactive Extensions."
-let authors = ["Ryan Riley"; "Steffen Forkmann"]
-let mail = "ryan.riley@panesofglass.org"
-let homepage = "https://github.com/fsharp/FSharp.Reactive"
+// --------------------------------------------------------------------------------------
+// Provide project-specific details below
+// --------------------------------------------------------------------------------------
 
-(* Directories *)
-let buildDir = "./build/"
-let packagesDir = "./packages/"
-let deployDir = "./deploy/"
-let testDir = "./test/"
+// Information about the project are used
+//  - for version and project name in generated AssemblyInfo file
+//  - by the generated NuGet package 
+//  - to run tests and to publish documentation on GitHub gh-pages
+//  - for documentation, you also need to edit info in "docs/tools/generate.fsx"
 
-let nugetDir = "./nuget/"
-let nugetLibDir = nugetDir @@ "lib/net40"
+// The name of the project 
+// (used by attributes in AssemblyInfo, name of a NuGet package and directory in 'src')
+let project = "FSharp.Control.Reactive"
 
-(* Tools *)
-let nugetPath = ".Nuget/nuget.exe"
-let nunitVersion = GetPackageVersion packagesDir "NUnit.Runners"
-let nunitPath = sprintf "%sNUnit.Runners.%s/Tools" packagesDir nunitVersion
+// Short summary of the project
+// (used as description in AssemblyInfo and as a short summary for NuGet package)
+let summary = "A F#-friendly wrapper for the Reactive Extensions."
 
-(* files *)
-let appReferences =
-    !! "src/**/*.fsproj" 
+// Longer description of the project
+// (used as a description for NuGet package; line breaks are automatically cleaned up)
+let description = """
+  A F#-friendly wrapper for the Reactive Extensions."""
+// List of author names (for NuGet package)
+let authors = ["Ryan Riley"; "Steffen Forkmann"; "Jared Hester"]
+// Tags for your project (for NuGet package)
+let tags = "F# fsharp reactive extensions rx"
 
-let testReferences =
-    !! "tests/**/*.fsproj" 
+// File system information 
+// (<projectFile>.*proj is built during the building process)
+let projectFile = "FSharp.Control.Reactive"
+// Pattern specifying assemblies to be tested using NUnit
+let testAssemblies = "bin/FSharp.Control.Reactive.Tests.exe"
 
-let filesToZip =
-    !! (buildDir + "/**/*.*") -- "*.zip"
+// Git configuration (used for publishing documentation in gh-pages branch)
+// The profile where the project is posted 
+let gitHome = "git@github.com:fsprojects"
+// The name of the project on GitHub
+let gitName = "FSharp.Reactive"
+let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/fsprojects"
 
-(* Targets *)
+// --------------------------------------------------------------------------------------
+// The rest of the file includes standard build steps 
+// --------------------------------------------------------------------------------------
+
+// Read additional information from the release notes document
+let release = parseReleaseNotes (IO.File.ReadAllLines "RELEASE_NOTES.md")
+let isAppVeyorBuild = environVar "APPVEYOR" <> null
+let nugetVersion = 
+    if isAppVeyorBuild then sprintf "%s.%s" release.NugetVersion buildVersion
+    else release.NugetVersion
+
+// Generate assembly info files with the right version & up-to-date information
+Target "AssemblyInfo" (fun _ ->
+  let fileName = "src/AssemblyInfo.fs"
+  CreateFSharpAssemblyInfo fileName
+      [ Attribute.Title project
+        Attribute.Product project
+        Attribute.Description summary
+        Attribute.Version release.AssemblyVersion
+        Attribute.FileVersion release.AssemblyVersion ] )
+
+Target "BuildVersion" (fun _ ->
+    Shell.Exec("appveyor", sprintf "UpdateBuild -Version \"%s\"" nugetVersion) |> ignore
+)
+
+// --------------------------------------------------------------------------------------
+// Clean build results & restore NuGet packages
+
+Target "RestorePackages" RestorePackages
+
 Target "Clean" (fun _ ->
-    CleanDirs [buildDir; testDir; deployDir; nugetDir; nugetLibDir]
+    CleanDirs ["bin"; "temp"]
 )
 
-Target "BuildApp" (fun _ -> 
-    if not isLocalBuild then
-        [ Attribute.Version(version)
-          Attribute.Title(projectName)
-          Attribute.Description(projectDescription)
-          Attribute.Guid("ED23F688-C0D0-4102-93D5-0D832633F66D")
-        ]
-        |> CreateFSharpAssemblyInfo "src/AssemblyInfo.fs"
-
-    MSBuildRelease buildDir "Build" appReferences
-        |> Log "AppBuild-Output: "
+Target "CleanDocs" (fun _ ->
+    CleanDirs ["docs/output"]
 )
 
-Target "BuildTest" (fun _ -> 
-    MSBuildDebug testDir "Build" testReferences
-        |> Log "TestBuild-Output: "
+// --------------------------------------------------------------------------------------
+// Build library & test project
+
+Target "Build" (fun _ ->
+    !! ("*/**/" + projectFile + "*.*proj")
+    |> MSBuildRelease "bin" "Rebuild"
+    |> ignore
 )
 
-Target "Test" (fun _ ->
-    !! (testDir + "/*.Tests.dll")
-        |> NUnit (fun p -> 
-            {p with 
-                ToolPath = nunitPath; 
-                DisableShadowCopy = true;
-                OutputFile = testDir + "TestResults.xml" })
+#if MONO
+Target "SourceLink" id
+#else
+open SourceLink
+Target "SourceLink" (fun _ ->
+    use repo = new GitRepo(__SOURCE_DIRECTORY__)
+    !! ("*/**/" + projectFile + "*.*proj")
+    |> Seq.iter (fun f ->
+        let proj = VsProj.Load f ["Configuration", "Release"; "OutputPath", Path.combine __SOURCE_DIRECTORY__ "bin"]
+        logfn "source linking %s" proj.OutputFilePdb
+        let files = proj.Compiles -- "**/AssemblyInfo.fs"
+        repo.VerifyChecksums files
+        proj.VerifyPdbChecksums files
+        proj.CreateSrcSrv (sprintf "%s/%s/{0}/%%var2%%" gitRaw gitName) repo.Revision (repo.Paths files)
+        Pdbstr.exec proj.OutputFilePdb proj.OutputFilePdbSrcSrv
+    )
 )
+#endif
 
 Target "CopyLicense" (fun _ ->
-    [ "LICENSE.txt" ] |> CopyTo buildDir
+    [ "LICENSE.txt" ] |> CopyTo "bin"
 )
 
-Target "BuildNuGet" (fun _ ->
-    [ buildDir + "FSharp.Reactive.dll"
-      buildDir + "FSharp.Reactive.pdb" ]
-        |> CopyTo nugetLibDir
+// --------------------------------------------------------------------------------------
+// Run the unit tests using test runner
 
-    let rxVersion = GetPackageVersion packagesDir "Rx-Experimental"
-    NuGet (fun p ->
-        {p with
+Target "RunTests" (fun _ ->
+    let errorCode =
+        [ for program in !!testAssemblies do
+            let p, a = if not isMono then program, null else "mono", program
+            let result = asyncShellExec { defaultParams with Program = p; CommandLine = a } |> Async.RunSynchronously
+            yield result ]
+        |> List.sum
+    if errorCode <> 0 then failwith "Error in tests"
+)
+
+// --------------------------------------------------------------------------------------
+// Build a NuGet package
+
+Target "NuGet" (fun _ ->
+    NuGet (fun p -> 
+        { p with   
             Authors = authors
-            Project = projectName
-            Description = projectDescription
-            Version = version
-            OutputPath = nugetDir
-            Dependencies = ["Rx-Experimental", rxVersion]
+            Project = project
+            Summary = summary
+            Description = description
+            Version = nugetVersion
+            ReleaseNotes = String.Join(Environment.NewLine, release.Notes)
+            Tags = tags
+            OutputPath = "bin"
             AccessKey = getBuildParamOrDefault "nugetkey" ""
-            ToolPath = nugetPath
-            Publish = hasBuildParam "nugetkey" })
-        "FSharp.Reactive.nuspec"
-
-    [nugetDir + sprintf "FSharp.Reactive.%s.nupkg" version]
-        |> CopyTo deployDir
+            Publish = hasBuildParam "nugetkey"
+            Dependencies = ["Rx-Experimental", GetPackageVersion "packages" "Rx-Experimental"]
+            Files = [ (@"..\bin\FSharp.Control.Reactive.dll", Some "lib/net40", None)
+                      (@"..\bin\FSharp.Control.Reactive.xml", Some "lib/net40", None)
+                      (@"..\bin\FSharp.Control.Reactive.pdb", Some "lib/net40", None) ] })
+        ("nuget/" + project + ".nuspec")
 )
 
-Target "DeployZip" (fun _ ->
-    !! (buildDir + "/**/*.*")
-    |> Zip buildDir (deployDir + sprintf "%s-%s.zip" projectName version)
+// --------------------------------------------------------------------------------------
+// Generate the documentation
+
+Target "GenerateDocs" (fun _ ->
+    executeFSIWithArgs "docs/tools" "generate.fsx" ["--define:RELEASE"] [] |> ignore
 )
 
-FinalTarget "CloseTestRunner" (fun _ ->
-    ProcessHelper.killProcess "nunit-agent.exe"
+// --------------------------------------------------------------------------------------
+// Release Scripts
+
+Target "ReleaseDocs" (fun _ ->
+    let tempDocsDir = "temp/gh-pages"
+    CleanDir tempDocsDir
+    Repository.cloneSingleBranch "" (gitHome + "/" + gitName + ".git") "gh-pages" tempDocsDir
+
+    fullclean tempDocsDir
+    CopyRecursive "docs/output" tempDocsDir true |> tracefn "%A"
+    StageAll tempDocsDir
+    Commit tempDocsDir (sprintf "Update generated documentation for version %s" release.NugetVersion)
+    Branches.push tempDocsDir
 )
 
-Target "Deploy" DoNothing
-Target "Default" DoNothing
+Target "Release" DoNothing
 
-(* Build Order *)
+// --------------------------------------------------------------------------------------
+// Run all targets by default. Invoke 'build <Target>' to override
+
+Target "All" DoNothing
+
 "Clean"
-    ==> "BuildApp" <=> "BuildTest" <=> "CopyLicense"
-    ==> "Test"
-    ==> "BuildNuGet"
-    ==> "DeployZip"
-    ==> "Deploy"
+  =?> ("BuildVersion", isAppVeyorBuild)
+  ==> "RestorePackages"
+  ==> "AssemblyInfo"
+  ==> "Build"
+  =?> ("SourceLink", not isMono && not (hasBuildParam "skipSourceLink"))
+  ==> "CopyLicense"
+  ==> "RunTests"
+  =?> ("NuGet", not isMono)
+  ==> "All"
 
-"Default" <== ["Deploy"]
+"All" 
+  ==> "CleanDocs"
+  ==> "GenerateDocs"
+  ==> "ReleaseDocs"
+  ==> "Release"
 
-// start build
-RunTargetOrDefault "Default"
+RunTargetOrDefault "All"

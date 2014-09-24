@@ -1,0 +1,76 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Control.Reactive", "src\FSharp.Control.Reactive.fsproj", "{ED23F688-C0D0-4102-93D5-0D832633F66D}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Control.Reactive.Tests", "tests\FSharp.Control.Reactive.Tests.fsproj", "{A8EBB4A5-80ED-43D5-8D7D-6A0F4E228C2F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{8961FBE9-1BE3-4A44-9610-5B4386DC5848}"
+	ProjectSection(SolutionItems) = preProject
+		build.fsx = build.fsx
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
+		RELEASE_NOTES.md = RELEASE_NOTES.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{838F0FBD-455C-4753-B184-CACC5BDBB2C0}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{E14EBCFE-FE32-46B2-876D-66D38AB53B1E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{5D1A5D8E-0DA2-47C6-B604-F059B740ABD4}"
+	ProjectSection(SolutionItems) = preProject
+		docs\content\index.fsx = docs\content\index.fsx
+		docs\content\tutorial.fsx = docs\content\tutorial.fsx
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{A10EE113-56C8-45E7-8970-B03F17AC3F8E}"
+	ProjectSection(SolutionItems) = preProject
+		docs\tools\generate.fsx = docs\tools\generate.fsx
+		docs\tools\packages.config = docs\tools\packages.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{AB2D0E6D-7335-44A6-9A7B-55C58C858279}"
+	ProjectSection(SolutionItems) = preProject
+		docs\tools\templates\template.cshtml = docs\tools\templates\template.cshtml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{57CF7CB9-B2E3-406A-994D-1C85AD11A524}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "img", "img", "{5EB1DFE0-EC60-4031-87E9-771F3848A728}"
+	ProjectSection(SolutionItems) = preProject
+		docs\files\img\logo.png = docs\files\img\logo.png
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED23F688-C0D0-4102-93D5-0D832633F66D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED23F688-C0D0-4102-93D5-0D832633F66D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED23F688-C0D0-4102-93D5-0D832633F66D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED23F688-C0D0-4102-93D5-0D832633F66D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8EBB4A5-80ED-43D5-8D7D-6A0F4E228C2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8EBB4A5-80ED-43D5-8D7D-6A0F4E228C2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8EBB4A5-80ED-43D5-8D7D-6A0F4E228C2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8EBB4A5-80ED-43D5-8D7D-6A0F4E228C2F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5D1A5D8E-0DA2-47C6-B604-F059B740ABD4} = {E14EBCFE-FE32-46B2-876D-66D38AB53B1E}
+		{A10EE113-56C8-45E7-8970-B03F17AC3F8E} = {E14EBCFE-FE32-46B2-876D-66D38AB53B1E}
+		{AB2D0E6D-7335-44A6-9A7B-55C58C858279} = {A10EE113-56C8-45E7-8970-B03F17AC3F8E}
+		{57CF7CB9-B2E3-406A-994D-1C85AD11A524} = {E14EBCFE-FE32-46B2-876D-66D38AB53B1E}
+		{5EB1DFE0-EC60-4031-87E9-771F3848A728} = {57CF7CB9-B2E3-406A-994D-1C85AD11A524}
+	EndGlobalSection
+EndGlobal
