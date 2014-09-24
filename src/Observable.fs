@@ -1,4 +1,4 @@
-﻿namespace FSharp.Control
+﻿namespace FSharp.Control.Reactive
 
 open System
 open System.Collections.Generic
@@ -8,10 +8,97 @@ open System.Reactive.Linq
 open System.Reactive.Concurrency
 
 
-[<AutoOpen>]
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+module Builders =
 
-module ReactiveCore =
+    /// An Observable computation builder.
+    type ObservableBuilder() =
+        member __.Return(x) = Observable.Return(x, Scheduler.CurrentThread)
+        member __.ReturnFrom m : IObservable<_> = m
+        member __.Bind(m: IObservable<_>, f: _ -> IObservable<_>) = m.SelectMany(f)
+        member __.Combine(comp1, comp2) = Observable.Concat(comp1, comp2)
+        member __.Delay(f: _ -> IObservable<_>) = Observable.Defer(fun _ -> f())
+        member __.Zero() = Observable.Empty(Scheduler.CurrentThread :> IScheduler)
+        member __.For(sequence, body) = Observable.For(sequence, body)
+        member __.TryWith(m: IObservable<_>, h: #exn -> IObservable<_>) = Observable.Catch(m, h)
+        member __.TryFinally(m, compensation) = Observable.Finally(m, Action compensation)
+        member __.Using(res: #IDisposable, body) = Observable.Using((fun () -> res), body)
+        member __.While(guard, m: IObservable<_>) = Observable.While(guard, m)
+        // TODO: Are these the correct implementation? Are they necessary?
+        member __.Yield(x) = Observable.Return(x, Scheduler.CurrentThread)
+        member __.YieldFrom m : IObservable<_> = m
+
+    let observe = ObservableBuilder()
+
+    /// A reactive query builder.
+    /// See http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html
+    type RxQueryBuilder() =
+        member __.For (s:IObservable<_>, body : _ -> IObservable<_>) = s.SelectMany(body)
+        [<CustomOperation("select", AllowIntoPattern=true)>]
+        member __.Select (s:IObservable<_>, [<ProjectionParameter>] selector : _ -> _) = s.Select(selector)
+        [<CustomOperation("where", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
+        member __.Where (s:IObservable<_>, [<ProjectionParameter>] predicate : _ -> bool ) = s.Where(predicate)
+        [<CustomOperation("takeWhile", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
+        member __.TakeWhile (s:IObservable<_>, [<ProjectionParameter>] predicate : _ -> bool ) = s.TakeWhile(predicate)
+        [<CustomOperation("take", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
+        member __.Take (s:IObservable<_>, count: int) = s.Take(count)
+        [<CustomOperation("skipWhile", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
+        member __.SkipWhile (s:IObservable<_>, [<ProjectionParameter>] predicate : _ -> bool ) = s.SkipWhile(predicate)
+        [<CustomOperation("skip", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
+        member __.Skip (s:IObservable<_>, count: int) = s.Skip(count)
+        member __.Zero () = Observable.Empty(Scheduler.CurrentThread :> IScheduler)
+        member __.Yield (value) = Observable.Return(value)
+        [<CustomOperation("count")>]
+        member __.Count (s:IObservable<_>) = Observable.Count(s)
+        [<CustomOperation("all")>]
+        member __.All (s:IObservable<_>, [<ProjectionParameter>] predicate : _ -> bool ) = s.All(new Func<_,bool>(predicate))
+        [<CustomOperation("contains")>]
+        member __.Contains (s:IObservable<_>, key) = s.Contains(key)
+        [<CustomOperation("distinct", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
+        member __.Distinct (s:IObservable<_>) = s.Distinct()
+        [<CustomOperation("exactlyOne")>]
+        member __.ExactlyOne (s:IObservable<_>) = s.Single()
+        [<CustomOperation("exactlyOneOrDefault")>]
+        member __.ExactlyOneOrDefault (s:IObservable<_>) = s.SingleOrDefault()
+        [<CustomOperation("find")>]
+        member __.Find (s:IObservable<_>, [<ProjectionParameter>] predicate : _ -> bool) = s.First(new Func<_,bool>(predicate))
+        [<CustomOperation("head")>]
+        member __.Head (s:IObservable<_>) = s.First()
+        [<CustomOperation("headOrDefault")>]
+        member __.HeadOrDefault (s:IObservable<_>) = s.FirstOrDefault()
+        [<CustomOperation("last")>]
+        member __.Last (s:IObservable<_>) = s.Last()
+        [<CustomOperation("lastOrDefault")>]
+        member __.LastOrDefault (s:IObservable<_>) = s.LastOrDefault()
+        [<CustomOperation("maxBy")>]
+        member __.MaxBy (s:IObservable<'a>,  [<ProjectionParameter>] valueSelector : 'a -> 'b) = s.MaxBy(new Func<'a,'b>(valueSelector))
+        [<CustomOperation("minBy")>]
+        member __.MinBy (s:IObservable<'a>,  [<ProjectionParameter>] valueSelector : 'a -> 'b) = s.MinBy(new Func<'a,'b>(valueSelector))
+        [<CustomOperation("nth")>]
+        member __.Nth (s:IObservable<'a>,  index ) = s.ElementAt(index)
+        [<CustomOperation("sumBy")>]
+        member inline __.SumBy (s:IObservable<_>,[<ProjectionParameter>] valueSelector : _ -> _) = s.Select(valueSelector).Aggregate(Unchecked.defaultof<_>, new Func<_,_,_>( fun a b -> a + b)) 
+        [<CustomOperation("groupBy", AllowIntoPattern=true)>]
+        member __.GroupBy (s:IObservable<_>,[<ProjectionParameter>] keySelector : _ -> _) = s.GroupBy(new Func<_,_>(keySelector))
+        [<CustomOperation("groupValBy", AllowIntoPattern=true)>]
+        member __.GroupValBy (s:IObservable<_>,[<ProjectionParameter>] resultSelector : _ -> _,[<ProjectionParameter>] keySelector : _ -> _) = s.GroupBy(new Func<_,_>(keySelector),new Func<_,_>(resultSelector))
+        [<CustomOperation("join", IsLikeJoin=true)>]
+        member __.Join (s1:IObservable<_>,s2:IObservable<_>, [<ProjectionParameter>] s1KeySelector : _ -> _,[<ProjectionParameter>] s2KeySelector : _ -> _,[<ProjectionParameter>] resultSelector : _ -> _) = s1.Join(s2,new Func<_,_>(s1KeySelector),new Func<_,_>(s2KeySelector),new Func<_,_,_>(resultSelector))
+        [<CustomOperation("groupJoin", AllowIntoPattern=true)>]
+        member __.GroupJoin (s1:IObservable<_>,s2:IObservable<_>, [<ProjectionParameter>] s1KeySelector : _ -> _,[<ProjectionParameter>] s2KeySelector : _ -> _,[<ProjectionParameter>] resultSelector : _ -> _) = s1.GroupJoin(s2,new Func<_,_>(s1KeySelector),new Func<_,_>(s2KeySelector),new Func<_,_,_>(resultSelector))
+        [<CustomOperation("zip", IsLikeZip=true)>]
+        member __.Zip (s1:IObservable<_>,s2:IObservable<_>,[<ProjectionParameter>] resultSelector : _ -> _) = s1.Zip(s2,new Func<_,_,_>(resultSelector))
+        [<CustomOperation("forkJoin", IsLikeZip=true)>]
+        member __.ForkJoin (s1:IObservable<_>,s2:IObservable<_>,[<ProjectionParameter>] resultSelector : _ -> _) = s1.ForkJoin(s2,new Func<_,_,_>(resultSelector))
+        [<CustomOperation("iter")>]
+        member __.Iter(s:IObservable<_>, [<ProjectionParameter>] selector : _ -> _) = s.Do(selector)
+
+    let rxquery = RxQueryBuilder()
+
+
+/// The Reactive module provides operators for working with IObservable<_> in F#.
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+module Observable =
 
     type Observer with
         /// Creates an observer from the specified onNext function.
@@ -56,104 +143,16 @@ module ReactiveCore =
         member this.Subscribe(onNext, onError, onCompleted) =
             this.Subscribe(Action<_> onNext, Action<_> onError, Action onCompleted)
 
-module Builders =
+
+(***************************************************************
+ * F# combinator wrappers for Rx extensions
+ ***************************************************************)
 
 
-    /// An Observable computation builder.
-    type ObservableBuilder() =
-        member this.Return(x) = Observable.Return(x, Scheduler.CurrentThread)
-        member this.ReturnFrom m : IObservable<_> = m
-        member this.Bind(m: IObservable<_>, f: _ -> IObservable<_>) = m.SelectMany(f)
-        member this.Combine(comp1, comp2) = Observable.Concat(comp1, comp2)
-        member this.Delay(f: _ -> IObservable<_>) = Observable.Defer(fun _ -> f())
-        member this.Zero() = Observable.Empty(Scheduler.CurrentThread :> IScheduler)
-        member this.For(sequence, body) = Observable.For(sequence, body)
-        member this.TryWith(m: IObservable<_>, h: #exn -> IObservable<_>) = Observable.Catch(m, h)
-        member this.TryFinally(m, compensation) = Observable.Finally(m, Action compensation)
-        member this.Using(res: #IDisposable, body) = Observable.Using((fun () -> res), body)
-        member this.While(guard, m: IObservable<_>) = Observable.While(guard, m)
-        // TODO: Are these the correct implementation? Are they necessary?
-        member this.Yield(x) = Observable.Return(x, Scheduler.CurrentThread)
-        member this.YieldFrom m : IObservable<_> = m
-
-    let observe = ObservableBuilder()
-
-
-/// The Reactive module provides operators for working with IObservable<_> in F#.
-module Reactive =
-
-        
     /// Applies an accumulator function over an observable sequence, returning the 
     /// result of the aggregation as a single element in the result sequence
     let aggregate accumulator source = 
         Observable.Aggregate(source, Func<_,_,_> accumulator )
-
-    /// A reactive query builder.
-    /// See http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html
-    type RxQueryBuilder() =
-        member this.For (s:IObservable<_>, body : _ -> IObservable<_>) = s.SelectMany(body)
-        [<CustomOperation("select", AllowIntoPattern=true)>]
-        member this.Select (s:IObservable<_>, [<ProjectionParameter>] selector : _ -> _) = s.Select(selector)
-        [<CustomOperation("where", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
-        member this.Where (s:IObservable<_>, [<ProjectionParameter>] predicate : _ -> bool ) = s.Where(predicate)
-        [<CustomOperation("takeWhile", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
-        member this.TakeWhile (s:IObservable<_>, [<ProjectionParameter>] predicate : _ -> bool ) = s.TakeWhile(predicate)
-        [<CustomOperation("take", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
-        member this.Take (s:IObservable<_>, count: int) = s.Take(count)
-        [<CustomOperation("skipWhile", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
-        member this.SkipWhile (s:IObservable<_>, [<ProjectionParameter>] predicate : _ -> bool ) = s.SkipWhile(predicate)
-        [<CustomOperation("skip", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
-        member this.Skip (s:IObservable<_>, count: int) = s.Skip(count)
-        member this.Zero () = Observable.Empty(Scheduler.CurrentThread :> IScheduler)
-        member this.Yield (value) = Observable.Return(value)
-        [<CustomOperation("count")>]
-        member this.Count (s:IObservable<_>) = Observable.Count(s)
-        [<CustomOperation("all")>]
-        member this.All (s:IObservable<_>, [<ProjectionParameter>] predicate : _ -> bool ) = s.All(new Func<_,bool>(predicate))
-        [<CustomOperation("contains")>]
-        member this.Contains (s:IObservable<_>, key) = s.Contains(key)
-        [<CustomOperation("distinct", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
-        member this.Distinct (s:IObservable<_>) = s.Distinct()
-        [<CustomOperation("exactlyOne")>]
-        member this.ExactlyOne (s:IObservable<_>) = s.Single()
-        [<CustomOperation("exactlyOneOrDefault")>]
-        member this.ExactlyOneOrDefault (s:IObservable<_>) = s.SingleOrDefault()
-        [<CustomOperation("find")>]
-        member this.Find (s:IObservable<_>, [<ProjectionParameter>] predicate : _ -> bool) = s.First(new Func<_,bool>(predicate))
-        [<CustomOperation("head")>]
-        member this.Head (s:IObservable<_>) = s.First()
-        [<CustomOperation("headOrDefault")>]
-        member this.HeadOrDefault (s:IObservable<_>) = s.FirstOrDefault()
-        [<CustomOperation("last")>]
-        member this.Last (s:IObservable<_>) = s.Last()
-        [<CustomOperation("lastOrDefault")>]
-        member this.LastOrDefault (s:IObservable<_>) = s.LastOrDefault()
-        [<CustomOperation("maxBy")>]
-        member this.MaxBy (s:IObservable<'a>,  [<ProjectionParameter>] valueSelector : 'a -> 'b) = s.MaxBy(new Func<'a,'b>(valueSelector))
-        [<CustomOperation("minBy")>]
-        member this.MinBy (s:IObservable<'a>,  [<ProjectionParameter>] valueSelector : 'a -> 'b) = s.MinBy(new Func<'a,'b>(valueSelector))
-        [<CustomOperation("nth")>]
-        member this.Nth (s:IObservable<'a>,  index ) = s.ElementAt(index)
-        [<CustomOperation("sumBy")>]
-        member inline this.SumBy (s:IObservable<_>,[<ProjectionParameter>] valueSelector : _ -> _) = s.Select(valueSelector).Aggregate(Unchecked.defaultof<_>, new Func<_,_,_>( fun a b -> a + b)) 
-        [<CustomOperation("groupBy", AllowIntoPattern=true)>]
-        member this.GroupBy (s:IObservable<_>,[<ProjectionParameter>] keySelector : _ -> _) = s.GroupBy(new Func<_,_>(keySelector))
-        [<CustomOperation("groupValBy", AllowIntoPattern=true)>]
-        member this.GroupValBy (s:IObservable<_>,[<ProjectionParameter>] resultSelector : _ -> _,[<ProjectionParameter>] keySelector : _ -> _) = s.GroupBy(new Func<_,_>(keySelector),new Func<_,_>(resultSelector))
-        [<CustomOperation("join", IsLikeJoin=true)>]
-        member this.Join (s1:IObservable<_>,s2:IObservable<_>, [<ProjectionParameter>] s1KeySelector : _ -> _,[<ProjectionParameter>] s2KeySelector : _ -> _,[<ProjectionParameter>] resultSelector : _ -> _) = s1.Join(s2,new Func<_,_>(s1KeySelector),new Func<_,_>(s2KeySelector),new Func<_,_,_>(resultSelector))
-        [<CustomOperation("groupJoin", AllowIntoPattern=true)>]
-        member this.GroupJoin (s1:IObservable<_>,s2:IObservable<_>, [<ProjectionParameter>] s1KeySelector : _ -> _,[<ProjectionParameter>] s2KeySelector : _ -> _,[<ProjectionParameter>] resultSelector : _ -> _) = s1.GroupJoin(s2,new Func<_,_>(s1KeySelector),new Func<_,_>(s2KeySelector),new Func<_,_,_>(resultSelector))
-        [<CustomOperation("zip", IsLikeZip=true)>]
-        member this.Zip (s1:IObservable<_>,s2:IObservable<_>,[<ProjectionParameter>] resultSelector : _ -> _) = s1.Zip(s2,new Func<_,_,_>(resultSelector))
-        [<CustomOperation("forkJoin", IsLikeZip=true)>]
-        member this.ForkJoin (s1:IObservable<_>,s2:IObservable<_>,[<ProjectionParameter>] resultSelector : _ -> _) = s1.ForkJoin(s2,new Func<_,_,_>(resultSelector))
-        [<CustomOperation("iter")>]
-        member this.Iter(s:IObservable<_>, [<ProjectionParameter>] selector : _ -> _) = s.Do(selector)
-
-    let rxquery = RxQueryBuilder()
-
-
 
     /// Determines whether all elements of and observable satisfy a predicate
     let all pred source =
@@ -685,7 +684,7 @@ module Reactive =
 
 
     /// Generates an observable from an IEvent<_> as an EventPattern.
-    let fromEventPattern<'T> eventName  (target:obj) =
+    let fromEventPattern eventName (target:obj) =
         Observable.FromEventPattern( target, eventName )
 
 
@@ -1416,14 +1415,10 @@ module Reactive =
         Observable.SkipWhile ( source, Func<'Source,int,bool> predicate)
 
 
-    /// Prepends an array of values to an observable sequence.   
-    let startWith  (values:'T [])  (source: IObservable<'T>) : IObservable<'T> = 
-        Observable.StartWith( source, values )
-
-
     /// Prepends a sequence of values to an observable sequence.   
-//    let startWithSeq (source:IObservable<'Source>) (values:seq<'Source>) : IObservable<'Source> =
-//        Observable.StartWith(source, values )
+    let startWith  (values: #seq<'T>)  (source: IObservable<'T>) : IObservable<'T> = 
+        // TODO: re-evaluate wrapping the overload that takes a params array when params are supported by F#.
+        Observable.StartWith( source, values )
 
 
     /// Subscribes to the Observable with a next fuction.
@@ -1831,4 +1826,3 @@ module Reactive =
                    ( first         : IObservable<'Source1>               ) : IObservable<'Result> =
         Observable.Zip(first, second, Func<_,_,_> resultSelector )
  
-

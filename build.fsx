@@ -3,22 +3,19 @@
 // --------------------------------------------------------------------------------------
 
 #I "packages/FAKE/tools"
+#r "Nuget.Core.dll"
 #r "FakeLib.dll"
-
-#if MONO
-#else
-#load "packages/SourceLink.Fake/tools/SourceLink.fsx"
-#endif
-
 open System
 open System.IO
 open Fake 
-open Fake.AssemblyInfoFile
 open Fake.Git
+open Fake.AssemblyInfoFile
 open Fake.ReleaseNotesHelper
-
-Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
-let (!!) includes = (!! includes).SetBaseDirectory __SOURCE_DIRECTORY__
+#if MONO
+#else
+#load "packages/SourceLink.Fake/tools/SourceLink.fsx"
+open SourceLink
+#endif
 
 // --------------------------------------------------------------------------------------
 // Provide project-specific details below
@@ -51,7 +48,7 @@ let tags = "F# fsharp reactive extensions rx"
 // (<projectFile>.*proj is built during the building process)
 let projectFile = "FSharp.Control.Reactive"
 // Pattern specifying assemblies to be tested using NUnit
-let testAssemblies = "bin/FSharp.Control.Reactive.Tests.exe"
+let testAssemblies = "bin/FSharp.Control.Reactive.Tests.dll"
 
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted 
@@ -65,6 +62,8 @@ let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/fsprojects"
 // --------------------------------------------------------------------------------------
 
 // Read additional information from the release notes document
+Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
+let (!!) includes = (!! includes).SetBaseDirectory __SOURCE_DIRECTORY__
 let release = parseReleaseNotes (IO.File.ReadAllLines "RELEASE_NOTES.md")
 let isAppVeyorBuild = environVar "APPVEYOR" <> null
 let nugetVersion = 
@@ -102,7 +101,7 @@ Target "CleanDocs" (fun _ ->
 // Build library & test project
 
 Target "Build" (fun _ ->
-    !! ("*/**/" + projectFile + "*.*proj")
+    !! ("src/**/" + projectFile + "*.*proj")
     |> MSBuildRelease "bin" "Rebuild"
     |> ignore
 )
@@ -110,17 +109,17 @@ Target "Build" (fun _ ->
 #if MONO
 Target "SourceLink" id
 #else
-open SourceLink
 Target "SourceLink" (fun _ ->
+    let baseUrl = sprintf "%s/%s/{0}/%%var2%%" gitRaw (project.ToLower())
     use repo = new GitRepo(__SOURCE_DIRECTORY__)
-    !! ("*/**/" + projectFile + "*.*proj")
+    !! ("src/**/" + projectFile + "*.*proj")
     |> Seq.iter (fun f ->
-        let proj = VsProj.Load f ["Configuration", "Release"; "OutputPath", Path.combine __SOURCE_DIRECTORY__ "bin"]
+        let proj = VsProj.LoadRelease f
         logfn "source linking %s" proj.OutputFilePdb
         let files = proj.Compiles -- "**/AssemblyInfo.fs"
         repo.VerifyChecksums files
         proj.VerifyPdbChecksums files
-        proj.CreateSrcSrv (sprintf "%s/%s/{0}/%%var2%%" gitRaw gitName) repo.Revision (repo.Paths files)
+        proj.CreateSrcSrv baseUrl repo.Revision (repo.Paths files)
         Pdbstr.exec proj.OutputFilePdb proj.OutputFilePdbSrcSrv
     )
 )
@@ -133,14 +132,19 @@ Target "CopyLicense" (fun _ ->
 // --------------------------------------------------------------------------------------
 // Run the unit tests using test runner
 
+Target "BuildTests" (fun _ -> 
+    !! ("tests/**/*Test*.*proj")
+    |> MSBuildRelease "bin" "Build"
+    |> ignore
+)
+
 Target "RunTests" (fun _ ->
-    let errorCode =
-        [ for program in !!testAssemblies do
-            let p, a = if not isMono then program, null else "mono", program
-            let result = asyncShellExec { defaultParams with Program = p; CommandLine = a } |> Async.RunSynchronously
-            yield result ]
-        |> List.sum
-    if errorCode <> 0 then failwith "Error in tests"
+    !! testAssemblies
+    |> NUnit (fun p -> 
+        { p with 
+            DisableShadowCopy = true
+            TimeOut = TimeSpan.FromMinutes 20.
+            OutputFile = "TestResults.xml" })
 )
 
 // --------------------------------------------------------------------------------------
@@ -197,11 +201,12 @@ Target "All" DoNothing
 
 "Clean"
   =?> ("BuildVersion", isAppVeyorBuild)
+  ==> "CopyLicense"
   ==> "RestorePackages"
   ==> "AssemblyInfo"
   ==> "Build"
-  =?> ("SourceLink", not isMono && not (hasBuildParam "skipSourceLink"))
-  ==> "CopyLicense"
+  //=?> ("SourceLink", not isMono && not (hasBuildParam "skipSourceLink"))
+  ==> "BuildTests"
   ==> "RunTests"
   =?> ("NuGet", not isMono)
   ==> "All"

@@ -1,10 +1,9 @@
 ﻿module FSharp.Reactive.Tests.ObservableSpecs
 
 open System
-open System.Collections.Generic
-open System.Reactive
 open System.Reactive.Linq
-open FSharp.Reactive
+open FSharp.Control.Reactive
+open Builders
 open NUnit.Framework
 
 let ``should be`` expectedNext expectedError expectedCompleted (observable:'a IObservable) =
@@ -12,11 +11,13 @@ let ``should be`` expectedNext expectedError expectedCompleted (observable:'a IO
     let error = ref false
     let completed = ref false
 
-    let subscription = observable |> Observable.subscribe (fun _ -> incr next) (fun _ -> error := true) (fun () -> completed := true)
+    let subscription = observable |> Observable.subscribeWithCallbacks (fun _ -> incr next) (fun _ -> error := true) (fun () -> completed := true)
 
-    Assert.That(!next, Is.EqualTo(expectedNext))
-    Assert.That(!error, Is.EqualTo(expectedError))
-    Assert.That(!completed, Is.EqualTo(expectedCompleted))
+    Assert.That(!next, Is.EqualTo expectedNext)
+    Assert.That(!error, Is.EqualTo expectedError)
+    Assert.That(!completed, Is.EqualTo expectedCompleted)
+
+let tuple x y = x,y
 
 [<Test>]
 let ``When subscribing to a single value observable, OnNext and OnCompleted should be fired``() =
@@ -40,7 +41,7 @@ let ``When subscribing to an F# event, only OnNext should be called``() =
     let subscription = testEvent.Publish.Subscribe((fun _ -> incr next), (fun _ -> error := true), (fun () -> completed := true))
     testEvent.Trigger(null, EventArgs())
 
-    Assert.That(!next, Is.EqualTo(1))
+    Assert.That(!next, Is.EqualTo 1)
     Assert.That(!error, Is.False)
     Assert.That(!completed, Is.False)
 
@@ -57,11 +58,11 @@ let ``When subscribing to an event, only OnNext should be fired once.``() =
 
     let tester = TestType()
 //    let subscription = tester.TestEvent.Subscribe((fun _ -> incr next), (fun _ -> error := true), (fun () -> completed := true))
-    let observable = Observable.fromEventPattern tester "TestEvent"
+    let observable = Observable.fromEventPattern "TestEvent" tester
     let subscription = observable.Subscribe((fun _ -> incr next), (fun _ -> error := true), (fun () -> completed := true))
     tester.Trigger()
 
-    Assert.That(!next, Is.EqualTo(1))
+    Assert.That(!next, Is.EqualTo 1)
     Assert.That(!error, Is.False)
     Assert.That(!completed, Is.False)
 
@@ -73,20 +74,20 @@ let ``When subscribing to an observable that fires an exception using the Observ
     builder |> ``should be`` 0 true false
 
 [<Test>]
-let ``When zip is defined with the applicative, it should match the result of Observable_zip``() =
+let ``When zip is defined with the applicative, it should match the result of Observable.zip``() =
     let inline (<*>) f m = Observable.apply f m
     let inline (<!>) f m = Observable.map f m
     let a = Observable.Return 1
     let b = Observable.Return 2
-    let zip b a = (fun x y -> x,y) <!> a <*> b // allows you to call a |> zip b, similar to Observable.zip
+    let zip a b = tuple <!> a <*> b
 
     let actual = ref (0,0)
     let expected = ref (0,0)
 
     (zip a b).Subscribe(fun x -> actual := x) |> ignore
-    (Observable.zip a b).Subscribe(fun x -> expected := x) |> ignore
+    (Observable.zip a b tuple).Subscribe(fun x -> expected := x) |> ignore
 
-    Assert.That(!actual, Is.EqualTo(!expected))
+    Assert.That(!actual, Is.EqualTo (!expected))
 
 [<Test>]
 let ``Test should show the stack overflow is fixed with Rx 2 beta``() =
@@ -95,15 +96,15 @@ let ``Test should show the stack overflow is fixed with Rx 2 beta``() =
             yield x
             if x < 100000 then
                 yield! g (x + 1) }
-        g 5 |> Observable.subscribe ignore ignore ignore |> ignore
+        g 5 |> Observable.subscribeWithCallbacks ignore ignore ignore |> ignore
     Assert.DoesNotThrow(TestDelegate(fun () -> test()))
 
 [<Test>]
 let ``Zipping two observable sequences of different types creates a single zipped observable`` =
-   let obs1 = Observable.Return 1
-   let obs2 = Observable.Return "A"
-   let zipped = obs1 |> Observable.zip obs2
-   let result = zipped |> Observable.First
-   let expected = ( 1, "A" )
+    let obs1 = Observable.Return 1
+    let obs2 = Observable.Return "A"
+    let zipped = Observable.zip obs1 obs2 tuple
+    let result = zipped |> Observable.First
+    let expected = ( 1, "A" )
 
-   Assert.That(result, Is.EqualTo(expected))
+    Assert.That(result, Is.EqualTo expected)

@@ -7,10 +7,10 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{a8ebb4a5-80ed-43d5-8d7d-6a0f4e228c2f}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>FSharp.Reactive.Tests</RootNamespace>
-    <AssemblyName>FSharp.Reactive.Tests</AssemblyName>
+    <RootNamespace>FSharp.Control.Reactive.Tests</RootNamespace>
+    <AssemblyName>FSharp.Control.Reactive.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <Name>FSharp.Reactive.Tests</Name>
+    <Name>FSharp.Control.Reactive.Tests</Name>
     <TargetFrameworkProfile />
     <FSharpTargetsPath Condition="'$(FSharpTargetsPath)' == '' And '$(OS)' != 'Windows_NT'">..\lib\FSharp\Microsoft.FSharp.Targets</FSharpTargetsPath>
     <FSharpTargetsPath Condition="'$(FSharpTargetsPath)' == '' And '$(VisualStudioVersion)' != '11.0' And Exists('$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets')">$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets</FSharpTargetsPath>
