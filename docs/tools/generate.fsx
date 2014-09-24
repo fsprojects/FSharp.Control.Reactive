@@ -104,4 +104,3 @@ buildDocumentation()
 #if REFERENCE
 buildReference()
 #endif
-

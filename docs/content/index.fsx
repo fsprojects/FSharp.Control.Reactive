@@ -49,9 +49,9 @@ The library is available under the Apache 2.0 license, which allows modification
 redistribution for both commercial and non-commercial purposes. For more information see the 
 [License file][license] in the GitHub repository. 
 
-  [content]: https://github.com/fsprojects/FSharp.Reactive/tree/master/docs/content
-  [gh]: https://github.com/fsprojects/FSharp.Reactive
-  [issues]: https://github.com/fsprojects/FSharp.Reactive/issues
-  [readme]: https://github.com/fsprojects/FSharp.Reactive/blob/master/README.md
-  [license]: https://github.com/fsprojects/FSharp.Reactive/blob/master/LICENSE.txt
+  [content]: https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/docs/content
+  [gh]: https://github.com/fsprojects/FSharp.Control.Reactive
+  [issues]: https://github.com/fsprojects/FSharp.Control.Reactive/issues
+  [readme]: https://github.com/fsprojects/FSharp.Control.Reactive/blob/master/README.md
+  [license]: https://github.com/fsprojects/FSharp.Control.Reactive/blob/master/LICENSE.txt
 *)
