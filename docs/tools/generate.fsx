@@ -15,6 +15,8 @@ let referenceBinaries =
 // Web site location for the generated documentation
 let website = "/FSharp.Control.Reactive"
 
+let githubLink = "https://github.com/fsprojects/FSharp.Control.Reactive"
+
 // Specify more information about your project
 let info =
   [ "project-name", "FSharp.Control.Reactive"
@@ -27,7 +29,7 @@ let info =
 // For typical project, no changes are needed below
 // --------------------------------------------------------------------------------------
 
-#I "../../packages/FSharp.Formatting.2.4.5/lib/net40"
+#I "../../packages/FSharp.Formatting.2.4.25/lib/net40"
 #I "../../packages/RazorEngine.3.3.0/lib/net40"
 #I "../../packages/FSharp.Compiler.Service.0.0.36/lib/net40"
 #r "../../packages/Microsoft.AspNet.Razor.2.0.30506.0/lib/net40/System.Web.Razor.dll"
