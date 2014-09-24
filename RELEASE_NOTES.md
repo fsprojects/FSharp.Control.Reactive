@@ -1,6 +1,13 @@
-### New in 3.0.0-beta - (TBD)
+### New in 2.3.0-beta - (TBD)
 * Add QueryBuilder
 * Add many more wrappers to Rx from F#, thanks to Jared Hester!
+
+**Breaking changes**
+* New namespace is `FSharp.Control.Reactive`
+* `Observable` module is no longer auto-opened with the namespace
+* `Observable.zip` now takes parameters in the "correct" order of `obs1` then `obs2`
+* `Observable.subscribe` has moved to `Observable.subscribeWithCallbacks`
+* `Observable.subscribe` now takes the `onNext` callback only
 
 **TODO**
 * Add tests
