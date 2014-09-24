@@ -54,7 +54,7 @@ let testAssemblies = "bin/FSharp.Control.Reactive.Tests.dll"
 // The profile where the project is posted 
 let gitHome = "git@github.com:fsprojects"
 // The name of the project on GitHub
-let gitName = "FSharp.Reactive"
+let gitName = "FSharp.Control.Reactive"
 let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/fsprojects"
 
 // --------------------------------------------------------------------------------------
