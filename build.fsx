@@ -67,7 +67,12 @@ let (!!) includes = (!! includes).SetBaseDirectory __SOURCE_DIRECTORY__
 let release = parseReleaseNotes (IO.File.ReadAllLines "RELEASE_NOTES.md")
 let isAppVeyorBuild = environVar "APPVEYOR" <> null
 let nugetVersion = 
-    if isAppVeyorBuild then sprintf "%s.%s" release.NugetVersion buildVersion
+    if isAppVeyorBuild then
+        // Split version string if it is suffixed with something like "-beta"
+        let versionParts = release.NugetVersion.Split([|'-'|])
+        if versionParts.Length > 1 then
+            sprintf "%s.%s-%s" versionParts.[0] buildVersion versionParts.[1]
+        else sprintf "%s.%s" release.NugetVersion buildVersion
     else release.NugetVersion
 
 // Generate assembly info files with the right version & up-to-date information
