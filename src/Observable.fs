@@ -10,7 +10,7 @@ open System.Reactive.Concurrency
 
 [<AutoOpen>]
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-<<<<<<< HEAD
+
 module ReactiveCore =
 
     type Observer with
@@ -55,9 +55,9 @@ module ReactiveCore =
         /// Subscribes to the Observable with all 3 callbacks.
         member this.Subscribe(onNext, onError, onCompleted) =
             this.Subscribe(Action<_> onNext, Action<_> onError, Action onCompleted)
-=======
+
 module Builders =
->>>>>>> 1307b66bea81d0944c27944761bd9dddb3d11f8e
+
 
     /// An Observable computation builder.
     type ObservableBuilder() =
@@ -78,7 +78,7 @@ module Builders =
 
     let observe = ObservableBuilder()
 
-<<<<<<< HEAD
+
 /// The Reactive module provides operators for working with IObservable<_> in F#.
 module Reactive =
 
@@ -88,7 +88,6 @@ module Reactive =
     let aggregate accumulator source = 
         Observable.Aggregate(source, Func<_,_,_> accumulator )
 
-=======
     /// A reactive query builder.
     /// See http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html
     type RxQueryBuilder() =
@@ -154,18 +153,7 @@ module Reactive =
 
     let rxquery = RxQueryBuilder()
 
-/// The Observable module provides operators for working with IObservable<_> in F#.
-[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module Observable =
 
-    let private flipApply f x i = f i x
-
-    /// Binds an observable to generate a subsequent observable.
-    let bind (f: 'T -> IObservable<'TNext>) (m: IObservable<'T>) = m.SelectMany(f)
-
-    /// Creates an observable sequence from the specified Subscribe method implementation.
-    let create (f: IObserver<'T> -> (unit -> unit)) = Observable.Create(Func<_,_>(fun o -> Action(f o)))
->>>>>>> 1307b66bea81d0944c27944761bd9dddb3d11f8e
 
     /// Determines whether all elements of and observable satisfy a predicate
     let all pred source =
@@ -175,7 +163,6 @@ module Observable =
     /// Returns the observable sequence that reacts first
     let amb second first = Observable.Amb(first, second)
 
-<<<<<<< HEAD
 
     /// Propagates the observable sequence that reacts first
     let ambSeq (source:seq<IObservable<'T>>) = Observable.Amb( source )
@@ -198,68 +185,14 @@ module Observable =
     /// Binds an observable to generate a subsequent observable.
     let bind (f: 'T -> IObservable<'TNext>) (m: IObservable<'T>) = m.SelectMany(Func<_,_> f)
 
-=======
-    /// Matches when both observable sequences have an available value
-    let both second first = Observable.And(first, second)
-
-    /// Merges two observable sequences into one observable sequence
-    let zip (second: IObservable<'U>) (first: IObservable<'T>) =
-        let inner a b = a, b
-        Observable.Zip(first, second, inner)
-
-    /// Merges two observable sequences into one observable sequence
-    /// whenever one of the observable sequences has a new value
-    /// ===> More results than zip
-    let combineLatest second first =
-        let inner a b = a, b
-        Observable.CombineLatest(first, second, inner)
-    
-    /// Concats (flattens) an observable of observables into an observable
-    /// ===> Observable.SelectMany(observable, Func<_,_>(fun (x:IObservable<'T>) -> x))
-    let concat (second: IObservable<'T>) (first: IObservable<'T>) = Observable.Concat(first, second)
-    
-    /// Maps the given observable with the given function
-    let map f source = Observable.Select(source, Func<_,_>(f))    
-     
-    /// Maps the given observable with the given function
-    let mapi f source = Observable.Select(source, flipApply f)
->>>>>>> 1307b66bea81d0944c27944761bd9dddb3d11f8e
 
     /// Lifts the values of f and m and applies f to m, returning an IObservable of the result.
     let apply f m = f |> bind (fun f' -> m |> bind (fun m' -> Observable.Return(f' m')))
  
 
-<<<<<<< HEAD
     /// Matches when both observable sequences have an available value
     let both second first = Observable.And(first, second)   
-=======
-    /// Maps two observables to the specified function.
-    let map2 f a b = apply (apply f a) b
-     
-    /// Filters all elements where the given predicate is satisfied
-    let filter f source = Observable.Where(source, Func<_,_> f)
 
-    /// Filters all elements where the given predicate is satisfied
-    let filteri f source = Observable.Where(source, flipApply f)
-     
-    /// Skips n elements
-    let skip (n: int) source = Observable.Skip(source, n)
-     
-    /// Skips elements while the predicate is satisfied
-    let skipWhile f source = Observable.SkipWhile(source, Func<_,_> f)
-
-    /// Skips elements while the predicate is satisfied
-    let skipWhilei f source = Observable.SkipWhile(source, flipApply f)
-     
-    /// Counts the elements
-    let count source = Observable.Count(source)
-     
-    /// Takes n elements
-    let take (n: int) source = Observable.Take(source, n)    
->>>>>>> 1307b66bea81d0944c27944761bd9dddb3d11f8e
-
-
-<<<<<<< HEAD
     // #region Buffers
 
 
@@ -1899,39 +1832,3 @@ module Observable =
         Observable.Zip(first, second, Func<_,_,_> resultSelector )
  
 
-
-
-
-=======
-    /// Determines whether an observable sequence contains a specified value
-    /// which satisfies the given predicate
-    let exists f source = Observable.Any(source, f)
-
-    /// Throttles the observable for the given interval
-    let throttle (interval: TimeSpan) source = Observable.Throttle(source, interval)
-    
-    /// Samples the observable at the given interval
-    let sample (interval: TimeSpan) source = Observable.Sample(source, interval)
-
-    /// Continues an observable sequence that is terminated
-    /// by an exception with the next observable sequence.
-    let catch (second: IObservable<'T>) first = Observable.Catch(first, second) 
-     
-    /// Takes elements while the predicate is satisfied
-    let takeWhile f source = Observable.TakeWhile(source, Func<_,_> f)
-
-    /// Takes elements while the predicate is satisfied
-    let takeWhilei f source = Observable.TakeWhile(source, flipApply f)
-     
-    /// Iterates through the observable and performs the given side-effect
-    let perform f source = Observable.Do(source, Action<_> f)
-     
-    /// Invokes the finally action after source observable sequence terminates normally or by an exception.
-    let performFinally f source = Observable.Finally(source, Action f)
-     
-    /// Folds the observable
-    let fold f seed source = Observable.Aggregate(source, seed, f)
-
-    /// Reduces the observable
-    let reduce f source = Observable.Aggregate(source, f)
->>>>>>> 1307b66bea81d0944c27944761bd9dddb3d11f8e
