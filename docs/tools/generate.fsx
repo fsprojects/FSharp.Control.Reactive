@@ -13,7 +13,7 @@ let referenceBinaries =
       "System.Reactive.Experimental.dll"
       "FSharp.Control.Reactive.dll" ]
 // Web site location for the generated documentation
-let website = "/FSharp.Reactive"
+let website = "/FSharp.Control.Reactive"
 
 // Specify more information about your project
 let info =
