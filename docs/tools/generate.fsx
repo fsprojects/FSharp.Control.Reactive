@@ -31,7 +31,7 @@ let info =
 
 #I "../../packages/FSharp.Formatting.2.4.25/lib/net40"
 #I "../../packages/RazorEngine.3.3.0/lib/net40"
-#I "../../packages/FSharp.Compiler.Service.0.0.36/lib/net40"
+#I "../../packages/FSharp.Compiler.Service.0.0.62/lib/net40"
 #r "../../packages/Microsoft.AspNet.Razor.2.0.30506.0/lib/net40/System.Web.Razor.dll"
 #r "../../packages/FAKE/tools/NuGet.Core.dll"
 #r "../../packages/FAKE/tools/FakeLib.dll"
