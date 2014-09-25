@@ -36,3 +36,4 @@ temp/
 test/
 tools/
 *.nupkg
+.paket/paket.exe

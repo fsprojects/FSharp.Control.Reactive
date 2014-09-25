@@ -1,0 +1,10 @@
+NUnit
+NUnit.Runners
+Rx-Core
+Rx-Experimental
+Rx-Interfaces
+Rx-Linq
+Rx-Main
+Rx-PlatformServices
+Rx-Providers
+Rx-Testing
