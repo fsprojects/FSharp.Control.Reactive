@@ -104,7 +104,7 @@ Target "CleanDocs" (fun _ ->
 // Build library & test project
 
 Target "Build" (fun _ ->
-    !! ("src/**/" + projectFile + "*.*proj")
+    !! (projectFile + ".sln")
     |> MSBuildRelease "bin" "Rebuild"
     |> ignore
 )
@@ -223,7 +223,6 @@ Target "All" DoNothing
   ==> "CopyLicense"
   ==> "AssemblyInfo"
   ==> "Build"
-  ==> "BuildTests"
   ==> "RunTests"
   =?> ("GenerateReferenceDocs",isLocalBuild && not isMono)
   =?> ("GenerateDocs",isLocalBuild && not isMono)
