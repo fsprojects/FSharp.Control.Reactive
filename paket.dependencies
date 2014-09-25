@@ -1,0 +1,17 @@
+source http://nuget.org/api/v2
+
+nuget FAKE
+nuget SourceLink.Fake
+nuget Nuget.CommandLine
+nuget NUnit ~> 2.6.3
+nuget Rx-Core ~> 2.2.2
+nuget Rx-Experimental ~> 2.2.2
+nuget Rx-Interfaces ~> 2.2.2
+nuget Rx-Linq ~> 2.2.2
+nuget Rx-Main ~> 2.2.2
+nuget Rx-PlatformServices ~> 2.2.2
+nuget Rx-Providers ~> 2.2.2
+nuget NUnit.Runners ~> 2.6.3
+nuget FSharp.Formatting ~> 2.4.25
+nuget FSharp.Compiler.Service ~> 0.0.36
+nuget Rx-Testing ~> 2.2.2
