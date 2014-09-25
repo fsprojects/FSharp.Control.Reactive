@@ -92,8 +92,6 @@ Target "BuildVersion" (fun _ ->
 // --------------------------------------------------------------------------------------
 // Clean build results & restore NuGet packages
 
-Target "RestorePackages" RestorePackages
-
 Target "Clean" (fun _ ->
     CleanDirs ["bin"; "temp"]
 )
@@ -223,7 +221,6 @@ Target "All" DoNothing
 "Clean"
   =?> ("BuildVersion", isAppVeyorBuild)
   ==> "CopyLicense"
-  ==> "RestorePackages"
   ==> "AssemblyInfo"
   ==> "Build"
   ==> "BuildTests"
