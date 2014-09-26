@@ -158,7 +158,7 @@ Target "NuGet" (fun _ ->
             Project = project
             Summary = summary
             Description = description
-            Version = release.NugetVersion
+            Version = nugetVersion
             ReleaseNotes = String.Join(Environment.NewLine, release.Notes)
             Tags = tags
             OutputPath = "bin"
@@ -196,17 +196,17 @@ Target "ReleaseDocs" (fun _ ->
 
     CopyRecursive "docs/output" tempDocsDir true |> tracefn "%A"
     StageAll tempDocsDir
-    Commit tempDocsDir (sprintf "Update generated documentation for version %s" release.NugetVersion)
+    Commit tempDocsDir (sprintf "Update generated documentation for version %s" nugetVersion)
     Branches.push tempDocsDir
 )
 
 Target "Release" (fun _ ->
     StageAll ""
-    Commit "" (sprintf "Bump version to %s" release.NugetVersion)
+    Commit "" (sprintf "Bump version to %s" nugetVersion)
     Branches.push ""
 
-    Branches.tag "" release.NugetVersion
-    Branches.pushTag "" "origin" release.NugetVersion
+    Branches.tag "" nugetVersion
+    Branches.pushTag "" "origin" nugetVersion
 )
 
 Target "BuildPackage" DoNothing
