@@ -224,9 +224,9 @@ Target "All" DoNothing
   ==> "AssemblyInfo"
   ==> "Build"
   ==> "RunTests"
+  ==> "All"
   =?> ("GenerateReferenceDocs",isLocalBuild && not isMono)
   =?> ("GenerateDocs",isLocalBuild && not isMono)
-  ==> "All"
   =?> ("ReleaseDocs",isLocalBuild && not isMono)
 
 "All" 
