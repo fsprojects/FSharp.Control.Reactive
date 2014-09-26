@@ -69,11 +69,14 @@ let release = parseReleaseNotes (IO.File.ReadAllLines "RELEASE_NOTES.md")
 let isAppVeyorBuild = environVar "APPVEYOR" <> null
 let nugetVersion = 
     if isAppVeyorBuild then
-        // Split version string if it is suffixed with something like "-beta"
         let versionParts = release.NugetVersion.Split([|'-'|])
+        let version = versionParts.[0]
+        let bugFixIndex = version.LastIndexOf('.')
+        let tempVersion = version.Substring(0, bugFixIndex)
+        // Split version string if it is suffixed with something like "-beta"
         if versionParts.Length > 1 then
-            sprintf "%s.%s-%s" versionParts.[0] buildVersion versionParts.[1]
-        else sprintf "%s.%s" release.NugetVersion buildVersion
+            sprintf "%s.%s-%s" tempVersion buildVersion versionParts.[1]
+        else sprintf "%s.%s" tempVersion buildVersion
     else release.NugetVersion
 
 // Generate assembly info files with the right version & up-to-date information
