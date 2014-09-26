@@ -1,4 +1,4 @@
-### New in 2.3-rc - (TBD)
+### New in 2.3-beta - (TBD)
 * Add QueryBuilder
 * Add many more wrappers to Rx from F#, thanks to Jared Hester!
 
