@@ -13,5 +13,5 @@ nuget Rx-PlatformServices ~> 2.2.2
 nuget Rx-Providers ~> 2.2.2
 nuget NUnit.Runners ~> 2.6.3
 nuget FSharp.Formatting ~> 2.4.25
-nuget FSharp.Compiler.Service ~> 0.0.36
+nuget FSharp.Compiler.Service ~> 0.0.62
 nuget Rx-Testing ~> 2.2.2
