@@ -5,13 +5,7 @@
 
 // Binaries that have XML documentation (in a corresponding generated XML file)
 let referenceBinaries =
-    [ "System.Reactive.Core.dll"
-      "System.Reactive.Interfaces.dll"
-      "System.Reactive.Linq.dll"
-      "System.Reactive.Providers.dll"
-      "System.Reactive.PlatformServices.dll"
-      "System.Reactive.Experimental.dll"
-      "FSharp.Control.Reactive.dll" ]
+    [ "FSharp.Control.Reactive.dll" ]
 // Web site location for the generated documentation
 let website = "/FSharp.Control.Reactive"
 
