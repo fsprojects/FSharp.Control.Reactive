@@ -167,10 +167,10 @@ Target "NuGet" (fun _ ->
             OutputPath = "bin"
             AccessKey = getBuildParamOrDefault "nugetkey" ""
             Publish = hasBuildParam "nugetkey"
-            Dependencies = ["Rx-Experimental", GetPackageVersion "packages" "Rx-Experimental"]
-            Files = [ (@"..\src\bin\Release\FSharp.Control.Reactive.dll", Some "lib/net40", None)
-                      (@"..\src\bin\Release\FSharp.Control.Reactive.xml", Some "lib/net40", None)
-                      (@"..\src\bin\Release\FSharp.Control.Reactive.pdb", Some "lib/net40", None) ] })
+            Dependencies = ["Rx-Linq", GetPackageVersion "packages" "Rx-Linq"]
+            Files = [ (@"bin\FSharp.Control.Reactive.dll", Some "lib/net40", None)
+                      (@"bin\FSharp.Control.Reactive.xml", Some "lib/net40", None)
+                      (@"bin\FSharp.Control.Reactive.pdb", Some "lib/net40", None) ] })
         ("nuget/" + project + ".nuspec")
 )
 
