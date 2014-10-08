@@ -460,7 +460,7 @@ module Observable =
 (***************************************************************
  * F# combinator wrappers for Rx extensions
  ***************************************************************)
- (* system reactive producer if  rx internals was made visible to this library with System.Runtime.CompilerServices.InternalsVisibleTo
+ (* if  rx internals is made visible to this library with System.Runtime.CompilerServices.InternalsVisibleTo
     type ObserverSink<'a>(observer : System.IObserver<'a>, cancel : System.IDisposable) as this = 
             let mutable observer = observer
             let cancel = ref Unchecked.defaultof<System.IDisposable>
@@ -597,10 +597,6 @@ module Observable =
     /// zero or more buffers produced based on timing information
     let bufferSpanShift (timeSpan:TimeSpan) (timeShift:TimeSpan) source = 
         Observable.Buffer(source, timeSpan, timeShift)
-
-
-    // #endregion
-
     
     /// Converts the elements of the sequence to the specified type
     let cast<'CastType> (source) =
@@ -643,34 +639,34 @@ module Observable =
 //        source |> Observable.map f
 //               |> Observable.filter Option.isSome
 //               |> Observable.map (function | Some(a) -> a | _ -> raise (Exception("notPossible")))
-    let choose ( map : 'a -> 'b option) (source : System.IObservable<'a>) : System.IObservable<'b> = 
-        upcast {  new Producer<'b>() with
-                  member x.Run observer cancel setSink = 
-                      let sink = new ObserverSink<_>(observer, cancel)
-                  
-                      let observer = 
-                          { new System.IObserver<_> with
-                                
-                                member x.OnNext value =       
-                                    let mutable result =  None                          
-                                    try 
-                                        result <- map value                                                                     
-                                    with ex -> 
-                                        sink.Observer.OnError ex
-                                        sink.Dispose()
-                                    match result with
-                                        | Some r -> sink.Observer.OnNext r
-                                        | _ -> ()   
-                            
-                                member x.OnError error = 
-                                    sink.Observer.OnError error
-                                    sink.Dispose()
-                            
-                                member x.OnCompleted() = 
-                                    sink.Observer.OnCompleted()
-                                    sink.Dispose() }
-                      setSink (sink)
-                      source.SubscribeSafe(observer) } 
+    let choose (map : 'a -> 'b option) (source : System.IObservable<'a>) : System.IObservable<'b> = 
+        upcast { new Producer<'b>() with
+                     member x.Run observer cancel setSink = 
+                         let sink = new ObserverSink<_>(observer, cancel)
+                         
+                         let observer = 
+                             { new System.IObserver<_> with
+                                   
+                                   member x.OnNext value = 
+                                       let mutable result = None
+                                       try 
+                                           result <- map value
+                                       with ex -> 
+                                           sink.Observer.OnError ex
+                                           sink.Dispose()
+                                       match result with
+                                       | Some r -> sink.Observer.OnNext r
+                                       | _ -> ()
+                                   
+                                   member x.OnError error = 
+                                       sink.Observer.OnError error
+                                       sink.Dispose()
+                                   
+                                   member x.OnCompleted() = 
+                                       sink.Observer.OnCompleted()
+                                       sink.Dispose() }
+                         setSink (sink)
+                         source.SubscribeSafe(observer) }
     /// Produces an enumerable sequence of consequtive (possibly empty) chunks of the source observable
     let chunkify<'Source> source : seq<IList<'Source>> = 
         Observable.Chunkify<'Source>( source )
