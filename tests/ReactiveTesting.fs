@@ -184,15 +184,7 @@ module ReactiveTesting =
         member x.controlledStart create = x.controlledStartWithAll ReactiveTest.Created ReactiveTest.Subscribed ReactiveTest.Disposed create
 
 module Seq = 
+    open System.Linq
     let seqEqual (s1 : 'a seq when 'a : equality) (s2 : 'a seq when 'a : equality) = 
-        use e1 = s1.GetEnumerator()
-        use e2 = s1.GetEnumerator()
-        let nb = ref true
-        let r = ref true
-        while ((!nb) && e1.MoveNext()) do
-            if (e2.MoveNext() = false || e1.Current <> e2.Current) then 
-                r := false
-                nb := false
-        if ((!nb) && e2.MoveNext()) then r := false
-        !r
-//  let seqEqual (s1: 'a seq when 'a : equality) (s2: 'a seq when 'a : equality) = (Seq.compareWith Operators.compare s1 s2) =0
+       s1.SequenceEqual(s2)
+

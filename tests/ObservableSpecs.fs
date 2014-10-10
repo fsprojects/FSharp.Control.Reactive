@@ -297,8 +297,8 @@ let Where_Where4() =
     let res = 
         scheduler.start (fun () -> 
             xs
-            |> Observable.filteri (fun x i -> i >= 1)
-            |> Observable.filteri (fun x i -> i < 2))
+            |> Observable.filteri (fun i x -> i >= 1)
+            |> Observable.filteri (fun i x -> i < 2))
     
     res.Messages
     |> Seq.seqEqual [| onNext 270L 4
@@ -320,7 +320,7 @@ let Where_Where42() =
 
 
     let z = test 0 (RxNext  4)
-
+        
     let xs = 
         [| RxRecording(110L, (RxNext 1))
            RxRecording(180L, (RxNext 2))
@@ -335,8 +335,8 @@ let Where_Where42() =
     let res = 
         scheduler.start (fun () -> 
             xs
-            |> Observable.filteri (fun x i -> i >= 1)
-            |> Observable.filteri (fun x i -> i < 2))
+            |> Observable.filteri (fun i x -> i >= 1)
+            |> Observable.filteri (fun i x -> i < 2))
     
     res.Messages
     |> Seq.seqEqual [| RxRecording( 270L, (RxNext  4))
@@ -453,3 +453,25 @@ let SelectWithIndex_Completed() =
     |> Assert.IsTrue
     xs.Subscriptions.AssertEqual(CompletedSubscription(200L, 400L))
     Assert.AreEqual(4, !invoked)
+
+
+
+
+[<Test>]
+let ``Sequence equal tests``() = 
+
+    let a = [| 1;2|]
+    let a1 = [| 1;2|]
+    let b = [| 1;2;3|]
+    let b1 = [| 1;2;3|]
+    
+    a |> Seq.seqEqual a |> Assert.IsTrue
+    a |> Seq.seqEqual a1 |> Assert.IsTrue
+    a1 |> Seq.seqEqual a |> Assert.IsTrue
+    b |> Seq.seqEqual b |> Assert.IsTrue
+    b |> Seq.seqEqual b1 |> Assert.IsTrue
+    b1 |> Seq.seqEqual b |> Assert.IsTrue
+    a |> Seq.seqEqual b |> Assert.IsFalse
+    b |> Seq.seqEqual a |> Assert.IsFalse
+
+
