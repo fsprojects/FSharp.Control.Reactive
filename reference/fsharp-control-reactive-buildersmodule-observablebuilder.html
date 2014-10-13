@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>ObservableBuilder - FSharp.Control.Reactive</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Ryan Riley, Steffen Forkmann, and Jared Heseter"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/FSharp.Control.Reactive/content/style.css" />
+    <script type="text/javascript" src="/FSharp.Control.Reactive/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="http://github.com/fsprojects/FSharp.Reactive">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/FSharp.Control.Reactive/index.html">FSharp.Control.Reactive</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>ObservableBuilder</h1>
+<div class="xmldoc">
+<p>An Observable computation builder.</p>
+</div>
+  <h3>Constructors</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Constructor</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '254', 254)" onmouseover="showTip(event, '254', 254)">
+            new()
+          </code>
+          <div class="tip" id="254">
+            <strong>Signature:</strong> unit -&gt; ObservableBuilder<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L15-15" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '256', 256)" onmouseover="showTip(event, '256', 256)">
+            Bind(m, f)
+          </code>
+          <div class="tip" id="256">
+            <strong>Signature:</strong> (m:IObservable&lt;&#39;?6098&gt; * f:(&#39;?6098 -&gt; IObservable&lt;&#39;?6099&gt;)) -&gt; IObservable&lt;&#39;?6099&gt;<br />
+                          <strong>Type parameters:</strong> '?6098, '?6099          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L18-18" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '286', 286)" onmouseover="showTip(event, '286', 286)">
+            Combine(comp1, comp2)
+          </code>
+          <div class="tip" id="286">
+            <strong>Signature:</strong> (comp1:IObservable&lt;&#39;?6101&gt; * comp2:IObservable&lt;&#39;?6101&gt;) -&gt; IObservable&lt;&#39;?6101&gt;<br />
+                          <strong>Type parameters:</strong> '?6101          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L19-19" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '287', 287)" onmouseover="showTip(event, '287', 287)">
+            Delay(f)
+          </code>
+          <div class="tip" id="287">
+            <strong>Signature:</strong> (f:(unit -&gt; IObservable&lt;&#39;?6103&gt;)) -&gt; IObservable&lt;&#39;?6103&gt;<br />
+                          <strong>Type parameters:</strong> '?6103          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L20-20" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '288', 288)" onmouseover="showTip(event, '288', 288)">
+            For(sequence, body)
+          </code>
+          <div class="tip" id="288">
+            <strong>Signature:</strong> (sequence:IEnumerable&lt;&#39;?6107&gt; * body:Func&lt;&#39;?6107,IObservable&lt;&#39;?6108&gt;&gt;) -&gt; IObservable&lt;&#39;?6108&gt;<br />
+                          <strong>Type parameters:</strong> '?6107, '?6108          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L22-22" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '289', 289)" onmouseover="showTip(event, '289', 289)">
+            Return(x)
+          </code>
+          <div class="tip" id="289">
+            <strong>Signature:</strong> x:&#39;?6094 -&gt; IObservable&lt;&#39;?6094&gt;<br />
+                          <strong>Type parameters:</strong> '?6094          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L16-16" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '290', 290)" onmouseover="showTip(event, '290', 290)">
+            ReturnFrom(m)
+          </code>
+          <div class="tip" id="290">
+            <strong>Signature:</strong> m:IObservable&lt;&#39;?6096&gt; -&gt; IObservable&lt;&#39;?6096&gt;<br />
+                          <strong>Type parameters:</strong> '?6096          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L17-17" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '291', 291)" onmouseover="showTip(event, '291', 291)">
+            TryFinally(m, compensation)
+          </code>
+          <div class="tip" id="291">
+            <strong>Signature:</strong> (m:IObservable&lt;&#39;?6113&gt; * compensation:(unit -&gt; unit)) -&gt; IObservable&lt;&#39;?6113&gt;<br />
+                          <strong>Type parameters:</strong> '?6113          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L24-24" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '292', 292)" onmouseover="showTip(event, '292', 292)">
+            TryWith(m, h)
+          </code>
+          <div class="tip" id="292">
+            <strong>Signature:</strong> (m:IObservable&lt;&#39;?6110&gt; * h:(&#39;?6111 -&gt; IObservable&lt;&#39;?6110&gt;)) -&gt; IObservable&lt;&#39;?6110&gt;<br />
+                          <strong>Type parameters:</strong> '?6110, '?6111          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L23-23" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '293', 293)" onmouseover="showTip(event, '293', 293)">
+            Using(res, body)
+          </code>
+          <div class="tip" id="293">
+            <strong>Signature:</strong> (res:&#39;?6115 * body:Func&lt;&#39;?6115,IObservable&lt;&#39;?6116&gt;&gt;) -&gt; IObservable&lt;&#39;?6116&gt;<br />
+                          <strong>Type parameters:</strong> '?6115, '?6116          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L25-25" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '294', 294)" onmouseover="showTip(event, '294', 294)">
+            While(guard, m)
+          </code>
+          <div class="tip" id="294">
+            <strong>Signature:</strong> (guard:Func&lt;bool&gt; * m:IObservable&lt;&#39;?6118&gt;) -&gt; IObservable&lt;&#39;?6118&gt;<br />
+                          <strong>Type parameters:</strong> '?6118          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L26-26" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '295', 295)" onmouseover="showTip(event, '295', 295)">
+            Yield(x)
+          </code>
+          <div class="tip" id="295">
+            <strong>Signature:</strong> x:&#39;?6120 -&gt; IObservable&lt;&#39;?6120&gt;<br />
+                          <strong>Type parameters:</strong> '?6120          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L28-28" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '296', 296)" onmouseover="showTip(event, '296', 296)">
+            YieldFrom(m)
+          </code>
+          <div class="tip" id="296">
+            <strong>Signature:</strong> m:IObservable&lt;&#39;?6122&gt; -&gt; IObservable&lt;&#39;?6122&gt;<br />
+                          <strong>Type parameters:</strong> '?6122          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L29-29" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '297', 297)" onmouseover="showTip(event, '297', 297)">
+            Zero()
+          </code>
+          <div class="tip" id="297">
+            <strong>Signature:</strong> unit -&gt; IObservable&lt;&#39;?6105&gt;<br />
+                          <strong>Type parameters:</strong> '?6105          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L21-21" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <img src="/FSharp.Control.Reactive/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">FSharp.Control.Reactive</li>
+            <li><a href="/FSharp.Control.Reactive/index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://nuget.com/packages/FSharp.Control.Reactive">Get Library via NuGet</a></li>
+            <li><a href="http://github.com/fsprojects/FSharp.Reactive">Source Code on GitHub</a></li>
+            <li><a href="http://github.com/fsprojects/FSharp.Reactive/blob/master/LICENSE.txt">License</a></li>
+            <li><a href="http://github.com/fsprojects/FSharp.Reactive/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+            
+            <li class="nav-header">Getting started</li>
+            <li><a href="/FSharp.Control.Reactive/tutorial.html">Sample tutorial</a></li>
+
+            <li class="nav-header">Documentation</li>
+            <li><a href="/FSharp.Control.Reactive/reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="http://github.com/fsprojects/FSharp.Reactive"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>
+
