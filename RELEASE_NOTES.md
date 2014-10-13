@@ -1,3 +1,6 @@
+### New in 2.3.6 - (Released 2014/10/13)
+* Now generating docs!
+
 ### New in 2.3.0 - (Released 2014/09/26)
 * Add QueryBuilder
 * Add many more wrappers to Rx from F#, thanks to Jared Hester!
