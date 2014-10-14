@@ -1,3 +1,11 @@
+### New in 2.4.0 - (Released 2014/10/14)
+Updates courtesty of marklam:
+
+* Changed the distinct functions to take F# functions
+* Added a version of ofSeq which uses a scheduler (ofSeqOn)
+* Reordered the parameters to scanInit to be more composable
+* Corrected some spellings and added some tests
+
 ### New in 2.3.7 - (Released 2014/10/14)
 * Updated to Rx 2.2.5
 * Updated Paket bootstrapper
