@@ -1,3 +1,7 @@
+### New in 2.3.7 - (Released 2014/10/14)
+* Updated to Rx 2.2.5
+* Updated Paket bootstrapper
+
 ### New in 2.3.6 - (Released 2014/10/13)
 * Now generating docs!
 
