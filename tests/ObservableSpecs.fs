@@ -5,6 +5,7 @@ open System.Reactive.Linq
 open FSharp.Control.Reactive
 open Builders
 open NUnit.Framework
+open Microsoft.Reactive.Testing
 
 let ``should be`` expectedNext expectedError expectedCompleted (observable:'a IObservable) =
     let next = ref 0
@@ -100,7 +101,7 @@ let ``Test should show the stack overflow is fixed with Rx 2 beta``() =
     Assert.DoesNotThrow(TestDelegate(fun () -> test()))
 
 [<Test>]
-let ``Zipping two observable sequences of different types creates a single zipped observable`` =
+let ``Zipping two observable sequences of different types creates a single zipped observable``() =
     let obs1 = Observable.Return 1
     let obs2 = Observable.Return "A"
     let zipped = Observable.zip obs1 obs2 tuple
@@ -108,3 +109,68 @@ let ``Zipping two observable sequences of different types creates a single zippe
     let expected = ( 1, "A" )
 
     Assert.That(result, Is.EqualTo expected)
+
+[<Test>]
+let ``distinctKey uses the key function to decide whether an element has been seen before``() =
+    let result   = ResizeArray()
+    let obs      = Observable.ofSeq [ (1,3); (2,5); (2,7); (1,6); (3,5) ]
+    let expected = [ (1,3); (2,5); (3,5) ]
+    obs |> Observable.distinctKey fst
+        |> Observable.subscribe(result.Add) 
+        |> ignore
+
+    Assert.That(result, Is.EqualTo expected)
+
+[<Test>]
+let ``distinctKeyCompare uses the key function and the comparer to decide whether an element has been seen before``() =
+    let comparer = { new System.Collections.Generic.IEqualityComparer<int> with
+                        member x.Equals(a,b)    = a % 2 = b % 2
+                        member x.GetHashCode(a) = a % 2 } // Equivalence based on odd or even
+    let result   = ResizeArray()
+    let obs      = Observable.ofSeq [ (1,3); (2,5); (2,7); (1,6); (3,5) ]
+    let expected = [ (1,3); (2,5) ]
+    obs |> Observable.distinctKeyCompare fst comparer
+        |> Observable.subscribe(result.Add) 
+        |> ignore
+
+    Assert.That(result, Is.EqualTo expected)
+
+[<Test>]
+let ``distinctUntilChangedKey uses the key function to decide whether an element has been seen before``() =
+    let result   = ResizeArray()
+    let obs      = Observable.ofSeq [ (1,3); (2,5); (2,7); (1,6); (3,5) ]
+    let expected = [ (1,3); (2,5); (1,6); (3,5) ]
+    obs |> Observable.distinctUntilChangedKey fst
+        |> Observable.subscribe(result.Add) 
+        |> ignore
+
+    Assert.That(result, Is.EqualTo expected)
+
+[<Test>]
+let ``distinctUntilChangedKeyCompare uses the key function and the comparer to decide whether an element has been seen before``() =
+    let comparer = { new System.Collections.Generic.IEqualityComparer<int> with
+                        member x.Equals(a,b)    = a % 2 = b % 2
+                        member x.GetHashCode(a) = a % 2 }  // Equivalence based on odd or even
+    let result   = ResizeArray()
+    let obs      = Observable.ofSeq [ (1,3); (2,5); (2,7); (1,6); (3,5) ]
+    let expected = [ (1,3); (2,5); (1,6) ]
+    obs |> Observable.distinctUntilChangedKeyCompare fst comparer
+        |> Observable.subscribe(result.Add) 
+        |> ignore
+
+    Assert.That(result, Is.EqualTo expected)
+
+[<Test>]
+let ``ofSeqOn enumerates its sequence on the specified scheduler``() =
+    let result    = ResizeArray()
+    let items     = [ 1; 2; 3]
+    let scheduler = TestScheduler()
+
+    let obs       = items |> Observable.ofSeqOn scheduler
+    obs |> Observable.subscribe(result.Add) 
+        |> ignore
+
+    Assert.That(result, Is.Empty)
+    scheduler.Start()
+    Assert.That(result, Is.EqualTo items)
+

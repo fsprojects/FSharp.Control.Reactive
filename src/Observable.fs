@@ -467,8 +467,8 @@ module Observable =
 
 
     /// Returns an observable sequence that contains only distinct elements according to the keySelector.
-    let distincKey ( keySelector:Func<'Source,'Key> )( source:IObservable<'Source> ) : IObservable<'Source> =
-        Observable.Distinct( source, keySelector)
+    let distinctKey ( keySelector:'Source -> 'Key )( source:IObservable<'Source> ) : IObservable<'Source> =
+        Observable.Distinct( source, Func<'Source,'Key> keySelector)
 
 
     /// Returns an observable sequence that contains only distinct elements according to the comparer.
@@ -477,8 +477,8 @@ module Observable =
 
 
     /// Returns an observable sequence that contains only distinct elements according to the keySelector and the comparer.
-    let distincKeyCompare ( keySelector:Func<'Source,'Key> )( comparer:IEqualityComparer<'Key>)( source:IObservable<'Source> ) : IObservable<'Source> =
-        Observable.Distinct( source, keySelector, comparer )
+    let distinctKeyCompare ( keySelector:'Source -> 'Key )( comparer:IEqualityComparer<'Key>)( source:IObservable<'Source> ) : IObservable<'Source> =
+        Observable.Distinct( source, Func<'Source,'Key> keySelector, comparer )
        
 
     /// Returns an observable sequence that only contains distinct contiguous elements 
@@ -487,8 +487,8 @@ module Observable =
 
 
     /// Returns an observable sequence that contains only distinct contiguous elements according to the keySelector.
-    let distinctUntilChangedKey ( keySelector:Func<'Source,'Key> )( source:IObservable<'Source> )  : IObservable<'Source> =
-        Observable.DistinctUntilChanged( source, keySelector )
+    let distinctUntilChangedKey ( keySelector:'Source -> 'Key )( source:IObservable<'Source> )  : IObservable<'Source> =
+        Observable.DistinctUntilChanged( source, Func<'Source,'Key> keySelector )
         
 
     /// Returns an observable sequence that contains only distinct contiguous elements according to the comparer.
@@ -497,8 +497,8 @@ module Observable =
 
 
     /// Returns an observable sequence that contains only distinct contiguous elements according to the keySelector and the comparer.
-    let distinctUntilChangedKeyCompare  ( keySelector:Func<'Source,'Key> )( comparer:IEqualityComparer<'Key> )( source:IObservable<'Source> ) : IObservable<'Source> =
-        Observable.DistinctUntilChanged( source, keySelector, comparer )
+    let distinctUntilChangedKeyCompare  ( keySelector:'Source -> 'Key )( comparer:IEqualityComparer<'Key> )( source:IObservable<'Source> ) : IObservable<'Source> =
+        Observable.DistinctUntilChanged( source, Func<'Source,'Key> keySelector, comparer )
 
 
     /// Returns the element at a specified index in a sequence.
@@ -1128,6 +1128,11 @@ module Observable =
                     {   new IDisposable with member __.Dispose() = ()   }
         }
 
+    
+    /// Returns the sequence as an observable, using the specified scheduler to run the enumeration loop
+    let ofSeqOn<'Item>(scheduler:Concurrency.IScheduler) (items:'Item seq) : IObservable<'Item> =
+        items.ToObservable(scheduler)
+
 
     /// Wraps the source sequence in order to run its observer callbacks on the specified scheduler.
     let observeOn (scheduler:Concurrency.IScheduler) source =
@@ -1352,7 +1357,7 @@ module Observable =
 
     /// Applies an accumulator function over an observable sequence and returns each intermediate result. 
     /// The specified init value is used as the initial accumulator value.
-    let scanInit  (source:IObservable<'Source>) (init:'TAccumulate) (accumulator) : IObservable<'TAccumulate> =
+    let scanInit (init:'TAccumulate) (accumulator) (source:IObservable<'Source>) : IObservable<'TAccumulate> =
         Observable.Scan( source, init, Func<'TAccumulate,'Source,'TAccumulate> accumulator )
 
 
