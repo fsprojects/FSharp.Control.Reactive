@@ -7,7 +7,6 @@ open Builders
 open NUnit.Framework
 
 open Microsoft.Reactive.Testing
-//open FSharp.Reactive.Tests.ReactiveTesting
 open FSharp.Reactive.Tests.ReactiveTesting
 let ``should be`` expectedNext expectedError expectedCompleted (observable:'a IObservable) =
     let next = ref 0
@@ -132,9 +131,9 @@ let ``Select Select1``() =
             |> Observable.map (fun x -> x + 1)
             |> Observable.map (fun x -> x - 2))
     
-    res.Messages.AssertEqual( //todo remove extension
+    res.Messages.AssertEqual( 
                               RxRecording(210L, RxNext(4 + 1 - 2)), RxRecording(240L, RxNext(3 + 1 - 2)), RxRecording(290L, RxNext(2 + 1 - 2)), RxRecording(350L, RxNext(1 + 1 - 2)), RxRecording(400L, RxCompleted))
-    xs.Subscriptions.AssertEqual( // to do remove extension method
+    xs.Subscriptions.AssertEqual( 
                                   CompletedSubscription(200L, 400L))
 [<Test>]
 let ``Select Select1-2``() = 
@@ -154,7 +153,7 @@ let ``Select Select1-2``() =
         |> Observable.map (fun x -> x + 1)
         |> Observable.map (fun x -> x - 2))
 
-    res.Messages.AssertEqual( //todo remove extension
+    res.Messages.AssertEqual( 
                               RxRecording(210L, RxNext(4 + 1 - 2)), 
                               RxRecording(240L, RxNext(3 + 1 - 2)), 
                               RxRecording(290L, RxNext(2 + 1 - 2)), 
@@ -162,115 +161,6 @@ let ``Select Select1-2``() =
                               RxRecording(400L, RxCompleted))
     xs.Subscriptions.AssertEqual( CompletedSubscription(200L, 400L)) // to do remove extension method
 
-[<Test>]
-let paused_no_skip() = 
-    let subscription = ref Unchecked.defaultof<_>
-    let scheduler = TestScheduler()
-    let controller = new System.Reactive.Subjects.Subject<_>()
-    let results = scheduler.createObserver()
-    
-    let xs = 
-        scheduler.createHotObservable ([| onNext 150L 1
-                                          onNext 210L 2
-                                          onNext 230L 3
-                                          onNext 301L 4
-                                          onNext 350L 5
-                                          onNext 399L 6
-                                          onCompleted 500L |])
-    scheduler.scheduleAbsolute 200L (fun s -> 
-        subscription := xs
-                        |> Observable.pauseable controller
-                        |> Observable.subscribeObserver results
-        controller.OnNext(true)
-        System.Reactive.Disposables.Disposable.Empty)
-    |> ignore
-    scheduler.scheduleAbsoluteWithState null 205L (fun s x -> 
-        controller.OnNext(false)
-        System.Reactive.Disposables.Disposable.Empty)
-    |> ignore
-    scheduler.scheduleAbsolute 209L (fun sc -> 
-        controller.OnNext(true)
-        System.Reactive.Disposables.Disposable.Empty)
-    |> ignore
-    scheduler.scheduleAbsolute 1000L (fun sch -> 
-        (!subscription).Dispose()
-        System.Reactive.Disposables.Disposable.Empty)
-    |> ignore
-    scheduler.Start()
-    results.Messages.AssertEqual([| onNext 210L 2
-                                    onNext 230L 3
-                                    onNext 301L 4
-                                    onNext 350L 5
-                                    onNext 399L 6
-                                    onCompleted 500L |])
-
-[<Test>]
-let paused_skips() = 
-    let subscription = ref Unchecked.defaultof<_>
-    let scheduler = new TestScheduler()
-    let controller = new System.Reactive.Subjects.Subject<_>()
-    let results = scheduler.createObserver()
-    
-    let xs = 
-        scheduler.createHotObservable ([| onNext 150L 1
-                                          onNext 210L 2
-                                          onNext 230L 3
-                                          onNext 301L 4
-                                          onNext 350L 5
-                                          onNext 399L 6
-                                          onCompleted 500L |])
-    scheduler.scheduleAbsolute 200L (fun sch -> 
-        subscription := xs
-                        |> Observable.pauseable controller
-                        |> Observable.subscribeObserver results
-        controller.OnNext(true)
-        System.Reactive.Disposables.Disposable.Empty)
-    |> ignore
-    scheduler.scheduleAbsolute 300L (fun sch -> 
-        controller.OnNext(false)
-        System.Reactive.Disposables.Disposable.Empty)
-    |> ignore
-    scheduler.scheduleAbsolute 400L (fun sch -> 
-        controller.OnNext(true)
-        System.Reactive.Disposables.Disposable.Empty)
-    |> ignore
-    scheduler.scheduleAbsolute 1000L (fun sch -> 
-        (!subscription).Dispose()
-        System.Reactive.Disposables.Disposable.Empty)
-    |> ignore
-    scheduler.Start()
-    results.Messages.AssertEqual([| onNext 210L 2
-                                    onNext 230L 3
-                                    onCompleted 500L |])
-
-
-[<Test>]
-let paused_skips2() = 
-    let scheduler = new TestScheduler()
-    
-    let xs = 
-        [| RxRecording(150L, (RxNext 1))
-           RxRecording(210L, (RxNext 2))
-           RxRecording(230L, (RxNext 3))
-           RxRecording(301L, (RxNext 4))
-           RxRecording(350L, (RxNext 5))
-           RxRecording(399L, (RxNext 6))
-           RxRecording(500L, RxCompleted) |]
-        |> scheduler.createHotObservable
-    
-    let cs = 
-        [| RxRecording(201L, (RxNext true))
-           RxRecording(300L, (RxNext false))
-           RxRecording(400L, (RxNext true))
-           RxRecording(100L, RxCompleted) |]
-        |> scheduler.createHotObservable
-    
-    let results = scheduler.controlledStart (fun () -> xs |> Observable.pauseable cs)
-    ([| RxRecording(210L, (RxNext 2))
-        RxRecording(230L, (RxNext 3))
-        RxRecording(500L, RxCompleted) |], results.Messages)
-    ||> Seq.seqEqual
-    |> Assert.IsTrue
 
 [<Test>]
 let OneShotTimer_TimeSpan_Zero() = 
@@ -454,24 +344,23 @@ let SelectWithIndex_Completed() =
     xs.Subscriptions.AssertEqual(CompletedSubscription(200L, 400L))
     Assert.AreEqual(4, !invoked)
 
-
-
-
 [<Test>]
 let ``Sequence equal tests``() = 
-
-    let a = [| 1;2|]
-    let a1 = [| 1;2|]
-    let b = [| 1;2;3|]
-    let b1 = [| 1;2;3|]
-    
-    a |> Seq.seqEqual a |> Assert.IsTrue
-    a |> Seq.seqEqual a1 |> Assert.IsTrue
-    a1 |> Seq.seqEqual a |> Assert.IsTrue
-    b |> Seq.seqEqual b |> Assert.IsTrue
-    b |> Seq.seqEqual b1 |> Assert.IsTrue
-    b1 |> Seq.seqEqual b |> Assert.IsTrue
-    a |> Seq.seqEqual b |> Assert.IsFalse
-    b |> Seq.seqEqual a |> Assert.IsFalse
+    let (||>>) f g (x, y) = g (f x y)
+    let testSeqEquality expectedResult = Seq.forall (Seq.seqEqual ||>> ((=) expectedResult)) >> Assert.IsTrue
+    let a = [| 1; 2 |]
+    let a1 = [| 1; 2 |]
+    let b = [| 1; 2; 3 |]
+    let b1 = [| 1; 2; 3 |]
+    [| (a, b)
+       (b, a) |]
+    |> testSeqEquality false
+    [| (a, a)
+       (a, a1)
+       (a1, a)
+       (b, b)
+       (b, b1)
+       (b1, b) |]
+    |> testSeqEquality true
 
 

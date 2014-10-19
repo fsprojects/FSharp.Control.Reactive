@@ -8,285 +8,6 @@ open System.Reactive.Linq
 open System.Reactive.Concurrency
 
 
-
-module RxInternals =
-    (* should also have recursive support here *)
-    [<AbstractClass>]
-    type ObserverBase<'a>() as this = 
-        let isStopped = ref 0
-        
-        interface System.IObserver<'a> with
-            
-            member x.OnNext value = 
-                if ((!isStopped) = 0) then this.OnNextCore value
-            
-            member x.OnError error = 
-                if (error = null) then failwith "scheduler null"
-                if (System.Threading.Interlocked.Exchange(isStopped, 1) = 0) then this.OnErrorCore error
-            
-            member x.OnCompleted() = 
-                if (System.Threading.Interlocked.Exchange(isStopped, 1) = 0) then this.OnCompletedCore()
-        
-        interface System.IDisposable with
-            member x.Dispose() = 
-                x.Dispose true
-                System.GC.SuppressFinalize(this)
-        
-        abstract OnNextCore : 'a -> unit
-        abstract OnErrorCore : System.Exception -> unit
-        abstract OnCompletedCore : unit -> unit
-        abstract Dispose : bool -> unit
-        override x.Dispose disposing = 
-            if (disposing) then isStopped := 1
-        member internal x.Fail error =
-              if (System.Threading.Interlocked.Exchange(isStopped, 1) = 0) then 
-                x.OnErrorCore error
-                true
-              else false
-    
-    type AutoDetachObserver<'a>(observer : System.IObserver<'a>) as this = 
-        inherit ObserverBase<'a>()
-        let m = new System.Reactive.Disposables.SingleAssignmentDisposable()
-        member x.Disposable 
-            with set v = m.Disposable <- v
-        
-        override x.OnNextCore value = 
-            let mutable noError = false
-            try 
-                observer.OnNext value
-                noError <- true
-            finally
-                if (noError = false) then (this :> System.IDisposable).Dispose()
-        
-        override x.OnErrorCore ex = 
-            try 
-                observer.OnError ex
-            finally
-                (this :> System.IDisposable).Dispose()
-        
-        override x.OnCompletedCore() = 
-            try 
-                observer.OnCompleted()
-            finally
-                (this :> System.IDisposable).Dispose()
-        
-        override x.Dispose disposing = 
-            base.Dispose disposing
-            if (disposing) then m.Dispose()
-
-               
-    type NopObserver<'a>() = 
-        static member public Instance = NopObserver<'a>()
-        interface System.IObserver<'a> with
-            member x.OnNext value = ()
-            member x.OnError error = ()
-            member x.OnCompleted() = ()
-    
-    type DoneObserver<'a>() = 
-        static let Completed = DoneObserver<'a>()
-        interface System.IObserver<'a> with
-            member x.OnNext value = ()
-            member x.OnError error = ()
-            member x.OnCompleted() = ()
-    
-    type DisposedObserver<'a>() = 
-        static let Completed = DoneObserver<'a>()
-        interface System.IObserver<'a> with
-            member x.OnNext value = raise (System.ObjectDisposedException(""))
-            member x.OnError error = raise (System.ObjectDisposedException(""))
-            member x.OnCompleted() = raise (System.ObjectDisposedException(""))
-    
-    [<AbstractClass>]
-    type Sink<'a>(observer : System.IObserver<'a>, cancel : System.IDisposable) as this = 
-        let mutable observer = observer
-        let cancel = ref Unchecked.defaultof<System.IDisposable>
-        abstract Dispose : unit -> unit
-        
-        override x.Dispose() = 
-            observer <- NopObserver<_>.Instance
-            let cancel = System.Threading.Interlocked.Exchange(cancel, null)
-            if (cancel <> null) then cancel.Dispose()
-        
-        interface System.IDisposable with
-            member x.Dispose() = this.Dispose()
-        
-        member x.GetForwarder() = 
-            { new System.IObserver<'a> with
-                  member x.OnNext value = observer.OnNext value
-                  
-                  member x.OnError error = 
-                      observer.OnError error
-                      this.Dispose()
-                  
-                  member x.OnCompleted() = 
-                      observer.OnCompleted()
-                      this.Dispose() }
-    
-    type Stubs = 
-        //static member public Throw : System.Exception -> unit = (fun ex -> raise ex) // issue Rx uses Platform EnlightenmentProviderHere
-        static member public Throw : System.Exception -> unit = (fun ex -> raise ex) // issue Rx uses Platform EnlightenmentProviderHere
-        static member public Nop : unit -> unit = (fun () -> ())
-    
-    type AnonymousSafeObserver<'a>(onNext, onError , onCompleted, disposable : System.IDisposable) = 
-        let mutable isStopped = ref 0
-        interface System.IObserver<'a> with
-            
-            member x.OnNext value = 
-                if (!isStopped = 0) then 
-                    let mutable noError = false
-                    try 
-                        onNext value
-                        noError <- true
-                    finally
-                        if (noError = false) then disposable.Dispose()
-            
-            member x.OnError ex = 
-                if (System.Threading.Interlocked.Exchange(isStopped, 1) = 0) then 
-                    try 
-                        onError ex
-                    finally
-                        disposable.Dispose()
-            
-            member x.OnCompleted() = 
-                if (System.Threading.Interlocked.Exchange(isStopped, 1) = 0) then 
-                    try 
-                        onCompleted()
-                    finally
-                        disposable.Dispose()
-    
-    type AnonymousObserver<'a>(onNext , onError, onCompleted) = 
-        inherit ObserverBase<'a>()
-        new(onNext) = new AnonymousObserver<_>(onNext, Stubs.Throw, Stubs.Nop)
-        new(onNext, onError) = new AnonymousObserver<_>(onNext, onError, Stubs.Nop)
-        new(onNext, onCompleted) = new AnonymousObserver<_>(onNext, Stubs.Throw, onCompleted)
-        override x.OnNextCore value = onNext value
-        override x.OnErrorCore error = onError error
-        override x.OnCompletedCore() = onCompleted()
-        member x.MakeSafe disposable = // to make intenal                                       
-            new AnonymousSafeObserver<_>(onNext, onError, onCompleted, disposable)
-    
-    [<AbstractClass>]
-    type ObservableBase<'a>() =
-
-        interface System.IObservable<'a> with
-            member x.Subscribe observer =
-                 let autoDetachObserver = new AutoDetachObserver<'a>(observer)
-                 if (System.Reactive.Concurrency.CurrentThreadScheduler.IsScheduleRequired=true) then
-                    System.Reactive.Concurrency.CurrentThreadScheduler.Instance.Schedule(autoDetachObserver,System.Func<_,_,_>x.ScheduledSubscribe) |> ignore
-                 else
-                    try
-                        autoDetachObserver.Disposable <- x.SubscribeCore autoDetachObserver
-                    with 
-                    | _ as ex -> if  ((autoDetachObserver.Fail ex) = false) then
-                                                       reraise()
-                 upcast autoDetachObserver
-        abstract  SubscribeCore:  observer : System.IObserver<'a> -> System.IDisposable
-        member private x.ScheduledSubscribe a (autoDetachObserver:  AutoDetachObserver<'a>) =
-            try
-                autoDetachObserver.Disposable <- x.SubscribeCore autoDetachObserver 
-            with 
-            | _ as ex -> if  ((autoDetachObserver.Fail ex) = false) then
-                           reraise()
-            System.Reactive.Disposables.Disposable.Empty
-                    
-        
-
-    type SafeObserver<'a>(observer, disposable : System.IDisposable) = 
-        
-        static member public Create(observer : System.IObserver<'a>, disposable : System.IDisposable) : System.IObserver<'a> = 
-            match observer with
-            | :? AnonymousObserver<'a> as a -> upcast a.MakeSafe(disposable)
-            | _ -> upcast new SafeObserver<'a>(observer, disposable)
-        
-        interface System.IObserver<'a> with
-            
-            member x.OnNext value = 
-                let mutable noError = false
-                try 
-                    observer.OnNext value
-                    noError <- true
-                finally
-                    if (noError = false) then disposable.Dispose()
-            
-            member x.OnError ex = 
-                try 
-                    observer.OnError ex
-                finally
-                    disposable.Dispose()
-            
-            member x.OnCompleted() = 
-                try 
-                    observer.OnCompleted()
-                finally
-                    disposable.Dispose()
-    
-    type IProducer<'a> = 
-        inherit System.IObservable<'a>
-        abstract SubscribeRaw : System.IObserver<'a> -> bool -> System.IDisposable
-    
-    type State<'a> = 
-        struct
-            val mutable sink : System.Reactive.Disposables.SingleAssignmentDisposable
-            val mutable subscription : System.Reactive.Disposables.SingleAssignmentDisposable
-            val mutable observer : System.IObserver<'a>
-            member x.Assign(s : System.IDisposable) = x.sink.Disposable <- s
-        end
-    
-    [<AbstractClass>]
-    type Producer<'a>() as this = 
-        
-        let run (s : System.Reactive.Concurrency.IScheduler) (x : State<'a>) = 
-            x.subscription.Disposable <- this.Run x.observer x.subscription x.Assign
-            System.Reactive.Disposables.Disposable.Empty
-        
-        interface IProducer<'a> with
-            member x.SubscribeRaw observer enableSafeguard = 
-                let mutable state = State<'a>()
-                state.observer <- observer
-                state.sink <- new System.Reactive.Disposables.SingleAssignmentDisposable()
-                state.subscription <- new System.Reactive.Disposables.SingleAssignmentDisposable()
-                let d = new System.Reactive.Disposables.CompositeDisposable(0)
-                d.Add(state.sink)
-                d.Add(state.subscription)
-                if (enableSafeguard) then state.observer <- SafeObserver.Create(state.observer, d)
-                if (System.Reactive.Concurrency.CurrentThreadScheduler.IsScheduleRequired) then System.Reactive.Concurrency.CurrentThreadScheduler.Instance.Schedule(state, System.Func<_, _, _> run) |> ignore
-                else 
-                    let zz = this.Run state.observer state.subscription state.Assign
-                    state.subscription.Disposable <- zz
-                d :> System.IDisposable
-        
-        interface System.IObservable<'a> with
-            member x.Subscribe observer = (this :> IProducer<'a>).SubscribeRaw observer true
-        
-        abstract Run : System.IObserver<'a> -> System.IDisposable -> (System.IDisposable -> unit) -> System.IDisposable
-    
-    type System.IObservable<'a> with
-        member x.SubscribeSafe( observer : System.IObserver<'a>) = 
-               match x with
-               | :? ObservableBase<'a> -> x.Subscribe observer
-               | :? IProducer<'a> as producer -> producer.SubscribeRaw observer false
-               | _ ->   let mutable d = System.Reactive.Disposables.Disposable.Empty
-                        try 
-                            d <- x.Subscribe(observer)
-                        with 
-                        | _ as ex -> observer.OnError ex
-                        d
-    
-    type ObserverSink<'a>(observer : System.IObserver<'a>, cancel : System.IDisposable) as this = 
-        let mutable observer = observer
-        let cancel = ref Unchecked.defaultof<System.IDisposable>
-        abstract Dispose : unit -> unit
-        
-        override x.Dispose() = 
-            observer <- NopObserver<_>.Instance
-            let cancel = System.Threading.Interlocked.Exchange(cancel, null)
-            if (cancel <> null) then cancel.Dispose()
-        
-        member x.Observer = observer
-        interface System.IDisposable with
-            member x.Dispose() = this.Dispose()
-
-
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Builders =
 
@@ -379,7 +100,6 @@ module Builders =
 /// The Reactive module provides operators for working with IObservable<_> in F#.
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Observable =
-    open RxInternals
     type Observer with
         /// Creates an observer from the specified onNext function.
         static member Create(onNext) =
@@ -424,86 +144,6 @@ module Observable =
             this.Subscribe(Action<_> onNext, Action<_> onError, Action onCompleted)
 
 
-(* f# rx operators *)
-    /// Filter type to enable filter merging
-    type Filter<'a>( predicate : 'a -> bool, source : System.IObservable<'a> ) = 
-        inherit Producer<'a>() 
-        override x.Run observer cancel setSink = 
-                let sink = new ObserverSink<_>(observer, cancel)
-                  
-                let observer = 
-                    { new System.IObserver<_> with
-                            
-                        member x.OnNext value =    
-                            let mutable flag  =  false                                  
-                            try 
-                                flag <- predicate value                             
-                            with ex -> 
-                                sink.Observer.OnError ex
-                                sink.Dispose()
-                            if (flag) then sink.Observer.OnNext value
-                            
-                        member x.OnError error = 
-                            sink.Observer.OnError error
-                            sink.Dispose()
-                            
-                        member x.OnCompleted() = 
-                            sink.Observer.OnCompleted()
-                            sink.Dispose() }
-                setSink (sink)
-                source.SubscribeSafe(observer) 
-        member x.omega predicate2 =
-            Filter<_>((fun x -> predicate x && predicate2 x ),source)
-
-    
-
-(***************************************************************
- * F# combinator wrappers for Rx extensions
- ***************************************************************)
- (* if  rx internals is made visible to this library with System.Runtime.CompilerServices.InternalsVisibleTo
-    type ObserverSink<'a>(observer : System.IObserver<'a>, cancel : System.IDisposable) as this = 
-            let mutable observer = observer
-            let cancel = ref Unchecked.defaultof<System.IDisposable>
-            abstract Dispose : unit -> unit
-        
-            override x.Dispose() = 
-                observer <- NopObserver<_>.Instance
-                let cancel = System.Threading.Interlocked.Exchange(cancel, null)
-                if (cancel <> null) then cancel.Dispose()
-        
-            member x.Observer = observer
-            interface System.IDisposable with
-                member x.Dispose() = this.Dispose()
-
-
-
-    let fsMapRx ( map : 'a -> 'b) (source : System.IObservable<'a>) : System.IObservable<'b> = 
-            upcast {  new System.Reactive.Producer<'b>() with
-                      member x.Run(observer,cancel,setSink:System.Action<_>) = 
-                          let sink = new ObserverSink<_>(observer, cancel)                  
-                          let observer = 
-                              { new System.IObserver<_> with
-                            
-                                    member x.OnNext value = 
-                                        let mutable result = Unchecked.defaultof<'b>
-                                        try 
-                                            result <- map (value)
-                                            sink.Observer.OnNext result
-                                        with ex -> 
-                                            sink.Observer.OnError ex
-                                            sink.Dispose()
-                            
-                                    member x.OnError error = 
-                                        sink.Observer.OnError error
-                                        sink.Dispose()
-                            
-                                    member x.OnCompleted() = 
-                                        sink.Observer.OnCompleted()
-                                        sink.Dispose() }
-                          setSink.Invoke(sink)
-                          source.SubscribeSafe(observer) } 
-
- *)
 
     /// Applies an accumulator function over an observable sequence, returning the 
     /// result of the aggregation as a single element in the result sequence
@@ -635,38 +275,11 @@ module Observable =
     let catchArray (sources:IObservable<'T>[]) =
         Observable.Catch(sources)
 
-//    let choose source (f:'a->'b option) =
-//        source |> Observable.map f
-//               |> Observable.filter Option.isSome
-//               |> Observable.map (function | Some(a) -> a | _ -> raise (Exception("notPossible")))
-    let choose (map : 'a -> 'b option) (source : System.IObservable<'a>) : System.IObservable<'b> = 
-        upcast { new Producer<'b>() with
-                     member x.Run observer cancel setSink = 
-                         let sink = new ObserverSink<_>(observer, cancel)
-                         
-                         let observer = 
-                             { new System.IObserver<_> with
-                                   
-                                   member x.OnNext value = 
-                                       let mutable result = None
-                                       try 
-                                           result <- map value
-                                       with ex -> 
-                                           sink.Observer.OnError ex
-                                           sink.Dispose()
-                                       match result with
-                                       | Some r -> sink.Observer.OnNext r
-                                       | _ -> ()
-                                   
-                                   member x.OnError error = 
-                                       sink.Observer.OnError error
-                                       sink.Dispose()
-                                   
-                                   member x.OnCompleted() = 
-                                       sink.Observer.OnCompleted()
-                                       sink.Dispose() }
-                         setSink (sink)
-                         source.SubscribeSafe(observer) }
+    let choose source (f:'a->'b option) =
+        source |> Observable.map f
+               |> Observable.filter Option.isSome
+               |> Observable.map (function | Some(a) -> a | _ -> raise (Exception("notPossible")))
+
     /// Produces an enumerable sequence of consequtive (possibly empty) chunks of the source observable
     let chunkify<'Source> source : seq<IList<'Source>> = 
         Observable.Chunkify<'Source>( source )
@@ -940,46 +553,15 @@ module Observable =
 
 
     /// Filters the observable elements of a sequence based on a predicate 
-//    let filter  (predicate:'T->bool) (source:IObservable<'T>) = 
-//        Observable.Where( source, predicate )
-    let filter  f  (source : System.IObservable<'a>) : System.IObservable<'a> = 
-        upcast (match source with
-                | :? Filter<'a> as filter ->  filter.omega f
-                | _ -> Filter(f,source))
+    let filter  (predicate:'T->bool) (source:IObservable<'T>) = 
+        Observable.Where( source, predicate )
 
 
     /// Filters the observable elements of a sequence based on a predicate by 
     /// incorporating the element's index
-//    let filteri (predicate:'T->int->bool) (source:IObservable<'T>)  = 
-//        Observable.Where( source, predicate )
+    let filteri (predicate:int->'T->bool) (source:IObservable<'T>)  = 
+        Observable.Where( source,Func<_,_,_> (fun a i -> predicate i a ))
 
-    let filteri ( f : int -> 'a -> bool) (source : System.IObservable<'a>) : System.IObservable<'a> = 
-        upcast {  new Producer<'a>() with
-                  member x.Run observer cancel setSink = 
-                      let sink = new ObserverSink<_>(observer, cancel)
-                      let index = ref 0
-                      let observer = 
-                          { new System.IObserver<_> with
-                            
-                                member x.OnNext value =    
-                                    let mutable flag  =  false                                  
-                                    try 
-                                        flag <- f !index value                             
-                                        incr index
-                                    with ex -> 
-                                        sink.Observer.OnError ex
-                                        sink.Dispose()
-                                    if (flag) then sink.Observer.OnNext value
-                            
-                                member x.OnError error = 
-                                    sink.Observer.OnError error
-                                    sink.Dispose()
-                            
-                                member x.OnCompleted() = 
-                                    sink.Observer.OnCompleted()
-                                    sink.Dispose() }
-                      setSink (sink)
-                      source.SubscribeSafe(observer) } 
     /// Invokes a specified action after the source observable sequence
     /// terminates gracefully of exceptionally
     let finallyDo  finallyAction  source  =
@@ -1424,68 +1006,11 @@ module Observable =
 
 
     /// Maps the given observable with the given function
-//    let map f source = Observable.Select(source, Func<_,_>(f))   
-    let map ( f : 'a -> 'b) (source : System.IObservable<'a>) : System.IObservable<'b> = 
-        upcast {  new Producer<'b>() with
-                  member x.Run observer cancel setSink = 
-                      let sink = new ObserverSink<_>(observer, cancel)
-                  
-                      let observer = 
-                          { new System.IObserver<_> with
-                            
-                                member x.OnNext value = 
-                                    let mutable result = Unchecked.defaultof<'b>
-                                    let mutable hasResult = false
-                                    try 
-                                        result <- f value
-                                        hasResult <- true                                    
-                                    with ex -> 
-                                        sink.Observer.OnError ex
-                                        sink.Dispose()
-                                    if (hasResult) then  sink.Observer.OnNext result
-                            
-                                member x.OnError error = 
-                                    sink.Observer.OnError error
-                                    sink.Dispose()
-                            
-                                member x.OnCompleted() = 
-                                    sink.Observer.OnCompleted()
-                                    sink.Dispose() }
-                      setSink (sink)
-                      source.SubscribeSafe(observer) } 
+    let map f source = Observable.Select(source, Func<_,_>(f))   
 
     /// Maps the given observable with the given function and the 
     /// index of the element
-    let mapi (f:int -> 'a -> 'b) (source:IObservable<'a>)  : System.IObservable<'b> =
-        upcast {  new Producer<_>() with
-                  member x.Run observer cancel setSink = 
-                      let sink = new ObserverSink<_>(observer, cancel)
-                      let index = ref 0
-                      let observer = 
-                          { new System.IObserver<_> with
-                            
-                                member x.OnNext value = 
-                                    let mutable result = Unchecked.defaultof<'b>
-                                    let mutable hasResult = false
-                                    try 
-                                        result <- f !index value
-                                        incr index
-                                        hasResult <- true                                    
-                                    with ex -> 
-                                        sink.Observer.OnError ex
-                                        sink.Dispose()
-                                    if (hasResult) then  sink.Observer.OnNext result
-                            
-                                member x.OnError error = 
-                                    sink.Observer.OnError error
-                                    sink.Dispose()
-                            
-                                member x.OnCompleted() = 
-                                    sink.Observer.OnCompleted()
-                                    sink.Dispose() }
-                      setSink (sink)
-                      source.SubscribeSafe(observer) } 
-
+    let mapi (f:int ->'a -> 'b) source = Observable.Select(source, Func<'a,int,'b>(fun a i -> f i a ))
 
     /// Maps two observables to the specified function.
     let map2 f a b = apply (apply f a) b
@@ -2297,25 +1822,6 @@ module Observable =
                    ( first         : IObservable<'Source1>               ) : IObservable<'Result> =
         Observable.Zip(first, second, Func<_,_,_> resultSelector )
 
-    /// Pauses the underlying observable sequence based upon the observable sequence which yields true/false. Note that this only works on hot observables.
-    /// from Rxjs
-    let pauseable pauser source =
-        createWithDisposable (fun iv -> let conn = source |> publish
-                                        let subscription = conn |> subscribeObserver iv
-                                        let connection = ref { new System.IDisposable with member x.Dispose() = () }
-                                        let pausable = pauser |> distinctUntilChanged 
-                                                              |> subscribeWithError (fun b -> if (b) then 
-                                                                                                connection := conn.Connect()
-                                                                                              else
-                                                                                                (!connection).Dispose()
-                                                                                                connection := { new System.IDisposable with member x.Dispose() = () })
-                                                                                    iv.OnError
-                                        new System.Reactive.Disposables.CompositeDisposable(subscription, !connection,pausable) :> IDisposable) 
-
     let iterOnSubscribe f source =
         defer (fun () -> f()
-                         source)
-
-
-
- 
+                         source) 

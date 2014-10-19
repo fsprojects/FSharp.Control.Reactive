@@ -1,7 +1,6 @@
 ﻿namespace FSharp.Reactive.Tests
 
 
-/// This is the F# equiv of Microsoft.Reactive.Testing and should be move into a new project
 module ReactiveTesting = 
     open Microsoft.Reactive.Testing
     open FSharp.Control.Reactive

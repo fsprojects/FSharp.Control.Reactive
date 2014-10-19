@@ -5,13 +5,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{a8ebb4a5-80ed-43d5-8d7d-6a0f4e228c2f}</ProjectGuid>
+    <ProjectGuid>{90047b0a-413d-49e4-a3f3-b3719f4f52d1}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>FSharp.Control.Reactive.Tests</RootNamespace>
-    <AssemblyName>FSharp.Control.Reactive.Tests</AssemblyName>
+    <RootNamespace>FSharp.Control.Reactive.Testing</RootNamespace>
+    <AssemblyName>FSharp.Control.Reactive.Testing</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <Name>FSharp.Control.Reactive.Tests</Name>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <Name>FSharp.Control.Reactive.Testing</Name>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <Tailcalls>false</Tailcalls>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
   </PropertyGroup>
@@ -27,9 +27,10 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <Tailcalls>true</Tailcalls>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
+    <DocumentationFile>..\bin\FSharp.Control.Reactive.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
@@ -59,25 +60,18 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
   <ItemGroup>
-    <Compile Include="ObservableSpecs.fs" />
+    <Compile Include="ReactiveTesting.fs" />
     <None Include="paket.references" />
+    <Compile Include="AssemblyInfo.fs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-      <HintPath>c:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\ReferenceAssemblies\v2.0\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
-    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\FSharp.Control.Reactive.Testing\FSharp.Control.Reactive.Testing.fsproj">
-      <Name>FSharp.Control.Reactive.Testing</Name>
-      <Project>{90047b0a-413d-49e4-a3f3-b3719f4f52d1}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\src\FSharp.Control.Reactive\FSharp.Control.Reactive.fsproj">
+    <ProjectReference Include="..\FSharp.Control.Reactive\FSharp.Control.Reactive.fsproj">
       <Name>FSharp.Control.Reactive</Name>
       <Project>{ed23f688-c0d0-4102-93d5-0d832633f66d}</Project>
       <Private>True</Private>
@@ -87,21 +81,6 @@
   <Import Project="$(SolutionDir)\.paket\paket.targets" />
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework'">
-      <ItemGroup>
-        <Reference Include="nunit.framework">
-          <HintPath>..\packages\NUnit\lib\nunit.framework.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework'">
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework'">
       <Choose>
         <When Condition="$(TargetFrameworkVersion) == 'v1.0'">
         </When>
@@ -116,7 +95,7 @@
         <When Condition="$(TargetFrameworkVersion) == 'v4.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Core">
-              <HintPath>..\packages\Rx-Core\lib\net40\System.Reactive.Core.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Core\lib\net40\System.Reactive.Core.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -125,7 +104,7 @@
         <Otherwise>
           <ItemGroup>
             <Reference Include="System.Reactive.Core">
-              <HintPath>..\packages\Rx-Core\lib\net45\System.Reactive.Core.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Core\lib\net45\System.Reactive.Core.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -138,7 +117,7 @@
         <When Condition="$(TargetFrameworkProfile) == 'net40+sl5+win8+wp8' And $(TargetPlatformIdentifier) == 'Portable' And $(TargetPlatformVersion) == '7.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Core">
-              <HintPath>..\packages\Rx-Core\lib\portable-net40+sl5+win8+wp8\System.Reactive.Core.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Core\lib\portable-net40+sl5+win8+wp8\System.Reactive.Core.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -147,7 +126,7 @@
         <When Condition="$(TargetFrameworkProfile) == 'net45+netcore45+wp8+wpa81' And $(TargetPlatformIdentifier) == 'Portable' And $(TargetPlatformVersion) == '7.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Core">
-              <HintPath>..\packages\Rx-Core\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Core.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Core\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Core.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -156,7 +135,7 @@
         <When Condition="$(TargetFrameworkProfile) == 'win8+net45+wp8' And $(TargetPlatformIdentifier) == 'Portable' And $(TargetPlatformVersion) == '7.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Core">
-              <HintPath>..\packages\Rx-Core\lib\portable-windows8+net45+wp8\System.Reactive.Core.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Core\lib\portable-windows8+net45+wp8\System.Reactive.Core.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -165,7 +144,7 @@
         <Otherwise>
           <ItemGroup>
             <Reference Include="System.Reactive.Core">
-              <HintPath>..\packages\Rx-Core\lib\portable-win81+wpa81\System.Reactive.Core.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Core\lib\portable-win81+wpa81\System.Reactive.Core.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -176,7 +155,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == 'Windows'">
       <ItemGroup>
         <Reference Include="System.Reactive.Core">
-          <HintPath>..\packages\Rx-Core\lib\windows8\System.Reactive.Core.dll</HintPath>
+          <HintPath>..\..\packages\Rx-Core\lib\windows8\System.Reactive.Core.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -187,7 +166,7 @@
         <When Condition="$(TargetPlatformVersion) == 'v8.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Core">
-              <HintPath>..\packages\Rx-Core\lib\windowsphone8\System.Reactive.Core.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Core\lib\windowsphone8\System.Reactive.Core.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -196,7 +175,7 @@
         <Otherwise>
           <ItemGroup>
             <Reference Include="System.Reactive.Core">
-              <HintPath>..\packages\Rx-Core\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Core.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Core\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Core.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -207,7 +186,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == 'Silverlight'">
       <ItemGroup>
         <Reference Include="System.Reactive.Core">
-          <HintPath>..\packages\Rx-Core\lib\sl5\System.Reactive.Core.dll</HintPath>
+          <HintPath>..\..\packages\Rx-Core\lib\sl5\System.Reactive.Core.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -230,7 +209,7 @@
         <When Condition="$(TargetFrameworkVersion) == 'v4.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Interfaces">
-              <HintPath>..\packages\Rx-Interfaces\lib\net40\System.Reactive.Interfaces.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Interfaces\lib\net40\System.Reactive.Interfaces.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -239,7 +218,7 @@
         <Otherwise>
           <ItemGroup>
             <Reference Include="System.Reactive.Interfaces">
-              <HintPath>..\packages\Rx-Interfaces\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Interfaces\lib\net45\System.Reactive.Interfaces.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -252,7 +231,7 @@
         <When Condition="$(TargetFrameworkProfile) == 'net40+sl5+win8+wp8' And $(TargetPlatformIdentifier) == 'Portable' And $(TargetPlatformVersion) == '7.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Interfaces">
-              <HintPath>..\packages\Rx-Interfaces\lib\portable-net40+sl5+win8+wp8\System.Reactive.Interfaces.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Interfaces\lib\portable-net40+sl5+win8+wp8\System.Reactive.Interfaces.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -261,7 +240,7 @@
         <When Condition="$(TargetFrameworkProfile) == 'net45+netcore45+wp8+wpa81' And $(TargetPlatformIdentifier) == 'Portable' And $(TargetPlatformVersion) == '7.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Interfaces">
-              <HintPath>..\packages\Rx-Interfaces\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Interfaces.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Interfaces\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Interfaces.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -270,7 +249,7 @@
         <When Condition="$(TargetFrameworkProfile) == 'win8+net45+wp8' And $(TargetPlatformIdentifier) == 'Portable' And $(TargetPlatformVersion) == '7.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Interfaces">
-              <HintPath>..\packages\Rx-Interfaces\lib\portable-windows8+net45+wp8\System.Reactive.Interfaces.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Interfaces\lib\portable-windows8+net45+wp8\System.Reactive.Interfaces.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -279,7 +258,7 @@
         <Otherwise>
           <ItemGroup>
             <Reference Include="System.Reactive.Interfaces">
-              <HintPath>..\packages\Rx-Interfaces\lib\portable-win81+wpa81\System.Reactive.Interfaces.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Interfaces\lib\portable-win81+wpa81\System.Reactive.Interfaces.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -290,7 +269,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == 'Windows'">
       <ItemGroup>
         <Reference Include="System.Reactive.Interfaces">
-          <HintPath>..\packages\Rx-Interfaces\lib\windows8\System.Reactive.Interfaces.dll</HintPath>
+          <HintPath>..\..\packages\Rx-Interfaces\lib\windows8\System.Reactive.Interfaces.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -301,7 +280,7 @@
         <When Condition="$(TargetPlatformVersion) == 'v8.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Interfaces">
-              <HintPath>..\packages\Rx-Interfaces\lib\windowsphone8\System.Reactive.Interfaces.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Interfaces\lib\windowsphone8\System.Reactive.Interfaces.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -310,7 +289,7 @@
         <Otherwise>
           <ItemGroup>
             <Reference Include="System.Reactive.Interfaces">
-              <HintPath>..\packages\Rx-Interfaces\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Interfaces.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Interfaces\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Interfaces.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -321,121 +300,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == 'Silverlight'">
       <ItemGroup>
         <Reference Include="System.Reactive.Interfaces">
-          <HintPath>..\packages\Rx-Interfaces\lib\sl5\System.Reactive.Interfaces.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework'">
-      <Choose>
-        <When Condition="$(TargetFrameworkVersion) == 'v1.0'">
-        </When>
-        <When Condition="$(TargetFrameworkVersion) == 'v1.1'">
-        </When>
-        <When Condition="$(TargetFrameworkVersion) == 'v2.0'">
-        </When>
-        <When Condition="$(TargetFrameworkVersion) == 'v3.5'">
-        </When>
-        <When Condition="$(TargetFrameworkVersion) == 'v4.0' And $(TargetFrameworkProfile) == 'Client'">
-        </When>
-        <When Condition="$(TargetFrameworkVersion) == 'v4.0'">
-          <ItemGroup>
-            <Reference Include="System.Reactive.Experimental">
-              <HintPath>..\packages\Rx-Experimental\lib\net40\System.Reactive.Experimental.dll</HintPath>
-              <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-          </ItemGroup>
-        </When>
-        <Otherwise>
-          <ItemGroup>
-            <Reference Include="System.Reactive.Experimental">
-              <HintPath>..\packages\Rx-Experimental\lib\net45\System.Reactive.Experimental.dll</HintPath>
-              <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-          </ItemGroup>
-        </Otherwise>
-      </Choose>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETPortable'">
-      <Choose>
-        <When Condition="$(TargetFrameworkProfile) == 'net40+sl5+win8+wp8' And $(TargetPlatformIdentifier) == 'Portable' And $(TargetPlatformVersion) == '7.0'">
-          <ItemGroup>
-            <Reference Include="System.Reactive.Experimental">
-              <HintPath>..\packages\Rx-Experimental\lib\portable-net40+sl5+win8+wp8\System.Reactive.Experimental.dll</HintPath>
-              <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-          </ItemGroup>
-        </When>
-        <When Condition="$(TargetFrameworkProfile) == 'net45+netcore45+wp8+wpa81' And $(TargetPlatformIdentifier) == 'Portable' And $(TargetPlatformVersion) == '7.0'">
-          <ItemGroup>
-            <Reference Include="System.Reactive.Experimental">
-              <HintPath>..\packages\Rx-Experimental\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Experimental.dll</HintPath>
-              <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-          </ItemGroup>
-        </When>
-        <When Condition="$(TargetFrameworkProfile) == 'win8+net45+wp8' And $(TargetPlatformIdentifier) == 'Portable' And $(TargetPlatformVersion) == '7.0'">
-          <ItemGroup>
-            <Reference Include="System.Reactive.Experimental">
-              <HintPath>..\packages\Rx-Experimental\lib\portable-windows8+net45+wp8\System.Reactive.Experimental.dll</HintPath>
-              <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-          </ItemGroup>
-        </When>
-        <Otherwise>
-          <ItemGroup>
-            <Reference Include="System.Reactive.Experimental">
-              <HintPath>..\packages\Rx-Experimental\lib\portable-win81+wpa81\System.Reactive.Experimental.dll</HintPath>
-              <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-          </ItemGroup>
-        </Otherwise>
-      </Choose>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == 'Windows'">
-      <ItemGroup>
-        <Reference Include="System.Reactive.Experimental">
-          <HintPath>..\packages\Rx-Experimental\lib\windows8\System.Reactive.Experimental.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == 'WindowsPhoneApp'">
-      <Choose>
-        <When Condition="$(TargetPlatformVersion) == 'v8.0'">
-          <ItemGroup>
-            <Reference Include="System.Reactive.Experimental">
-              <HintPath>..\packages\Rx-Experimental\lib\windowsphone8\System.Reactive.Experimental.dll</HintPath>
-              <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-          </ItemGroup>
-        </When>
-        <Otherwise>
-          <ItemGroup>
-            <Reference Include="System.Reactive.Experimental">
-              <HintPath>..\packages\Rx-Experimental\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Experimental.dll</HintPath>
-              <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-          </ItemGroup>
-        </Otherwise>
-      </Choose>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == 'Silverlight'">
-      <ItemGroup>
-        <Reference Include="System.Reactive.Experimental">
-          <HintPath>..\packages\Rx-Experimental\lib\sl5\System.Reactive.Experimental.dll</HintPath>
+          <HintPath>..\..\packages\Rx-Interfaces\lib\sl5\System.Reactive.Interfaces.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -458,7 +323,7 @@
         <When Condition="$(TargetFrameworkVersion) == 'v4.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Linq">
-              <HintPath>..\packages\Rx-Linq\lib\net40\System.Reactive.Linq.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Linq\lib\net40\System.Reactive.Linq.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -467,7 +332,7 @@
         <Otherwise>
           <ItemGroup>
             <Reference Include="System.Reactive.Linq">
-              <HintPath>..\packages\Rx-Linq\lib\net45\System.Reactive.Linq.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Linq\lib\net45\System.Reactive.Linq.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -480,7 +345,7 @@
         <When Condition="$(TargetFrameworkProfile) == 'net40+sl5+win8+wp8' And $(TargetPlatformIdentifier) == 'Portable' And $(TargetPlatformVersion) == '7.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Linq">
-              <HintPath>..\packages\Rx-Linq\lib\portable-net40+sl5+win8+wp8\System.Reactive.Linq.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Linq\lib\portable-net40+sl5+win8+wp8\System.Reactive.Linq.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -489,7 +354,7 @@
         <When Condition="$(TargetFrameworkProfile) == 'net45+netcore45+wp8+wpa81' And $(TargetPlatformIdentifier) == 'Portable' And $(TargetPlatformVersion) == '7.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Linq">
-              <HintPath>..\packages\Rx-Linq\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Linq.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Linq\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Linq.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -498,7 +363,7 @@
         <When Condition="$(TargetFrameworkProfile) == 'win8+net45+wp8' And $(TargetPlatformIdentifier) == 'Portable' And $(TargetPlatformVersion) == '7.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Linq">
-              <HintPath>..\packages\Rx-Linq\lib\portable-windows8+net45+wp8\System.Reactive.Linq.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Linq\lib\portable-windows8+net45+wp8\System.Reactive.Linq.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -507,7 +372,7 @@
         <Otherwise>
           <ItemGroup>
             <Reference Include="System.Reactive.Linq">
-              <HintPath>..\packages\Rx-Linq\lib\portable-win81+wpa81\System.Reactive.Linq.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Linq\lib\portable-win81+wpa81\System.Reactive.Linq.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -518,7 +383,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == 'Windows'">
       <ItemGroup>
         <Reference Include="System.Reactive.Linq">
-          <HintPath>..\packages\Rx-Linq\lib\windows8\System.Reactive.Linq.dll</HintPath>
+          <HintPath>..\..\packages\Rx-Linq\lib\windows8\System.Reactive.Linq.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -529,7 +394,7 @@
         <When Condition="$(TargetPlatformVersion) == 'v8.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Linq">
-              <HintPath>..\packages\Rx-Linq\lib\windowsphone8\System.Reactive.Linq.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Linq\lib\windowsphone8\System.Reactive.Linq.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -538,7 +403,7 @@
         <Otherwise>
           <ItemGroup>
             <Reference Include="System.Reactive.Linq">
-              <HintPath>..\packages\Rx-Linq\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Linq.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Linq\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Linq.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -549,7 +414,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == 'Silverlight'">
       <ItemGroup>
         <Reference Include="System.Reactive.Linq">
-          <HintPath>..\packages\Rx-Linq\lib\sl5\System.Reactive.Linq.dll</HintPath>
+          <HintPath>..\..\packages\Rx-Linq\lib\sl5\System.Reactive.Linq.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -572,7 +437,7 @@
         <When Condition="$(TargetFrameworkVersion) == 'v4.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Providers">
-              <HintPath>..\packages\Rx-Providers\lib\net40\System.Reactive.Providers.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Providers\lib\net40\System.Reactive.Providers.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -581,7 +446,7 @@
         <Otherwise>
           <ItemGroup>
             <Reference Include="System.Reactive.Providers">
-              <HintPath>..\packages\Rx-Providers\lib\net45\System.Reactive.Providers.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Providers\lib\net45\System.Reactive.Providers.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -594,7 +459,7 @@
         <When Condition="$(TargetFrameworkProfile) == 'net40+sl5+win8+wp8' And $(TargetPlatformIdentifier) == 'Portable' And $(TargetPlatformVersion) == '7.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Providers">
-              <HintPath>..\packages\Rx-Providers\lib\portable-net40+sl5+win8+wp8\System.Reactive.Providers.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Providers\lib\portable-net40+sl5+win8+wp8\System.Reactive.Providers.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -603,7 +468,7 @@
         <When Condition="$(TargetFrameworkProfile) == 'net45+netcore45+wp8+wpa81' And $(TargetPlatformIdentifier) == 'Portable' And $(TargetPlatformVersion) == '7.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Providers">
-              <HintPath>..\packages\Rx-Providers\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Providers.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Providers\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Providers.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -612,7 +477,7 @@
         <When Condition="$(TargetFrameworkProfile) == 'win8+net45+wp8' And $(TargetPlatformIdentifier) == 'Portable' And $(TargetPlatformVersion) == '7.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Providers">
-              <HintPath>..\packages\Rx-Providers\lib\portable-windows8+net45+wp8\System.Reactive.Providers.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Providers\lib\portable-windows8+net45+wp8\System.Reactive.Providers.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -621,7 +486,7 @@
         <Otherwise>
           <ItemGroup>
             <Reference Include="System.Reactive.Providers">
-              <HintPath>..\packages\Rx-Providers\lib\portable-win81+wpa81\System.Reactive.Providers.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Providers\lib\portable-win81+wpa81\System.Reactive.Providers.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -632,7 +497,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == 'Windows'">
       <ItemGroup>
         <Reference Include="System.Reactive.Providers">
-          <HintPath>..\packages\Rx-Providers\lib\windows8\System.Reactive.Providers.dll</HintPath>
+          <HintPath>..\..\packages\Rx-Providers\lib\windows8\System.Reactive.Providers.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -643,7 +508,7 @@
         <When Condition="$(TargetPlatformVersion) == 'v8.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.Providers">
-              <HintPath>..\packages\Rx-Providers\lib\windowsphone8\System.Reactive.Providers.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Providers\lib\windowsphone8\System.Reactive.Providers.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -652,7 +517,7 @@
         <Otherwise>
           <ItemGroup>
             <Reference Include="System.Reactive.Providers">
-              <HintPath>..\packages\Rx-Providers\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Providers.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Providers\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Providers.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -663,7 +528,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == 'Silverlight'">
       <ItemGroup>
         <Reference Include="System.Reactive.Providers">
-          <HintPath>..\packages\Rx-Providers\lib\sl5\System.Reactive.Providers.dll</HintPath>
+          <HintPath>..\..\packages\Rx-Providers\lib\sl5\System.Reactive.Providers.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -690,7 +555,7 @@
         <When Condition="$(TargetFrameworkVersion) == 'v4.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.PlatformServices">
-              <HintPath>..\packages\Rx-PlatformServices\lib\net40\System.Reactive.PlatformServices.dll</HintPath>
+              <HintPath>..\..\packages\Rx-PlatformServices\lib\net40\System.Reactive.PlatformServices.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -699,7 +564,7 @@
         <Otherwise>
           <ItemGroup>
             <Reference Include="System.Reactive.PlatformServices">
-              <HintPath>..\packages\Rx-PlatformServices\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
+              <HintPath>..\..\packages\Rx-PlatformServices\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -712,7 +577,7 @@
         <When Condition="$(TargetFrameworkProfile) == 'net40+sl5+win8+wp8' And $(TargetPlatformIdentifier) == 'Portable' And $(TargetPlatformVersion) == '7.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.PlatformServices">
-              <HintPath>..\packages\Rx-PlatformServices\lib\portable-net40+sl5+win8+wp8\System.Reactive.PlatformServices.dll</HintPath>
+              <HintPath>..\..\packages\Rx-PlatformServices\lib\portable-net40+sl5+win8+wp8\System.Reactive.PlatformServices.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -721,7 +586,7 @@
         <When Condition="$(TargetFrameworkProfile) == 'net45+netcore45+wp8+wpa81' And $(TargetPlatformIdentifier) == 'Portable' And $(TargetPlatformVersion) == '7.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.PlatformServices">
-              <HintPath>..\packages\Rx-PlatformServices\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.PlatformServices.dll</HintPath>
+              <HintPath>..\..\packages\Rx-PlatformServices\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.PlatformServices.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -730,7 +595,7 @@
         <When Condition="$(TargetFrameworkProfile) == 'win8+net45+wp8' And $(TargetPlatformIdentifier) == 'Portable' And $(TargetPlatformVersion) == '7.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.PlatformServices">
-              <HintPath>..\packages\Rx-PlatformServices\lib\portable-windows8+net45+wp8\System.Reactive.PlatformServices.dll</HintPath>
+              <HintPath>..\..\packages\Rx-PlatformServices\lib\portable-windows8+net45+wp8\System.Reactive.PlatformServices.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -739,7 +604,7 @@
         <Otherwise>
           <ItemGroup>
             <Reference Include="System.Reactive.PlatformServices">
-              <HintPath>..\packages\Rx-PlatformServices\lib\portable-win81+wpa81\System.Reactive.PlatformServices.dll</HintPath>
+              <HintPath>..\..\packages\Rx-PlatformServices\lib\portable-win81+wpa81\System.Reactive.PlatformServices.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -750,7 +615,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == 'Windows'">
       <ItemGroup>
         <Reference Include="System.Reactive.PlatformServices">
-          <HintPath>..\packages\Rx-PlatformServices\lib\windows8\System.Reactive.PlatformServices.dll</HintPath>
+          <HintPath>..\..\packages\Rx-PlatformServices\lib\windows8\System.Reactive.PlatformServices.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -761,7 +626,7 @@
         <When Condition="$(TargetPlatformVersion) == 'v8.0'">
           <ItemGroup>
             <Reference Include="System.Reactive.PlatformServices">
-              <HintPath>..\packages\Rx-PlatformServices\lib\windowsphone8\System.Reactive.PlatformServices.dll</HintPath>
+              <HintPath>..\..\packages\Rx-PlatformServices\lib\windowsphone8\System.Reactive.PlatformServices.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -770,7 +635,7 @@
         <Otherwise>
           <ItemGroup>
             <Reference Include="System.Reactive.PlatformServices">
-              <HintPath>..\packages\Rx-PlatformServices\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.PlatformServices.dll</HintPath>
+              <HintPath>..\..\packages\Rx-PlatformServices\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.PlatformServices.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -781,7 +646,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == 'Silverlight'">
       <ItemGroup>
         <Reference Include="System.Reactive.PlatformServices">
-          <HintPath>..\packages\Rx-PlatformServices\lib\sl5\System.Reactive.PlatformServices.dll</HintPath>
+          <HintPath>..\..\packages\Rx-PlatformServices\lib\sl5\System.Reactive.PlatformServices.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -804,7 +669,7 @@
         <When Condition="$(TargetFrameworkVersion) == 'v4.0'">
           <ItemGroup>
             <Reference Include="Microsoft.Reactive.Testing">
-              <HintPath>..\packages\Rx-Testing\lib\net40\Microsoft.Reactive.Testing.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Testing\lib\net40\Microsoft.Reactive.Testing.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -816,7 +681,7 @@
         <Otherwise>
           <ItemGroup>
             <Reference Include="Microsoft.Reactive.Testing">
-              <HintPath>..\packages\Rx-Testing\lib\net45\Microsoft.Reactive.Testing.dll</HintPath>
+              <HintPath>..\..\packages\Rx-Testing\lib\net45\Microsoft.Reactive.Testing.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -830,7 +695,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == 'Windows'">
       <ItemGroup>
         <Reference Include="Microsoft.Reactive.Testing">
-          <HintPath>..\packages\Rx-Testing\lib\windows8\Microsoft.Reactive.Testing.dll</HintPath>
+          <HintPath>..\..\packages\Rx-Testing\lib\windows8\Microsoft.Reactive.Testing.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -839,7 +704,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == 'WindowsPhoneApp'">
       <ItemGroup>
         <Reference Include="Microsoft.Reactive.Testing">
-          <HintPath>..\packages\Rx-Testing\lib\windowsphone8\Microsoft.Reactive.Testing.dll</HintPath>
+          <HintPath>..\..\packages\Rx-Testing\lib\windowsphone8\Microsoft.Reactive.Testing.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -848,7 +713,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == 'Silverlight'">
       <ItemGroup>
         <Reference Include="Microsoft.Reactive.Testing">
-          <HintPath>..\packages\Rx-Testing\lib\sl5\Microsoft.Reactive.Testing.dll</HintPath>
+          <HintPath>..\..\packages\Rx-Testing\lib\sl5\Microsoft.Reactive.Testing.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
