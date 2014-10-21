@@ -15,10 +15,13 @@ open FSharp.Control.Reactive
 open Builders
 
 (**
-FSharp.Control.Reactive Tutorial
+Getting Started
 ===================
 
 The easiest way to get started using FSharp.Control.Reactive is to take a look at the [tests](https://github.com/fsprojects/FSharp.Control.Reactive/blob/master/tests/ObservableSpecs.fs). In general, you can consider the `Observable` module as providing a set of extensions to the built-in `Observable` module.
+
+`Observable` Module
+-------------------
 
 As a first, simple example, the built-in module does not include a `zip` operator, but FSharp.Control.Reactive fills in this gap:
 *)
@@ -30,6 +33,9 @@ Observable.zip obs1 obs2 tuple
 |> Observable.subscribe (printfn "%A")
 
 (**
+Computation Expressions
+-------------------
+
 The provided computation expressions open new approaches for constructing and combining `Observable` computations. The `observe` computation expression provides a simple workflow using the essential LINQ operators:
 *)
 
@@ -43,5 +49,12 @@ generate 5
 |> ignore
 
 (**
-TODO: Continue tutorial with more complex examples, including use of `rxquery`.
+You can find a few additional examples of both the `observe` and `rxquery` computation expressions [on the soruce blog post](http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html).
+
+Reactive Extensions
+-------------------
+
+For more information on Rx, check out the [Rx Workshop on Channel 9](http://channel9.msdn.com/series/Rx-Workshop). The examples provided in the workshop should be easy to port to FSharp.Control.Reactive. The [Beginner's Guide to the Reactive Extensions](http://msdn.microsoft.com/en-us/data/gg577611.aspx) includes many other links to excellent content.
+
+TODO: Continue tutorial with examples from the above, including use of `rxquery`.
  *)
