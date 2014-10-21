@@ -7,7 +7,7 @@
     <owners>@authors@</owners>
     <language>en-US</language>
     <projectUrl>https://github.com/fsprojects/FSharp.Control.Reactive</projectUrl>
-    <iconUrl>https://raw.github.com/fsharp/FSharp.ProjectScaffold/master/nuget/logo.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/fsprojects/FSharp.Control.Reactive/master/docs/files/img/logo.png</iconUrl>
     <licenseUrl>https://github.com/fsprojects/FSharp.Control.Reactive/raw/master/LICENSE.txt</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>@summary@</summary>
