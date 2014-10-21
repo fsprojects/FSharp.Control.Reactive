@@ -317,22 +317,27 @@ module Observable =
     // #region CombineLatest Functions
 
 
+    /// Merges the specified observable sequences into one observable sequence by  applying the map
+    /// whenever any of the observable sequences produces an element.
+    let combineLatest ( map : 'T1 -> 'T2 -> 'Result  ) ( source1 : IObservable<'T1> ) ( source2 : IObservable<'T2> ) =
+        Observable.CombineLatest(source1, source2, Func<'T1, 'T2 ,'Result> map )
+
     /// Merges the specified observable sequences into one observable sequence by 
     /// emmiting a list with the latest source elements of whenever any of the 
-    /// observable sequences produces and element.
-    let combineLatest (source :seq<IObservable<'T>> ) : IObservable<IList<'T>> =
+    /// observable sequences produces an element.
+    let combineLatestSeq (source :seq<IObservable<'T>> ) : IObservable<IList<'T>> =
         Observable.CombineLatest( source )
 
 
     /// Merges the specified observable sequences into one observable sequence by  applying the map
-    /// whenever any of the observable sequences produces and element.
+    /// whenever any of the observable sequences produces an element.
     let combineLatestArray (source :IObservable<'T>[] )  =
         Observable.CombineLatest( source )        
 
 
     /// Merges the specified observable sequences into one observable sequence by  applying the map
-    /// whenever any of the observable sequences produces and element.
-    let combineLatestMap ( map : IList<'T>-> 'Result  )(source :seq<IObservable<'T>> )  =
+    /// whenever any of the observable sequences produces an element.
+    let combineLatestSeqMap ( map : IList<'T>-> 'Result ) ( source :seq<IObservable<'T>> )  =
         Observable.CombineLatest( source, Func<IList<'T>,'Result> map )
 
 

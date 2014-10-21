@@ -6,6 +6,7 @@ open FSharp.Control.Reactive
 open Builders
 open NUnit.Framework
 open Microsoft.Reactive.Testing
+open System.Reactive.Subjects
 
 let ``should be`` expectedNext expectedError expectedCompleted (observable:'a IObservable) =
     let next = ref 0
@@ -173,4 +174,92 @@ let ``ofSeqOn enumerates its sequence on the specified scheduler``() =
     Assert.That(result, Is.Empty)
     scheduler.Start()
     Assert.That(result, Is.EqualTo items)
+
+[<Test>]
+let ``combineLatest calls map function with pairs of latest values``() =
+    let result   = ResizeArray()
+    use obs1     = new Subject<int>()
+    use obs2     = new Subject<int>()
+    let map x y  = x + (y / 2)
+    Observable.combineLatest map obs1 obs2
+        |> Observable.subscribe(result.Add) 
+        |> ignore
+
+    Assert.That(result, Is.Empty)
+    obs1.OnNext 1
+    Assert.That(result, Is.Empty)
+    obs1.OnNext 2
+    Assert.That(result, Is.Empty)
+    obs2.OnNext 10
+    Assert.That(result, Is.EqualTo [ 7 ] )
+    obs2.OnNext 20                
+    Assert.That(result, Is.EqualTo [ 7; 12 ] )
+    obs1.OnNext 3                 
+    Assert.That(result, Is.EqualTo [ 7; 12; 13 ] )
+
+[<Test>]
+let ``combineLatestArray produces arrays of latest values``() =
+    let result   = ResizeArray()
+    use obs1     = new Subject<int>()
+    use obs2     = new Subject<int>()
+    Observable.combineLatestArray [| obs1; obs2 |]
+        |> Observable.subscribe(result.Add) 
+        |> ignore
+
+    Assert.That(result, Is.Empty)
+    obs1.OnNext 1
+    Assert.That(result, Is.Empty)
+    obs1.OnNext 2
+    Assert.That(result, Is.Empty)
+    obs2.OnNext 10
+    Assert.That(result, Is.EqualTo [ [| 2; 10 |] ] )
+    obs2.OnNext 20                
+    Assert.That(result, Is.EqualTo [ [| 2; 10 |]; [| 2; 20 |] ] )
+    obs1.OnNext 3                 
+    Assert.That(result, Is.EqualTo [ [| 2; 10 |]; [| 2; 20 |]; [| 3; 20 |] ] )
+
+[<Test>]
+let ``combineLatestSeq produces lists of latest values``() =
+    let result   = ResizeArray()
+    use obs1     = new Subject<int>()
+    use obs2     = new Subject<int>()
+    let sources  = [ obs1 :> IObservable<_>; obs2 :> IObservable<_>] |> Seq.ofList
+    Observable.combineLatestSeq sources
+        |> Observable.subscribe(result.Add) 
+        |> ignore
+
+    Assert.That(result, Is.Empty)
+    obs1.OnNext 1
+    Assert.That(result, Is.Empty)
+    obs1.OnNext 2
+    Assert.That(result, Is.Empty)
+    obs2.OnNext 10
+    Assert.That(result, Is.EqualTo [ [2; 10] ] )
+    obs2.OnNext 20                
+    Assert.That(result, Is.EqualTo [ [2; 10]; [2; 20] ] )
+    obs1.OnNext 3                 
+    Assert.That(result, Is.EqualTo [ [2; 10]; [2; 20]; [3; 20] ] )
+
+[<Test>]
+let ``combineLatestSeqMap applies map function to latest values``() =
+    let result   = ResizeArray()
+    use obs1     = new Subject<int>()
+    use obs2     = new Subject<int>()
+    let sources  = [ obs1 :> IObservable<_>; obs2 :> IObservable<_>] |> Seq.ofList
+    let map xs   = xs |> Seq.sum
+    Observable.combineLatestSeqMap map sources
+        |> Observable.subscribe(result.Add) 
+        |> ignore
+
+    Assert.That(result, Is.Empty)
+    obs1.OnNext 1
+    Assert.That(result, Is.Empty)
+    obs1.OnNext 2
+    Assert.That(result, Is.Empty)
+    obs2.OnNext 10
+    Assert.That(result, Is.EqualTo [ 12 ] )
+    obs2.OnNext 20                
+    Assert.That(result, Is.EqualTo [ 12; 22 ] )
+    obs1.OnNext 3                 
+    Assert.That(result, Is.EqualTo [ 12; 22; 23 ] )
 
