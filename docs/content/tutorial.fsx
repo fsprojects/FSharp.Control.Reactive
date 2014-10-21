@@ -20,7 +20,7 @@ Getting Started
 
 The easiest way to get started using FSharp.Control.Reactive is to take a look at the [tests](https://github.com/fsprojects/FSharp.Control.Reactive/blob/master/tests/ObservableSpecs.fs). In general, you can consider the `Observable` module as providing a set of extensions to the built-in `Observable` module.
 
-`Observable` Module
+Observable Module
 -------------------
 
 As a first, simple example, the built-in module does not include a `zip` operator, but FSharp.Control.Reactive fills in this gap:
