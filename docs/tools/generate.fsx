@@ -17,7 +17,7 @@ let info =
     "project-author", "Ryan Riley, Steffen Forkmann, and Jared Heseter"
     "project-summary", "A F#-friendly wrapper for the Reactive Extensions."
     "project-github", "http://github.com/fsprojects/FSharp.Reactive"
-    "project-nuget", "http://nuget.com/packages/FSharp.Control.Reactive" ]
+    "project-nuget", "https://www.nuget.org/packages/FSharp.Control.Reactive" ]
 
 // --------------------------------------------------------------------------------------
 // For typical project, no changes are needed below
