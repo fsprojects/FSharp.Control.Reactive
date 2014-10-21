@@ -49,7 +49,7 @@ generate 5
 |> ignore
 
 (**
-You can find a few additional examples of both the `observe` and `rxquery` computation expressions [on the soruce blog post](http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html).
+You can find a few additional examples of both the `observe` and `rxquery` computation expressions [on the source blog post](http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html).
 
 Reactive Extensions
 -------------------
