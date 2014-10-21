@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>FSharp.Control.Reactive Tutorial
+    <title>Getting Started
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content="A F#-friendly wrapper for the Reactive Extensions."/>
@@ -33,9 +33,11 @@
       <div class="row">
         <div class="span9" id="main">
           
-<h1>FSharp.Control.Reactive Tutorial</h1>
+<h1>Getting Started</h1>
 
 <p>The easiest way to get started using FSharp.Control.Reactive is to take a look at the <a href="https://github.com/fsprojects/FSharp.Control.Reactive/blob/master/tests/ObservableSpecs.fs">tests</a>. In general, you can consider the <code>Observable</code> module as providing a set of extensions to the built-in <code>Observable</code> module.</p>
+
+<h2><code>Observable</code> Module</h2>
 
 <p>As a first, simple example, the built-in module does not include a <code>zip</code> operator, but FSharp.Control.Reactive fills in this gap:</p>
 
@@ -56,6 +58,8 @@
 </td>
 </tr>
 </table>
+
+<h2>Computation Expressions</h2>
 
 <p>The provided computation expressions open new approaches for constructing and combining <code>Observable</code> computations. The <code>observe</code> computation expression provides a simple workflow using the essential LINQ operators:</p>
 
@@ -83,7 +87,13 @@
 </tr>
 </table>
 
-<p>TODO: Continue tutorial with more complex examples, including use of <code>rxquery</code>.</p>
+<p>You can find a few additional examples of both the <code>observe</code> and <code>rxquery</code> computation expressions <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html">on the soruce blog post</a>.</p>
+
+<h2>Reactive Extensions</h2>
+
+<p>For more information on Rx, check out the <a href="http://channel9.msdn.com/series/Rx-Workshop">Rx Workshop on Channel 9</a>. The examples provided in the workshop should be easy to port to FSharp.Control.Reactive. The <a href="http://msdn.microsoft.com/en-us/data/gg577611.aspx">Beginner's Guide to the Reactive Extensions</a> includes many other links to excellent content.</p>
+
+<p>TODO: Continue tutorial with examples from the above, including use of <code>rxquery</code>.</p>
 
 <div class="tip" id="fs1">namespace System</div>
 <div class="tip" id="fs2">namespace System.Reactive</div>
