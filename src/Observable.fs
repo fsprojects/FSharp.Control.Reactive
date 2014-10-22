@@ -1276,7 +1276,7 @@ module Observable =
     /// Returns a connectable observable sequence that shares a single subscription to the underlying sequence 
     /// replaying notifications subject to a maximum element count for the replay buffer.
     let replayBuffer ( bufferSize:int )( source:IObservable<'Source>)  : Subjects.IConnectableObservable<'Source> =
-            Observable.Replay( source )  
+            Observable.Replay( source, bufferSize )  
 
 
     /// Returns an observable sequence that is the result of invoking the selector on a connectable observable 
@@ -1288,22 +1288,28 @@ module Observable =
     /// Returns a connectable observable sequence that shares a single subscription to the underlying sequence 
     /// replaying notifications subject to a maximum time length for the replay buffer.
     let replayWindow  ( window:TimeSpan ) ( source:IObservable<'Source>): Subjects.IConnectableObservable<'Source> =
-            Observable.Replay( source )  
+            Observable.Replay( source, window )  
 
+    /// Returns a connectable observable sequence that shares a single subscription to the underlying sequence 
+    /// replaying notifications subject to a maximum time length for the replay buffer.
+    let replayWindowOn  (scheduler:Concurrency.IScheduler) ( window:TimeSpan ) ( source:IObservable<'Source>): Subjects.IConnectableObservable<'Source> =
+            Observable.Replay( source, window, scheduler )  
 
     /// Returns a connectable observable sequence that shares a single subscription to the underlying sequence
     //  replaying notifications subject to a maximum time length and element count for the replay buffer.
     let replayBufferWindow  ( bufferSize:int )( window:TimeSpan )( source:IObservable<'Source>) : Subjects.IConnectableObservable<'Source> =
-            Observable.Replay( source )  
+            Observable.Replay( source, bufferSize, window )  
 
+    /// Returns a connectable observable sequence that shares a single subscription to the underlying sequence
+    //  replaying notifications subject to a maximum time length and element count for the replay buffer.
+    let replayBufferWindowOn (scheduler:Concurrency.IScheduler) ( bufferSize:int )( window:TimeSpan )( source:IObservable<'Source>) : Subjects.IConnectableObservable<'Source> =
+            Observable.Replay( source, bufferSize, window, scheduler )  
 
-    
     /// Returns an observable sequence that is the result of apply a map to a connectable observable sequence that
     /// shares a single subscription to the underlying sequence replaying notifications subject to
     /// a maximum element count for the replay buffer.                              
     let replayMapBuffer ( map ) ( bufferSize:int )( source:IObservable<'Source>) : IObservable<'Result> =
             Observable.Replay( source, Func<IObservable<'Source>,IObservable<'Result>>map, bufferSize )  
-
 
     /// Returns an observable sequence that is the result of apply a map to a connectable observable sequence that
     /// shares a single subscription to the underlying sequence replaying notifications subject to
@@ -1311,6 +1317,11 @@ module Observable =
     let replayMapWindow  ( map)( window:TimeSpan )( source:IObservable<'Source>) : IObservable<'Result> =
             Observable.Replay( source,Func<IObservable<'Source>,IObservable<'Result>>  map, window )  
 
+    /// Returns an observable sequence that is the result of apply a map to a connectable observable sequence that
+    /// shares a single subscription to the underlying sequence replaying notifications subject to
+    /// a maximum time length.
+    let replayMapWindowOn (scheduler:Concurrency.IScheduler) ( map)( window:TimeSpan )( source:IObservable<'Source>) : IObservable<'Result> =
+            Observable.Replay( source,Func<IObservable<'Source>,IObservable<'Result>>  map, window, scheduler )  
 
     /// Returns an observable sequence that is the result of apply a map to a connectable observable sequence that
     /// shares a single subscription to the underlying sequence replaying notifications subject to
@@ -1318,6 +1329,11 @@ module Observable =
     let replayMapBufferWindow  ( map )( bufferSize:int ) ( window:TimeSpan ) ( source:IObservable<'Source>): IObservable<'Result> =
         Observable.Replay( source, Func<IObservable<'Source>, IObservable<'Result>> map, bufferSize, window )  
 
+    /// Returns an observable sequence that is the result of apply a map to a connectable observable sequence that
+    /// shares a single subscription to the underlying sequence replaying notifications subject to
+    /// a maximum time length and element count for the replay buffer.
+    let replayMapBufferWindowOn (scheduler:Concurrency.IScheduler) ( map )( bufferSize:int ) ( window:TimeSpan ) ( source:IObservable<'Source>): IObservable<'Result> =
+        Observable.Replay( source, Func<IObservable<'Source>, IObservable<'Result>> map, bufferSize, window, scheduler )  
 
     /// Repeats the source observable sequence until it successfully terminates.
     let retry ( source:IObservable<'Source>) : IObservable<'Source> =
@@ -1327,10 +1343,6 @@ module Observable =
     /// Repeats the source observable sequence the specified number of times or until it successfully terminates.
     let retryCount (count:int) ( source:IObservable<'Source>) : IObservable<'Source> =
         Observable.Retry( source, count )
-
-
-
-
 
     let result x : IObservable<_>=
         { new IObservable<_> with
