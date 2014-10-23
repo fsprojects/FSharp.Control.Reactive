@@ -1670,6 +1670,9 @@ module Observable =
     let timestamp ( source:IObservable<'Source> ) : IObservable<Timestamped<'Source>> =
         Observable.Timestamp( source )
 
+    /// Timestamps each element in an observable sequence using the supplied scheduler.
+    let timestampOn (scheduler : IScheduler)  ( source:IObservable<'Source> ) : IObservable<Timestamped<'Source>> =
+        Observable.Timestamp( source, scheduler )
 
     /// Converts an observable into a seq
     let toEnumerable (source: IObservable<'T>) = Observable.ToEnumerable(source)

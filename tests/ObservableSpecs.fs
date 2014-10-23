@@ -410,3 +410,28 @@ let ``replayBufferWindowOn replays only the required count of notifications upon
 
     scheduler.Start()
     Assert.That(result, Is.EqualTo [ 3; 4 ] )
+
+[<Test>]
+let ``timestampOn uses timestamps from the supplied scheduler``() =
+    let oneSecond = TimeSpan.FromSeconds(1.).Ticks
+    let result    = ResizeArray()
+    use subject   = new Subject<int>()
+    let scheduler = TestScheduler()
+
+    let obs = subject |> Observable.materialize
+                      |> Observable.timestampOn scheduler
+                      |> Observable.subscribe(result.Add)
+                      |> ignore
+
+    scheduler.AdvanceBy(oneSecond)
+    let firstNotificationAt = scheduler.Now
+    subject.OnNext 1
+    
+    scheduler.AdvanceBy(oneSecond)
+    let secondNotificationAt = scheduler.Now
+    subject.OnNext 2
+
+    Assert.That(result, Has.Count.EqualTo 2)
+    Assert.That(result.[0].Timestamp, Is.EqualTo firstNotificationAt)
+    Assert.That(result.[1].Timestamp, Is.EqualTo secondNotificationAt)
+
