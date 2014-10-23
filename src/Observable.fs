@@ -1255,7 +1255,7 @@ module Observable =
 
 
     /// Repeats the observable sequence a specified number of times.
-    let repeatCount<'Result> ( value:'Result )( repeatCount:int ) : IObservable<'Result> =
+    let repeatCount<'Result> ( repeatCount:int ) ( value:'Result ) : IObservable<'Result> =
         Observable.Repeat( value, repeatCount )
 
 
