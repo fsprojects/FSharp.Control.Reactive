@@ -154,7 +154,7 @@ module Observable =
     let aggregate accumulator source = 
         Observable.Aggregate(source, Func<_,_,_> accumulator )
 
-    /// Determines whether all elements of and observable satisfy a predicate
+    /// Determines whether all elements of an observable satisfy a predicate
     let all pred source =
         Observable.All(source, pred )
 
@@ -302,7 +302,7 @@ module Observable =
     /// Produces an enumerable sequence that returns elements collected/aggregated from the source sequence between consecutive iterations.
     /// merge - Merges a sequence element with the current collector
     /// newCollector - Factory to create a new collector object.
-    let collectMerge source newCollector merge = 
+    let collectMerge newCollector merge source = 
         Observable.Collect( source, Func<_> newCollector,Func<_,_,_> merge )
 
 
@@ -435,7 +435,7 @@ module Observable =
 
     /// Time shifts the observable sequence to start propagating notifications at the specified absolute time.
     /// The relative time intervals between the values are preserved.
-    let delayUnitl  ( dueTime:DateTimeOffset ) ( source:IObservable<'Source> ) : IObservable<'Source> =
+    let delayUntil ( source:IObservable<'Source> ) ( dueTime:DateTimeOffset ) : IObservable<'Source> =
         Observable.Delay(source, dueTime )
         
 
@@ -531,8 +531,8 @@ module Observable =
 
 
     /// Determines whether two sequences are equal by comparing the elements pairwise using a specified equality comparer.
-    let equalsCompare ( first:IObservable<'Source>  )( second:IObservable<'Source> )( comparer:IEqualityComparer<'Source>) : IObservable<bool> =
-        Observable.SequenceEqual( first, second )
+    let equalsComparer ( comparer:IEqualityComparer<'Source>)  ( first:IObservable<'Source>  )( second:IObservable<'Source> ): IObservable<bool> =
+        Observable.SequenceEqual( first, second, comparer )
 
 
     /// Determines whether an observable and enumerable sequence are equal by comparing the elements pairwise.
@@ -541,8 +541,8 @@ module Observable =
 
 
     /// Determines whether an observable and enumerable sequence are equal by comparing the elements pairwise using a specified equality comparer.
-    let equalsSeqComparer ( first:IObservable<'Source>  )( second:seq<'Source> )( comparer:IEqualityComparer<'Source> ) : IObservable<bool> =
-        Observable.SequenceEqual( first, second )
+    let equalsSeqComparer ( comparer:IEqualityComparer<'Source> ) ( first:IObservable<'Source>  )( second:seq<'Source> ) : IObservable<bool> =
+        Observable.SequenceEqual( first, second, comparer )
 
 
     let error e =
@@ -929,10 +929,13 @@ module Observable =
     let head obs = Observable.FirstAsync(obs)
 
 
-    /// Returns and observable sequence that produces a value after each period
+    /// Returns an observable sequence that produces a value after each period
     let interval period = 
         Observable.Interval( period )
 
+    /// Returns an observable sequence that produces a value on the specified scheduler after each period
+    let intervalOn (scheduler : IScheduler) period = 
+        Observable.Interval( period, scheduler )
 
     /// Determines whether the given observable is empty 
     let isEmpty source = source = Observable.Empty()
@@ -1495,7 +1498,7 @@ module Observable =
 
 
     /// Synchronizes the observable sequence so that notifications cannot be delivered concurrently
-    /// this voerload is useful to "fix" and observable sequence that exhibits concurrent 
+    /// this overload is useful to "fix" an observable sequence that exhibits concurrent 
     /// callbacks on individual observers, which is invalid behavior for the query processor
     let synchronize  source : IObservable<'Source>= 
         Observable.Synchronize( source )
@@ -1559,16 +1562,18 @@ module Observable =
     let throttle  (dueTime:TimeSpan) (source:IObservable<'Source>): IObservable<'Source> =
         Observable.Throttle( source, dueTime )
 
+    /// Ignores elements from an observable sequence which are followed by another element within a specified relative time duration.
+    let throttleOn (scheduler : IScheduler) (dueTime:TimeSpan) (source:IObservable<'Source>): IObservable<'Source> =
+        Observable.Throttle( source, dueTime, scheduler )
 
     /// Ignores elements from an observable sequence which are followed by another value within a computed throttle duration
-    let throttleComputed ( source:IObservable<'Source>) (throttleDurationSelector) : IObservable<'Source> =
+    let throttleComputed (throttleDurationSelector) ( source:IObservable<'Source>) : IObservable<'Source> =
         Observable.Throttle( source, Func<'Source,IObservable<'Throttle>> throttleDurationSelector )
 
 
     /// Returns an observable sequence that terminates with an exception.
     let throw ( except:exn ) : IObservable<'Result> =
         Observable.Throw( except )
-
 
     /// matches when the observable sequence has an available element and 
     /// applies the map
@@ -1702,7 +1707,7 @@ module Observable =
                                     comparer                            ) 
     
 
-    /// Exposes and observable sequence as an object with an Action based .NET event
+    /// Exposes an observable sequence as an object with an Action based .NET event
     let toEvent (source:IObservable<unit>) = 
         Observable.ToEvent(source)
 
@@ -1817,7 +1822,7 @@ module Observable =
 
 
     /// Merges two observable sequences into one observable sequence by combining their elements in a pairwise fashion.
-    let zip ( first:IObservable<'Source1>)( second:IObservable<'Source2>) ( resultSelector:'Source1 -> 'Source2 -> 'Result) : IObservable<'Result> =
+    let zip ( resultSelector:'Source1 -> 'Source2 -> 'Result) ( first:IObservable<'Source1>)( second:IObservable<'Source2>) : IObservable<'Result> =
         Observable.Zip( first, second, Func<'Source1,'Source2,'Result> resultSelector)
 
 

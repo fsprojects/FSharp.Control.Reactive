@@ -87,7 +87,7 @@ let ``When zip is defined with the applicative, it should match the result of Ob
     let expected = ref (0,0)
 
     (zip a b).Subscribe(fun x -> actual := x) |> ignore
-    (Observable.zip a b tuple).Subscribe(fun x -> expected := x) |> ignore
+    (Observable.zip tuple a b).Subscribe(fun x -> expected := x) |> ignore
 
     Assert.That(!actual, Is.EqualTo (!expected))
 
@@ -105,7 +105,7 @@ let ``Test should show the stack overflow is fixed with Rx 2 beta``() =
 let ``Zipping two observable sequences of different types creates a single zipped observable``() =
     let obs1 = Observable.Return 1
     let obs2 = Observable.Return "A"
-    let zipped = Observable.zip obs1 obs2 tuple
+    let zipped = Observable.zip tuple obs1 obs2 
     let result = zipped |> Observable.First
     let expected = ( 1, "A" )
 
@@ -174,6 +174,44 @@ let ``ofSeqOn enumerates its sequence on the specified scheduler``() =
     Assert.That(result, Is.Empty)
     scheduler.Start()
     Assert.That(result, Is.EqualTo items)
+
+[<Test>]
+let ``intervalOn produces a value at the specified rate on the supplied scheduler``() =
+    let result    = ResizeArray()
+    let scheduler = TestScheduler()
+    let oneSecond = TimeSpan.FromSeconds(1.).Ticks
+
+    let obs = Observable.intervalOn scheduler (TimeSpan.FromSeconds(2.))
+    obs |> Observable.subscribe(result.Add) 
+        |> ignore
+
+    Assert.That(result, Is.Empty)
+    scheduler.AdvanceBy oneSecond; Assert.That(result, Is.Empty)
+    scheduler.AdvanceBy oneSecond; Assert.That(result, Has.Count.EqualTo 1)
+    scheduler.AdvanceBy oneSecond; Assert.That(result, Has.Count.EqualTo 1)
+    scheduler.AdvanceBy oneSecond; Assert.That(result, Has.Count.EqualTo 2)
+
+[<Test>]
+let ``throttleOn produces a value at the specified rate on the supplied scheduler``() =
+    let result    = ResizeArray()
+    use obs       = new Subject<int>()
+    let scheduler = TestScheduler()
+    let oneSecond = TimeSpan.FromSeconds(1.).Ticks
+
+    obs |> Observable.throttleOn scheduler (TimeSpan.FromSeconds(2.))
+        |> Observable.subscribe(result.Add) 
+        |> ignore
+
+    obs.OnNext(1);                 Assert.That(result, Is.Empty)
+    scheduler.AdvanceBy oneSecond; Assert.That(result, Is.Empty)
+    scheduler.AdvanceBy oneSecond
+    Assert.That(result, Is.EqualTo [1] )
+
+    obs.OnNext(2)
+    scheduler.AdvanceBy oneSecond; Assert.That(result, Is.EqualTo [1] )
+    obs.OnNext(3)
+    scheduler.AdvanceBy oneSecond; Assert.That(result, Is.EqualTo [1] )
+    scheduler.AdvanceBy oneSecond; Assert.That(result, Is.EqualTo [1; 3] )
 
 [<Test>]
 let ``combineLatest calls map function with pairs of latest values``() =
