@@ -1799,8 +1799,10 @@ module Observable =
         Observable.Window( source, timeSpan, count )
 
 
-    /// Merges two observable sequences into one observable sequence by combining their elements in a pairwise fashion.
-    let zip ( first:IObservable<'Source1>)( second:IObservable<'Source2>) ( resultSelector:'Source1 -> 'Source2 -> 'Result) : IObservable<'Result> =
+    /// Merges two observable sequences into one observable sequence of pairs.
+    let zip ( first:IObservable<'Source1> ) ( second:IObservable<'Source2> ) : IObservable<'Source1 * 'Source2> =
+        Observable.Zip( first, second, fun a b -> a,b)
+
         Observable.Zip( first, second, Func<'Source1,'Source2,'Result> resultSelector)
 
 

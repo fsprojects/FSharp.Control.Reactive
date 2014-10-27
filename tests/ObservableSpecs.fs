@@ -86,7 +86,7 @@ let ``When zip is defined with the applicative, it should match the result of Ob
     let expected = ref (0,0)
 
     (zip a b).Subscribe(fun x -> actual := x) |> ignore
-    (Observable.zip a b tuple).Subscribe(fun x -> expected := x) |> ignore
+    (Observable.zip a b).Subscribe(fun x -> expected := x) |> ignore
 
     Assert.That(!actual, Is.EqualTo (!expected))
 
@@ -104,7 +104,7 @@ let ``Test should show the stack overflow is fixed with Rx 2 beta``() =
 let ``Zipping two observable sequences of different types creates a single zipped observable``() =
     let obs1 = Observable.Return 1
     let obs2 = Observable.Return "A"
-    let zipped = Observable.zip obs1 obs2 tuple
+    let zipped = Observable.zip obs1 obs2
     let result = zipped |> Observable.First
     let expected = ( 1, "A" )
 
