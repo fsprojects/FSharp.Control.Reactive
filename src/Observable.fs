@@ -1803,6 +1803,9 @@ module Observable =
     let zip ( first:IObservable<'Source1> ) ( second:IObservable<'Source2> ) : IObservable<'Source1 * 'Source2> =
         Observable.Zip( first, second, fun a b -> a,b)
 
+
+    /// Merges two observable sequences into one observable sequence by combining their elements through a projection function.
+    let zipWith ( resultSelector:'Source1 -> 'Source2 -> 'Result) ( first:IObservable<'Source1>) ( second:IObservable<'Source2>)  : IObservable<'Result> =
         Observable.Zip( first, second, Func<'Source1,'Source2,'Result> resultSelector)
 
 
