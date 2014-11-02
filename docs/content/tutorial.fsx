@@ -43,7 +43,7 @@ let rec generate x =
     observe {
         yield x
         if x < 100000 then
-            yield! g (x + 1) }
+            yield! generate (x + 1) }
 generate 5
 |> Observable.subscribeWithCallbacks ignore ignore ignore
 |> ignore
