@@ -87,7 +87,7 @@ let ``When zip is defined with the applicative, it should match the result of Ob
     let expected = ref (0,0)
 
     (zip a b).Subscribe(fun x -> actual := x) |> ignore
-    (Observable.zip tuple a b).Subscribe(fun x -> expected := x) |> ignore
+    (Observable.zip a b).Subscribe(fun x -> expected := x) |> ignore
 
     Assert.That(!actual, Is.EqualTo (!expected))
 
@@ -105,11 +105,22 @@ let ``Test should show the stack overflow is fixed with Rx 2 beta``() =
 let ``Zipping two observable sequences of different types creates a single zipped observable``() =
     let obs1 = Observable.Return 1
     let obs2 = Observable.Return "A"
-    let zipped = Observable.zip tuple obs1 obs2 
+    let zipped = Observable.zip obs1 obs2
     let result = zipped |> Observable.First
     let expected = ( 1, "A" )
 
     Assert.That(result, Is.EqualTo expected)
+
+[<Test>]
+let ``ZipWith on two observable sequences of different types creates a single zipped observable``() =
+    let obs1 = Observable.Return 1
+    let obs2 = Observable.Return "A"
+    let zipped = Observable.zipWith tuple obs1 obs2
+    let result = zipped |> Observable.First
+    let expected = ( 1, "A" )
+
+    Assert.That(result, Is.EqualTo expected)
+
 
 [<Test>]
 let ``distinctKey uses the key function to decide whether an element has been seen before``() =

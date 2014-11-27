@@ -26,10 +26,9 @@ Observable Module
 As a first, simple example, the built-in module does not include a `zip` operator, but FSharp.Control.Reactive fills in this gap:
 *)
 
-let tuple x y = x,y
 let obs1 = Observable.Return 1
 let obs2 = Observable.Return "A"
-Observable.zip obs1 obs2 tuple
+Observable.zip obs1 obs2
 |> Observable.subscribe (printfn "%A")
 
 (**
@@ -43,7 +42,7 @@ let rec generate x =
     observe {
         yield x
         if x < 100000 then
-            yield! g (x + 1) }
+            yield! generate (x + 1) }
 generate 5
 |> Observable.subscribeWithCallbacks ignore ignore ignore
 |> ignore

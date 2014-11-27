@@ -1307,7 +1307,7 @@ module Observable =
     //  replaying notifications subject to a maximum time length and element count for the replay buffer.
     let replayBufferWindowOn (scheduler:Concurrency.IScheduler) ( bufferSize:int )( window:TimeSpan )( source:IObservable<'Source>) : Subjects.IConnectableObservable<'Source> =
             Observable.Replay( source, bufferSize, window, scheduler )  
-
+    
     /// Returns an observable sequence that is the result of apply a map to a connectable observable sequence that
     /// shares a single subscription to the underlying sequence replaying notifications subject to
     /// a maximum element count for the replay buffer.                              
@@ -1824,8 +1824,18 @@ module Observable =
         Observable.Window( source, timeSpan, count )
 
 
-    /// Merges two observable sequences into one observable sequence by combining their elements in a pairwise fashion.
-    let zip ( resultSelector:'Source1 -> 'Source2 -> 'Result) ( first:IObservable<'Source1>)( second:IObservable<'Source2>) : IObservable<'Result> =
+    /// Merges two observable sequences into one observable sequence of pairs.
+    let zip ( first:IObservable<'Source1> ) ( second:IObservable<'Source2> ) : IObservable<'Source1 * 'Source2> =
+        Observable.Zip( first, second, fun a b -> a,b)
+
+
+    /// Merges three observable sequences into one observable sequence of triples.
+    let zip3 ( first:IObservable<'Source1> ) ( second:IObservable<'Source2> ) ( third:IObservable<'Source3> ) : IObservable<'Source1 * 'Source2 * 'Source3> =
+        Observable.Zip( first, second, third, fun a b c -> a,b,c)
+
+
+    /// Merges two observable sequences into one observable sequence by combining their elements through a projection function.
+    let zipWith ( resultSelector:'Source1 -> 'Source2 -> 'Result) ( first:IObservable<'Source1>) ( second:IObservable<'Source2>)  : IObservable<'Result> =
         Observable.Zip( first, second, Func<'Source1,'Source2,'Result> resultSelector)
 
 

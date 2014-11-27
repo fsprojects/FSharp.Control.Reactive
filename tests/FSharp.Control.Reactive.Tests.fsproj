@@ -58,31 +58,6 @@
     </Otherwise>
   </Choose>
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
-  <ItemGroup>
-    <Compile Include="ObservableSpecs.fs" />
-    <None Include="paket.references" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.Reactive.Testing">
-      <HintPath>..\packages\Rx-Testing\lib\net40\Microsoft.Reactive.Testing.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-      <HintPath>c:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\ReferenceAssemblies\v2.0\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="mscorlib" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\src\FSharp.Control.Reactive.fsproj">
-      <Name>FSharp.Control.Reactive</Name>
-      <Project>{ed23f688-c0d0-4102-93d5-0d832633f66d}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Import Project="$(SolutionDir)\.paket\paket.targets" />
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework'">
       <Choose>
@@ -159,14 +134,6 @@
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
-            <Reference Include="Microsoft.Reactive.Testing">
-              <HintPath>..\packages\Rx-Testing\lib\net40\Microsoft.Reactive.Testing.dll</HintPath>
-              <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-            <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-              <Paket>True</Paket>
-            </Reference>
           </ItemGroup>
         </When>
         <When Condition="$(TargetFrameworkVersion) == 'v4.0'">
@@ -206,14 +173,6 @@
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
-            <Reference Include="Microsoft.Reactive.Testing">
-              <HintPath>..\packages\Rx-Testing\lib\net40\Microsoft.Reactive.Testing.dll</HintPath>
-              <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-            <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-              <Paket>True</Paket>
-            </Reference>
           </ItemGroup>
         </When>
         <Otherwise>
@@ -251,14 +210,6 @@
             <Reference Include="System.Reactive.Providers">
               <HintPath>..\packages\Rx-Providers\lib\net45\System.Reactive.Providers.dll</HintPath>
               <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-            <Reference Include="Microsoft.Reactive.Testing">
-              <HintPath>..\packages\Rx-Testing\lib\net45\Microsoft.Reactive.Testing.dll</HintPath>
-              <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-            <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
               <Paket>True</Paket>
             </Reference>
           </ItemGroup>
@@ -442,14 +393,6 @@
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
-        <Reference Include="Microsoft.Reactive.Testing">
-          <HintPath>..\packages\Rx-Testing\lib\net45\Microsoft.Reactive.Testing.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-          <Paket>True</Paket>
-        </Reference>
       </ItemGroup>
     </When>
     <When Condition="$(TargetFrameworkIdentifier) == 'MonoTouch'">
@@ -487,14 +430,6 @@
         <Reference Include="System.Reactive.Providers">
           <HintPath>..\packages\Rx-Providers\lib\net45\System.Reactive.Providers.dll</HintPath>
           <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-        <Reference Include="Microsoft.Reactive.Testing">
-          <HintPath>..\packages\Rx-Testing\lib\net45\Microsoft.Reactive.Testing.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -538,14 +473,6 @@
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
-            <Reference Include="Microsoft.Reactive.Testing">
-              <HintPath>..\packages\Rx-Testing\lib\net45\Microsoft.Reactive.Testing.dll</HintPath>
-              <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-            <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-              <Paket>True</Paket>
-            </Reference>
           </ItemGroup>
         </When>
         <When Condition="$(SilverlightVersion) == 'v4.0'">
@@ -583,14 +510,6 @@
             <Reference Include="System.Reactive.Providers">
               <HintPath>..\packages\Rx-Providers\lib\net45\System.Reactive.Providers.dll</HintPath>
               <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-            <Reference Include="Microsoft.Reactive.Testing">
-              <HintPath>..\packages\Rx-Testing\lib\net45\Microsoft.Reactive.Testing.dll</HintPath>
-              <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-            <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
               <Paket>True</Paket>
             </Reference>
           </ItemGroup>
@@ -632,9 +551,7 @@
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
-            <Reference Include="Microsoft.Reactive.Testing">
-              <HintPath>..\packages\Rx-Testing\lib\sl5\Microsoft.Reactive.Testing.dll</HintPath>
-              <Private>True</Private>
+            <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight">
               <Paket>True</Paket>
             </Reference>
           </ItemGroup>
@@ -675,11 +592,6 @@
         </Reference>
         <Reference Include="System.Reactive.Providers">
           <HintPath>..\packages\Rx-Providers\lib\windows8\System.Reactive.Providers.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-        <Reference Include="Microsoft.Reactive.Testing">
-          <HintPath>..\packages\Rx-Testing\lib\windows8\Microsoft.Reactive.Testing.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -724,14 +636,6 @@
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
-            <Reference Include="Microsoft.Reactive.Testing">
-              <HintPath>..\packages\Rx-Testing\lib\net45\Microsoft.Reactive.Testing.dll</HintPath>
-              <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-            <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-              <Paket>True</Paket>
-            </Reference>
           </ItemGroup>
         </When>
         <When Condition="$(TargetPlatformVersion) == 'v8.0'">
@@ -768,11 +672,6 @@
             </Reference>
             <Reference Include="System.Reactive.Providers">
               <HintPath>..\packages\Rx-Providers\lib\windowsphone8\System.Reactive.Providers.dll</HintPath>
-              <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-            <Reference Include="Microsoft.Reactive.Testing">
-              <HintPath>..\packages\Rx-Testing\lib\windowsphone8\Microsoft.Reactive.Testing.dll</HintPath>
               <Private>True</Private>
               <Paket>True</Paket>
             </Reference>
@@ -813,14 +712,6 @@
             <Reference Include="System.Reactive.Providers">
               <HintPath>..\packages\Rx-Providers\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Providers.dll</HintPath>
               <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-            <Reference Include="Microsoft.Reactive.Testing">
-              <HintPath>..\packages\Rx-Testing\lib\net45\Microsoft.Reactive.Testing.dll</HintPath>
-              <Private>True</Private>
-              <Paket>True</Paket>
-            </Reference>
-            <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
               <Paket>True</Paket>
             </Reference>
           </ItemGroup>
@@ -864,15 +755,32 @@
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
-        <Reference Include="Microsoft.Reactive.Testing">
-          <HintPath>..\packages\Rx-Testing\lib\net45\Microsoft.Reactive.Testing.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-          <Paket>True</Paket>
-        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
+  <ItemGroup>
+    <Compile Include="ObservableSpecs.fs" />
+    <None Include="paket.references" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Reactive.Testing">
+      <HintPath>..\packages\Rx-Testing\lib\net40\Microsoft.Reactive.Testing.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+      <HintPath>c:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\ReferenceAssemblies\v2.0\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\src\FSharp.Control.Reactive.fsproj">
+      <Name>FSharp.Control.Reactive</Name>
+      <Project>{ed23f688-c0d0-4102-93d5-0d832633f66d}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="$(SolutionDir)\.paket\paket.targets" />
 </Project>
