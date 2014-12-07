@@ -1,4 +1,4 @@
-### New in 3.0.0 - (Released 2014/12/07)
+### New in 3.0.1 - (Released 2014/12/07)
 * #48 Some of the Observable functions aren't very composable
  * NOTE: Includes breaking changes due to updated function names and signatures
 * #47 Replay overloads don't use the window or bufferSize parameters
