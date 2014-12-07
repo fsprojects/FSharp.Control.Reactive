@@ -19,11 +19,11 @@ module Builders =
         member __.Combine(comp1, comp2) = Observable.Concat(comp1, comp2)
         member __.Delay(f: _ -> IObservable<_>) = Observable.Defer(fun _ -> f())
         member __.Zero() = Observable.Empty(Scheduler.CurrentThread :> IScheduler)
-        member __.For(sequence, body) = Observable.For(sequence, body)
+        member __.For(sequence, body) = Observable.For(sequence, Func<_,_> body)
         member __.TryWith(m: IObservable<_>, h: #exn -> IObservable<_>) = Observable.Catch(m, h)
         member __.TryFinally(m, compensation) = Observable.Finally(m, Action compensation)
-        member __.Using(res: #IDisposable, body) = Observable.Using((fun () -> res), body)
-        member __.While(guard, m: IObservable<_>) = Observable.While(guard, m)
+        member __.Using(res: #IDisposable, body) = Observable.Using((fun () -> res), Func<_,_> body)
+        member __.While(guard, m: IObservable<_>) = Observable.While(Func<_> guard, m)
         // TODO: Are these the correct implementation? Are they necessary?
         member __.Yield(x) = Observable.Return(x, Scheduler.CurrentThread)
         member __.YieldFrom m : IObservable<_> = m
@@ -156,7 +156,7 @@ module Observable =
 
     /// Determines whether all elements of an observable satisfy a predicate
     let all pred source =
-        Observable.All(source, pred )
+        Observable.All(source, Func<_,_> pred )
 
 
     /// Returns the observable sequence that reacts first
@@ -399,7 +399,7 @@ module Observable =
     /// Returns an observable sequence containing an int that represents how many elements 
     /// in the specified observable sequence satisfy a condition.
     let countSatisfy predicate source = 
-        Observable.Count( source, predicate )
+        Observable.Count( source, Func<_,_> predicate )
 
     ///  Creates an observable sequence from a specified Subscribe method implementation.
     let create subscribe =
@@ -556,7 +556,7 @@ module Observable =
     /// Determines whether an observable sequence contains a specified value
     /// which satisfies the given predicate
     let exists predicate source = 
-        Observable.Any(source, predicate)
+        Observable.Any(source, Func<_,_> predicate)
 
 
     /// Filters the observable elements of a sequence based on a predicate 
@@ -584,7 +584,7 @@ module Observable =
     /// Returns the first element of an observable sequence
     /// if it satisfies the predicate
     let firstIf predicate (source:IObservable<'T>) =
-        source.FirstAsync( predicate )
+        source.FirstAsync( Func<_,_> predicate )
 
 
     /// Projects each element of an observable sequence to an observable sequence 
@@ -1103,7 +1103,7 @@ module Observable =
     /// resulting from the selector function's invocation. For specializations with fixed
     /// subject types, see Publish, PublishLast, and Replay.
     let multicastMap subjectSelector selector source  =
-        Observable.Multicast(source,subjectSelector, selector)
+        Observable.Multicast(source, Func<_> subjectSelector, Func<_,_> selector)
 
 
     /// Returns a non-terminating observable sequence, which can 
@@ -1686,7 +1686,7 @@ module Observable =
 
     /// Creates an observable sequence according to a specified key selector function
     let toDictionary keySelector source = 
-        Observable.ToDictionary(source, keySelector)
+        Observable.ToDictionary(source, Func<_,_> keySelector)
 
 
     /// Creates an observable sequence according to a specified key selector function
