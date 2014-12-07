@@ -163,7 +163,8 @@ Target "NuGet" (fun _ ->
             OutputPath = "bin"
             AccessKey = getBuildParamOrDefault "nugetkey" ""
             Publish = hasBuildParam "nugetkey"
-            Dependencies = [ "Rx-Core", GetPackageVersion "packages" "Rx-Core"
+            Dependencies = [ "FSharp.Core", GetPackageVersion "packages" "FSharp.Core"
+                             "Rx-Core", GetPackageVersion "packages" "Rx-Core"
                              "Rx-Interfaces", GetPackageVersion "packages" "Rx-Interfaces"
                              "Rx-Linq", GetPackageVersion "packages" "Rx-Linq" ]
             Files = [ (@"..\bin\FSharp.Control.Reactive.dll", Some "lib/net40", None)
