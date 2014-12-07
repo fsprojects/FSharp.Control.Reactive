@@ -1,3 +1,6 @@
+### New in 2.4.2 - (Released 2014/12/07)
+* Use consistent function types in ObservableBuilder.
+
 ### New in 2.4.1 - (Released 2014/12/07)
 * Now using FSharp.Core from NuGet
 
