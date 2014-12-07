@@ -1,3 +1,6 @@
+### New in 2.4.1 - (Released 2014/12/07)
+* Now using FSharp.Core from NuGet
+
 ### New in 2.4.0 - (Released 2014/10/14)
 Updates courtesty of marklam:
 
