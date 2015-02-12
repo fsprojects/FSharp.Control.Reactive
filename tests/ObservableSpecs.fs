@@ -72,7 +72,7 @@ let ``When subscribing to an event, only OnNext should be fired once.``() =
 let ``When subscribing to an observable that fires an exception using the ObservableBuilder, only OnError should be fired``() =
     let builder = observe {
         failwith "Test"
-        return 1 }
+        yield 1 }
     builder |> ``should be`` 0 true false
 
 [<Test>]

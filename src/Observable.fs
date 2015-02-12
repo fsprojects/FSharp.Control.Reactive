@@ -13,8 +13,6 @@ module Builders =
 
     /// An Observable computation builder.
     type ObservableBuilder() =
-        member __.Return(x) = Observable.Return(x, Scheduler.CurrentThread)
-        member __.ReturnFrom m : IObservable<_> = m
         member __.Bind(m: IObservable<_>, f: _ -> IObservable<_>) = m.SelectMany(f)
         member __.Combine(comp1, comp2) = Observable.Concat(comp1, comp2)
         member __.Delay(f: _ -> IObservable<_>) = Observable.Defer(fun _ -> f())
@@ -24,9 +22,12 @@ module Builders =
         member __.TryFinally(m, compensation) = Observable.Finally(m, Action compensation)
         member __.Using(res: #IDisposable, body) = Observable.Using((fun () -> res), Func<_,_> body)
         member __.While(guard, m: IObservable<_>) = Observable.While(Func<_> guard, m)
-        // TODO: Are these the correct implementation? Are they necessary?
         member __.Yield(x) = Observable.Return(x, Scheduler.CurrentThread)
         member __.YieldFrom m : IObservable<_> = m
+        [<Obsolete("Use Yield. Return will be removed in an upcoming version of FSharp.Control.Reactive.")>]
+        member inline __.Return(x) = __.Yield(x)
+        [<Obsolete("Use Yield. Return will be removed in an upcoming version of FSharp.Control.Reactive.")>]
+        member inline __.ReturnFrom m = __.YieldFrom m
 
     let observe = ObservableBuilder()
 
