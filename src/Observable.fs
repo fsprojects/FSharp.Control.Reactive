@@ -58,19 +58,19 @@ module Builders =
         [<CustomOperation("distinct", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
         member __.Distinct (s:IObservable<_>) = s.Distinct()
         [<CustomOperation("exactlyOne")>]
-        member __.ExactlyOne (s:IObservable<_>) = s.Single()
+        member __.ExactlyOne (s:IObservable<_>) = s.SingleAsync()
         [<CustomOperation("exactlyOneOrDefault")>]
-        member __.ExactlyOneOrDefault (s:IObservable<_>) = s.SingleOrDefault()
+        member __.ExactlyOneOrDefault (s:IObservable<_>) = s.SingleOrDefaultAsync()
         [<CustomOperation("find")>]
-        member __.Find (s:IObservable<_>, [<ProjectionParameter>] predicate : _ -> bool) = s.First(new Func<_,bool>(predicate))
+        member __.Find (s:IObservable<_>, [<ProjectionParameter>] predicate : _ -> bool) = s.FirstAsync(new Func<_,bool>(predicate))
         [<CustomOperation("head")>]
-        member __.Head (s:IObservable<_>) = s.First()
+        member __.Head (s:IObservable<_>) = s.FirstAsync()
         [<CustomOperation("headOrDefault")>]
-        member __.HeadOrDefault (s:IObservable<_>) = s.FirstOrDefault()
+        member __.HeadOrDefault (s:IObservable<_>) = s.FirstOrDefaultAsync()
         [<CustomOperation("last")>]
-        member __.Last (s:IObservable<_>) = s.Last()
+        member __.Last (s:IObservable<_>) = s.LastAsync()
         [<CustomOperation("lastOrDefault")>]
-        member __.LastOrDefault (s:IObservable<_>) = s.LastOrDefault()
+        member __.LastOrDefault (s:IObservable<_>) = s.LastOrDefaultAsync()
         [<CustomOperation("maxBy")>]
         member __.MaxBy (s:IObservable<'a>,  [<ProjectionParameter>] valueSelector : 'a -> 'b) = s.MaxBy(new Func<'a,'b>(valueSelector))
         [<CustomOperation("minBy")>]

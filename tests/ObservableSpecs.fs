@@ -102,6 +102,45 @@ let ``Test should show the stack overflow is fixed with Rx 2 beta``() =
     Assert.DoesNotThrow(TestDelegate(fun () -> test()))
 
 [<Test>]
+let ``RxQueryBuilder.Head can return first item`` () =
+    let test = observe {
+        yield 1
+        yield 2
+        yield 3
+        yield 4 }
+
+    let query = rxquery {
+        for x in test do
+        head }
+
+    query |> Observable.subscribe (fun x -> Assert.AreEqual(1, x)) |> ignore
+
+[<Test>]
+let ``RxQueryBuilder.ExactlyOne can returns only one item`` () =
+    let test = observe { yield 1 }
+
+    let query = rxquery {
+        for x in test do
+        exactlyOne }
+
+    query |> Observable.subscribe (fun x -> Assert.AreEqual(1, x)) |> ignore
+
+[<Test>]
+let ``RxQueryBuilder.ExactlyOne throws when source contains more than one item`` () =
+    let test = observe {
+        yield 1
+        yield 2 }
+
+    let query = rxquery {
+        for x in test do
+        exactlyOne }
+
+    Observable.subscribeWithError
+        (fun _ -> Assert.Fail("ExactlyOne should throw when source contains more than one element"))
+        (fun _ -> Assert.Pass())
+        query |> ignore
+
+[<Test>]
 let ``Zipping two observable sequences of different types creates a single zipped observable``() =
     let obs1 = Observable.Return 1
     let obs2 = Observable.Return "A"

@@ -1,6 +1,7 @@
 ### New in 3.1.0 - (Released 2015/02/12)
 * Fixed signature of `Observable.create` to better fit F#. #56
 * Marked `ObservableBuilder.Return` and `ObservableBuilder.ReturnFrom` as `Obsolete` as users should use `Yield` and `YieldFrom`, which allow for multiple results. #53
+* Changed signatures of `RxQueryBuilder` functions `ExactlyOne`, `ExactlyOneOrDefault`, `Find`, `Head`, `HeadOrDefault`, `Last`, and `LastOrDefault` to their Async equivalents. #57
 
 ### New in 3.0.1 - (Released 2014/12/07)
 * #48 Some of the Observable functions aren't very composable
