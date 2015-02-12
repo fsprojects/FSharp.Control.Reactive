@@ -1,3 +1,6 @@
+### New in 3.1.0 - (Released 2015/02/12)
+* Fixed signature of `Observable.create` to better fit F#.
+
 ### New in 3.0.1 - (Released 2014/12/07)
 * #48 Some of the Observable functions aren't very composable
  * NOTE: Includes breaking changes due to updated function names and signatures
