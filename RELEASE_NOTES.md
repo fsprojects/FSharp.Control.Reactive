@@ -1,3 +1,6 @@
+### New in 3.1.1 - (Released 2015/02/12)
+* Additional signature fixes to accept F# functions rather than `Func` #51
+
 ### New in 3.1.0 - (Released 2015/02/12)
 * Fixed signature of `Observable.create` to better fit F#. #56
 * Marked `ObservableBuilder.Return` and `ObservableBuilder.ReturnFrom` as `Obsolete` as users should use `Yield` and `YieldFrom`, which allow for multiple results. #53
