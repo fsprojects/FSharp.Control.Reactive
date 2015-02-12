@@ -523,7 +523,7 @@ module Observable =
 
     /// Returns an empty Observable sequence
     let emptyWitness<'T>(witness:'T) :IObservable<'T> =
-             Observable.Empty( witness )
+        Observable.Empty( witness )
 
 
     /// Determines whether two sequences are equal by comparing the elements pairwise.
@@ -561,14 +561,14 @@ module Observable =
 
 
     /// Filters the observable elements of a sequence based on a predicate 
-    let filter  (predicate:'T->bool) (source:IObservable<'T>) = 
-        Observable.Where( source, predicate )
+    let filter  predicate (source: IObservable<'T>) = 
+        Observable.Where( source, Func<_,_> predicate )
 
 
     /// Filters the observable elements of a sequence based on a predicate by 
     /// incorporating the element's index
-    let filteri (predicate:'T->int->bool) (source:IObservable<'T>)  = 
-        Observable.Where( source, predicate )
+    let filteri predicate (source: IObservable<'T>)  = 
+        Observable.Where( source, Func<_,_> predicate )
 
 
     /// Invokes a specified action after the source observable sequence
@@ -717,7 +717,7 @@ module Observable =
 
     /// Generates an observable sequence by running a state-driven and temporal loop producing the sequence's elements.
     let generateTimeSpan ( initialState:'State )( condition )( iterate )( resultMap )( genTime ) : IObservable<'Result> =
-        Observable.Generate( initialState, condition, iterate, Func<'State,'Result>resultMap, Func<'State,TimeSpan>genTime )
+        Observable.Generate( initialState, Func<_,_> condition, Func<_,_> iterate, Func<'State,'Result> resultMap, Func<'State,TimeSpan> genTime )
 
 
     /// Returns an enumerator that enumerates all values of the observable sequence.
@@ -998,32 +998,32 @@ module Observable =
     /// Returns an enumerable sequence whose enumeration returns the latest observed element in the source observable sequence.
     /// Enumerators on the resulting sequence will never produce the same element repeatedly, 
     /// and will block until the next element becomes available.
-    let latest source = 
+    let latest source =
         Observable.Latest( source )
 
 
     /// Returns an observable sequence containing a int64 that represents 
     /// the total number of elements in an observable sequence 
-    let longCount source = 
+    let longCount source =
         Observable.LongCount(source)
 
 
     /// Returns an observable sequence containing an int that represents how many elements 
     /// in the specified observable sequence satisfy a condition.
-    let longCountSatisfy predicate source = 
-        Observable.LongCount(source, predicate)    
+    let longCountSatisfy predicate source =
+        Observable.LongCount(source, Func<_,_> predicate)
 
 
     /// Maps the given observable with the given function
-    let map f source = Observable.Select(source, Func<_,_>(f))   
+    let map f source = Observable.Select(source, Func<_,_>(f))
 
 
     /// Maps the given observable with the given function and the 
     /// index of the element
     let mapi (f:int -> 'Source -> 'Result) (source:IObservable<'Source>) =
-        source 
+        source
         |> Observable.scan ( fun (i,_) x -> (i+1,Some(x))) (-1,None)
-        |> Observable.map 
+        |> Observable.map
             (   function
                 | i, Some(x) -> f i x
                 | _, None    -> invalidOp "Invalid state"   )
