@@ -403,8 +403,8 @@ module Observable =
 
     ///  Creates an observable sequence from a specified Subscribe method implementation.
     let create subscribe =
+        let subscribe observer = Action (subscribe observer)
         Observable.Create(Func<IObserver<'Result>,Action> subscribe)
-
 
     /// Creates an observable sequence from a specified Subscribe method implementation.
     let createWithDisposable subscribe =
