@@ -1,3 +1,6 @@
+### New in 3.1.2 - (Released 2015/04/03)
+* Remove unnecessary signatures for Observable.Create and add test to demonstrate use.
+
 ### New in 3.1.1 - (Released 2015/02/12)
 * Additional signature fixes to accept F# functions rather than `Func` #51
 

@@ -402,15 +402,6 @@ module Observable =
     let countSatisfy predicate source = 
         Observable.Count( source, Func<_,_> predicate )
 
-    ///  Creates an observable sequence from a specified Subscribe method implementation.
-    let create subscribe =
-        let subscribe observer = Action (subscribe observer)
-        Observable.Create(Func<IObserver<'Result>,Action> subscribe)
-
-    /// Creates an observable sequence from a specified Subscribe method implementation.
-    let createWithDisposable subscribe =
-        Observable.Create(Func<IObserver<'Result>,IDisposable> subscribe)
-
 
     /// Returns the elements of the specified sequence or the type parameter's default value 
     /// in a singleton sequence if the sequence is empty.

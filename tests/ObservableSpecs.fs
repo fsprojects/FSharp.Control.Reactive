@@ -485,3 +485,17 @@ let ``timestampOn uses timestamps from the supplied scheduler``() =
     Assert.That(result.[0].Timestamp, Is.EqualTo firstNotificationAt)
     Assert.That(result.[1].Timestamp, Is.EqualTo secondNotificationAt)
 
+
+open FSharp.Control.Reactive.Observable
+
+[<Test>]
+let ``Observable.Create should support a simple observable returning fun () -> ()``() =
+    let obs =
+        Observable.Create(fun (o : IObserver<_>) ->
+            o.OnNext("xxx")
+            o.OnCompleted()
+            ignore)
+
+    use x = obs.Subscribe(fun result -> Assert.That(result, Is.EqualTo "xxx"))
+    ()
+
