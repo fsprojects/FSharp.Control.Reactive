@@ -7,6 +7,9 @@ open Builders
 open NUnit.Framework
 open Microsoft.Reactive.Testing
 open System.Reactive.Subjects
+open System.Reactive.Concurrency
+open FSharp.Control.Reactive.Observable
+
 
 let ``should be`` expectedNext expectedError expectedCompleted (observable:'a IObservable) =
     let next = ref 0
@@ -485,9 +488,6 @@ let ``timestampOn uses timestamps from the supplied scheduler``() =
     Assert.That(result.[0].Timestamp, Is.EqualTo firstNotificationAt)
     Assert.That(result.[1].Timestamp, Is.EqualTo secondNotificationAt)
 
-
-open FSharp.Control.Reactive.Observable
-
 [<Test>]
 let ``Observable.Create should support a simple observable returning fun () -> ()``() =
     let obs =
@@ -499,3 +499,22 @@ let ``Observable.Create should support a simple observable returning fun () -> (
     use x = obs.Subscribe(fun result -> Assert.That(result, Is.EqualTo "xxx"))
     ()
 
+[<Test>]
+let ``Observable.subscribeOn should run subscription on another thread`` () =
+    let expected  = "Hello World"
+    let scheduler = new TestScheduler()
+    let result    = ResizeArray()
+    let oneSecond = TimeSpan.FromSeconds(1.).Ticks
+    let obs =
+        Observable.Create(fun (o : IObserver<_>) ->
+            scheduler.Schedule(Action(fun () -> o.OnNext(expected)))
+            )
+    use x = obs
+            |> Observable.subscribeOn(scheduler)
+            |> Observable.subscribe(result.Add)
+    Assert.IsTrue(result |> Seq.isEmpty)
+
+    scheduler.AdvanceBy(oneSecond)
+    Assert.That(result.[0], Is.EqualTo expected)
+    ()
+    

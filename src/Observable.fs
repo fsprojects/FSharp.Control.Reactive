@@ -1469,7 +1469,14 @@ module Observable =
     /// on the specified scheduler. This operation is not commonly used;  This only performs 
     /// the side-effects of subscription and unsubscription on the specified scheduler.
     ///  In order to invoke observer callbacks on a scheduler, use 'observeOn'
-    let subscribeOn (context:Threading.SynchronizationContext) (source:IObservable<'Source>) : IObservable<'Source> =
+    let subscribeOn (scheduler:Reactive.Concurrency.IScheduler) (source:IObservable<'Source>) : IObservable<'Source> =
+        Observable.SubscribeOn( source, scheduler )
+
+    /// Wraps the source sequence in order to run its subscription and unsubscription logic 
+    /// on the specified SynchronizationContext. This operation is not commonly used;  This only performs 
+    /// the side-effects of subscription and unsubscription on the specified scheduler.
+    ///  In order to invoke observer callbacks on a scheduler, use 'observeOn'
+    let subscribeOnContext (context:Threading.SynchronizationContext) (source:IObservable<'Source>) : IObservable<'Source> =
         Observable.SubscribeOn( source, context )
 
 
