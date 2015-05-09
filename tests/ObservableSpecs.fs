@@ -518,3 +518,35 @@ let ``Observable.subscribeOn should run subscription on another thread`` () =
     Assert.That(result.[0], Is.EqualTo expected)
     ()
     
+[<Test>]
+let ``FlatMapAsync should take F# async workflows and flatmap them to observables``() =
+    let expected = "<head>fake header</head>"
+    let fakeHttpRequest _ =
+        async {  return expected }
+    let result    = ResizeArray()
+    let subject = new Subject<string>()
+
+    use mapper = subject 
+                    |> Observable.flatmapAsync fakeHttpRequest
+                    |> Observable.subscribe result.Add
+
+    Assert.That(result.Count, Is.EqualTo 0)
+
+    subject.OnNext("www.google.com")
+    subject.OnNext("www.microsoft.com")
+    subject.OnNext("www.apple.com")
+    
+    System.Threading.Thread.Sleep 100
+    // HACK: Yes this is using a Thread.Sleep. This is a problem in the current version of Rx 
+    // interoping with other concurrency models. James World has a great Stackoverflow post
+    // on the problems with this : http://stackoverflow.com/a/28236216
+    // Dave Sexton has made a pull request to try to resolve these issues: 
+    // https://github.com/Reactive-Extensions/Rx.NET/pull/65
+    //
+    // It looks like this will be in the next version of Rx to allow use of TestScheduler
+    // but for now we live with this hack
+
+    Assert.That(result.Count, Is.EqualTo 3)
+    Assert.That(result.[0], Is.EqualTo expected)
+    Assert.That(result.[1], Is.EqualTo expected)
+    Assert.That(result.[2], Is.EqualTo expected)
