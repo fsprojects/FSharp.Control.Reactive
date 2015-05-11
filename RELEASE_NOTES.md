@@ -3,7 +3,7 @@
   * Renamed `subscribeOn` to `subscribeOnContext` to maintain consistency with other, similar functions
   * Added `subscribeOn` that takes an `IScheduler`
   * Added test for `subscribeOn`
-* Added fromAsync, liftAsync, and flatmapAsync
+* Added ofAsync, liftAsync, and flatmapAsync
 
 ### New in 3.1.2 - (Released 2015/04/03)
 * Remove unnecessary signatures for Observable.Create and add test to demonstrate use.
