@@ -615,13 +615,13 @@ module Observable =
         Observable.SelectMany( source, Func<'Source,Threading.Tasks.Task<'Result>> map ) 
 
     ///Turns an F# async workflow into an observable
-    let fromAsync asyncOperation = 
+    let ofAsync asyncOperation = 
         Observable.FromAsync
             (fun (token : Threading.CancellationToken) -> Async.StartAsTask(asyncOperation,cancellationToken = token))
 
     ///Helper function for turning async workflows into observables
     let liftAsync asyncOperation =         
-        asyncOperation >> fromAsync
+        asyncOperation >> ofAsync
 
     /// Projects each element of an observable sequence to a async workflow and merges all of the async worksflow results into one observable sequence.
     let flatmapAsync asyncOperation (source : IObservable<'Source>) = 
