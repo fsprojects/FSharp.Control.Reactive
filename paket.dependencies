@@ -5,10 +5,7 @@ nuget SourceLink.Fake
 nuget Nuget.CommandLine
 nuget FSharp.Core ~> 3.1.2
 nuget Rx-Experimental ~> 2.2.5
-nuget Rx-Main ~> 2.2.5
-nuget Rx-PlatformServices ~> 2.2.5
 nuget Rx-Testing ~> 2.2.5
 nuget NUnit 
 nuget NUnit.Runners 
 nuget FSharp.Formatting
-nuget FSharp.Compiler.Service
