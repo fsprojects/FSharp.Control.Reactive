@@ -6,6 +6,7 @@ open System.Threading
 open System.Reactive
 open System.Reactive.Linq
 open System.Reactive.Concurrency
+open System.Reactive.Disposables
 
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
@@ -1878,3 +1879,10 @@ module Observable =
                    ( first         : IObservable<'Source1>               ) : IObservable<'Result> =
         Observable.Zip(first, second, Func<_,_,_> resultSelector )
  
+
+ module Disposables = 
+     /// Returns an IDisposable that disposes all the underlying disposables
+     let compose (disposables: #seq<IDisposable>) =
+         Disposable.Create(fun _ -> 
+             disposables 
+             |> Seq.iter(fun x -> x.Dispose()))
