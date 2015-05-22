@@ -1,4 +1,4 @@
-### New in 3.2.1 - (Released TBD)
+### New in 3.3.0 - (Released TBD)
 * Added `Disposables` module with a `compose` function that will creates a new `IDisposable` that will dispose the sequence of provided `IDisposable`s.
 
 ### New in 3.2.0 - (Released 2015/05/16)
