@@ -1,4 +1,7 @@
-### New in 3.2.0 - (Released 2015/05/10)
+### New in 3.2.1 - (Released TBD)
+* Added `Disposables` module with a `compose` function that will creates a new `IDisposable` that will dispose the sequence of provided `IDisposable`s.
+
+### New in 3.2.0 - (Released 2015/05/16)
 * Bug fix: `subscribeOn` should take an `IScheduler`
   * Renamed `subscribeOn` to `subscribeOnContext` to maintain consistency with other, similar functions
   * Added `subscribeOn` that takes an `IScheduler`
