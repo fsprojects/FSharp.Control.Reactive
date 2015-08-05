@@ -943,8 +943,10 @@ module Observable =
     let intervalOn (scheduler : IScheduler) period = 
         Observable.Interval( period, scheduler )
 
-    /// Determines whether the given observable is empty 
-    let isEmpty source = source = Observable.Empty()
+    /// IsEmpty returns an Observable that emits true if and only if the 
+    /// source Observable completes without emitting any items. 
+    let isEmpty source = 
+        Observable.IsEmpty source
 
 
     /// Invokes an action for each element in the observable sequence, and propagates all observer 
