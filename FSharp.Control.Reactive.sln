@@ -1,9 +1,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Control.Reactive", "src\FSharp.Control.Reactive.fsproj", "{ED23F688-C0D0-4102-93D5-0D832633F66D}"
-EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Control.Reactive.Tests", "tests\FSharp.Control.Reactive.Tests.fsproj", "{A8EBB4A5-80ED-43D5-8D7D-6A0F4E228C2F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{8961FBE9-1BE3-4A44-9610-5B4386DC5848}"
@@ -40,20 +38,28 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "img", "img", "{5EB1DFE0-EC6
 		docs\files\img\logo.png = docs\files\img\logo.png
 	EndProjectSection
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Control.Reactive", "src\FSharp.Control.Reactive\FSharp.Control.Reactive.fsproj", "{ED23F688-C0D0-4102-93D5-0D832633F66D}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Control.Reactive.Testing", "src\FSharp.Control.Reactive.Testing\FSharp.Control.Reactive.Testing.fsproj", "{90047B0A-413D-49E4-A3F3-B3719F4F52D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{ED23F688-C0D0-4102-93D5-0D832633F66D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ED23F688-C0D0-4102-93D5-0D832633F66D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ED23F688-C0D0-4102-93D5-0D832633F66D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ED23F688-C0D0-4102-93D5-0D832633F66D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A8EBB4A5-80ED-43D5-8D7D-6A0F4E228C2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A8EBB4A5-80ED-43D5-8D7D-6A0F4E228C2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8EBB4A5-80ED-43D5-8D7D-6A0F4E228C2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8EBB4A5-80ED-43D5-8D7D-6A0F4E228C2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED23F688-C0D0-4102-93D5-0D832633F66D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED23F688-C0D0-4102-93D5-0D832633F66D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED23F688-C0D0-4102-93D5-0D832633F66D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED23F688-C0D0-4102-93D5-0D832633F66D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90047B0A-413D-49E4-A3F3-B3719F4F52D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90047B0A-413D-49E4-A3F3-B3719F4F52D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90047B0A-413D-49E4-A3F3-B3719F4F52D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90047B0A-413D-49E4-A3F3-B3719F4F52D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
