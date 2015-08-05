@@ -18,7 +18,7 @@ open Builders
 FSharp.Control.Reactive
 ===================
 
-Documentation
+FSharp.Control.Reactive provides F#-style modules for working with the [Reactive Extensions (Rx)](https://rx.codeplex.com/) as a set of extensions to the built-in `Observable` module. The library includes `observe` and `rxquery` computation expressions, as well.
 
 <div class="row">
   <div class="span1"></div>

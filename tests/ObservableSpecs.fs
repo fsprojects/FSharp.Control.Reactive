@@ -5,6 +5,11 @@ open System.Reactive.Linq
 open FSharp.Control.Reactive
 open Builders
 open NUnit.Framework
+open Microsoft.Reactive.Testing
+open System.Reactive.Subjects
+open System.Reactive.Concurrency
+open FSharp.Control.Reactive.Observable
+
 
 open Microsoft.Reactive.Testing
 open FSharp.Reactive.Tests.ReactiveTesting
@@ -72,7 +77,7 @@ let ``When subscribing to an event, only OnNext should be fired once.``() =
 let ``When subscribing to an observable that fires an exception using the ObservableBuilder, only OnError should be fired``() =
     let builder = observe {
         failwith "Test"
-        return 1 }
+        yield 1 }
     builder |> ``should be`` 0 true false
 
 [<Test>]
@@ -87,7 +92,7 @@ let ``When zip is defined with the applicative, it should match the result of Ob
     let expected = ref (0,0)
 
     (zip a b).Subscribe(fun x -> actual := x) |> ignore
-    (Observable.zip a b tuple).Subscribe(fun x -> expected := x) |> ignore
+    (Observable.zip a b).Subscribe(fun x -> expected := x) |> ignore
 
     Assert.That(!actual, Is.EqualTo (!expected))
 
@@ -102,10 +107,59 @@ let ``Test should show the stack overflow is fixed with Rx 2 beta``() =
     Assert.DoesNotThrow(TestDelegate(fun () -> test()))
 
 [<Test>]
-let ``Zipping two observable sequences of different types creates a single zipped observable`` =
+let ``RxQueryBuilder.Head can return first item`` () =
+    let test = observe {
+        yield 1
+        yield 2
+        yield 3
+        yield 4 }
+
+    let query = rxquery {
+        for x in test do
+        head }
+
+    query |> Observable.subscribe (fun x -> Assert.AreEqual(1, x)) |> ignore
+
+[<Test>]
+let ``RxQueryBuilder.ExactlyOne can returns only one item`` () =
+    let test = observe { yield 1 }
+
+    let query = rxquery {
+        for x in test do
+        exactlyOne }
+
+    query |> Observable.subscribe (fun x -> Assert.AreEqual(1, x)) |> ignore
+
+[<Test>]
+let ``RxQueryBuilder.ExactlyOne throws when source contains more than one item`` () =
+    let test = observe {
+        yield 1
+        yield 2 }
+
+    let query = rxquery {
+        for x in test do
+        exactlyOne }
+
+    Observable.subscribeWithError
+        (fun _ -> Assert.Fail("ExactlyOne should throw when source contains more than one element"))
+        (fun _ -> Assert.Pass())
+        query |> ignore
+
+[<Test>]
+let ``Zipping two observable sequences of different types creates a single zipped observable``() =
     let obs1 = Observable.Return 1
     let obs2 = Observable.Return "A"
-    let zipped = Observable.zip obs1 obs2 tuple
+    let zipped = Observable.zip obs1 obs2
+    let result = zipped |> Observable.First
+    let expected = ( 1, "A" )
+
+    Assert.That(result, Is.EqualTo expected)
+
+[<Test>]
+let ``ZipWith on two observable sequences of different types creates a single zipped observable``() =
+    let obs1 = Observable.Return 1
+    let obs2 = Observable.Return "A"
+    let zipped = Observable.zipWith tuple obs1 obs2
     let result = zipped |> Observable.First
     let expected = ( 1, "A" )
 
@@ -113,254 +167,389 @@ let ``Zipping two observable sequences of different types creates a single zippe
 
 
 [<Test>]
-let ``Select Select1``() = 
-    let scheduler = new TestScheduler()
-    
-    let xs = 
-        [| RxRecording(180L, RxNext 5)
-           RxRecording(210L, RxNext 4)
-           RxRecording(240L, RxNext 3)
-           RxRecording(290L, RxNext 2)
-           RxRecording(350L, RxNext 1)
-           RxRecording(400L, RxCompleted) |]
-        |> scheduler.createHotObservable
-    
-    let res = 
-        scheduler.start (fun () -> 
-            xs
-            |> Observable.map (fun x -> x + 1)
-            |> Observable.map (fun x -> x - 2))
-    
-    res.Messages.AssertEqual( 
-                              RxRecording(210L, RxNext(4 + 1 - 2)), RxRecording(240L, RxNext(3 + 1 - 2)), RxRecording(290L, RxNext(2 + 1 - 2)), RxRecording(350L, RxNext(1 + 1 - 2)), RxRecording(400L, RxCompleted))
-    xs.Subscriptions.AssertEqual( 
-                                  CompletedSubscription(200L, 400L))
-[<Test>]
-let ``Select Select1-2``() = 
-    let scheduler = new TestScheduler()
-    
-    let xs = 
-        [| RxRecording(180L, RxNext 5)
-           RxRecording(210L, RxNext 4)
-           RxRecording(240L, RxNext 3)
-           RxRecording(290L, RxNext 2)
-           RxRecording(350L, RxNext 1)
-           RxRecording(400L, RxCompleted) |]
-        |> scheduler.createHotObservable
-    
-    let res =  scheduler.controlledStart (fun () -> 
-        xs
-        |> Observable.map (fun x -> x + 1)
-        |> Observable.map (fun x -> x - 2))
+let ``distinctKey uses the key function to decide whether an element has been seen before``() =
+    let result   = ResizeArray()
+    let obs      = Observable.ofSeq [ (1,3); (2,5); (2,7); (1,6); (3,5) ]
+    let expected = [ (1,3); (2,5); (3,5) ]
+    obs |> Observable.distinctKey fst
+        |> Observable.subscribe(result.Add)
+        |> ignore
 
-    res.Messages.AssertEqual( 
-                              RxRecording(210L, RxNext(4 + 1 - 2)), 
-                              RxRecording(240L, RxNext(3 + 1 - 2)), 
-                              RxRecording(290L, RxNext(2 + 1 - 2)), 
-                              RxRecording(350L, RxNext(1 + 1 - 2)), 
-                              RxRecording(400L, RxCompleted))
-    xs.Subscriptions.AssertEqual( CompletedSubscription(200L, 400L)) // to do remove extension method
-
+    Assert.That(result, Is.EqualTo expected)
 
 [<Test>]
-let OneShotTimer_TimeSpan_Zero() = 
-    let scheduler = new TestScheduler()
-    let res = scheduler.start (fun () -> Observable.timerSpanWithScheduler scheduler (TimeSpan.FromTicks(0L)))
-    res.Messages.AssertEqual([| onNext 201L 0L
-                                onCompleted 201L |])
+let ``distinctKeyCompare uses the key function and the comparer to decide whether an element has been seen before``() =
+    let comparer = { new System.Collections.Generic.IEqualityComparer<int> with
+                        member x.Equals(a,b)    = a % 2 = b % 2
+                        member x.GetHashCode(a) = a % 2 } // Equivalence based on odd or even
+    let result   = ResizeArray()
+    let obs      = Observable.ofSeq [ (1,3); (2,5); (2,7); (1,6); (3,5) ]
+    let expected = [ (1,3); (2,5) ]
+    obs |> Observable.distinctKeyCompare fst comparer
+        |> Observable.subscribe(result.Add)
+        |> ignore
+
+    Assert.That(result, Is.EqualTo expected)
 
 [<Test>]
-let Where_Where4() = 
-    let scheduler = new TestScheduler()
-    
-    let xs = 
-        [| onNext 110L 1
-           onNext 180L 2
-           onNext 230L 3
-           onNext 270L 4
-           onNext 340L 5
-           onNext 380L 6
-           onNext 390L 7
-           onCompleted 400L |]
-        |> scheduler.createHotObservable
-    
-    let res = 
-        scheduler.start (fun () -> 
-            xs
-            |> Observable.filteri (fun i x -> i >= 1)
-            |> Observable.filteri (fun i x -> i < 2))
-    
-    res.Messages
-    |> Seq.seqEqual [| onNext 270L 4
-                       onNext 340L 5
-                       onCompleted 400L |]
-    |> Assert.IsTrue
-    res.Messages
-    |> Seq.seqEqual [| onNext 270L 4
-                       onNext 340L 5
-                       onCompleted 400L |]
-    |> Assert.IsTrue
-    xs.Subscriptions.AssertEqual(CompletedSubscription(200L, 400L))
+let ``distinctUntilChangedKey uses the key function to decide whether an element has been seen before``() =
+    let result   = ResizeArray()
+    let obs      = Observable.ofSeq [ (1,3); (2,5); (2,7); (1,6); (3,5) ]
+    let expected = [ (1,3); (2,5); (1,6); (3,5) ]
+    obs |> Observable.distinctUntilChangedKey fst
+        |> Observable.subscribe(result.Add)
+        |> ignore
+
+    Assert.That(result, Is.EqualTo expected)
 
 [<Test>]
-let Where_Where42() = 
-    let scheduler = new TestScheduler()
-    
-    let test a (b:RxMessage<_>) = RxNext(b)
+let ``distinctUntilChangedKeyCompare uses the key function and the comparer to decide whether an element has been seen before``() =
+    let comparer = { new System.Collections.Generic.IEqualityComparer<int> with
+                        member x.Equals(a,b)    = a % 2 = b % 2
+                        member x.GetHashCode(a) = a % 2 }  // Equivalence based on odd or even
+    let result   = ResizeArray()
+    let obs      = Observable.ofSeq [ (1,3); (2,5); (2,7); (1,6); (3,5) ]
+    let expected = [ (1,3); (2,5); (1,6) ]
+    obs |> Observable.distinctUntilChangedKeyCompare fst comparer
+        |> Observable.subscribe(result.Add)
+        |> ignore
 
+    Assert.That(result, Is.EqualTo expected)
 
-    let z = test 0 (RxNext  4)
-        
-    let xs = 
-        [| RxRecording(110L, (RxNext 1))
-           RxRecording(180L, (RxNext 2))
-           RxRecording(230L, (RxNext 3))
-           RxRecording(270L, (RxNext 4))
-           RxRecording(340L, (RxNext 5))
-           RxRecording(380L, (RxNext 6))
-           RxRecording(390L, (RxNext 7))
-           RxRecording(400L, RxCompleted) |]
-        |> scheduler.createHotObservable
-    
-    let res = 
-        scheduler.start (fun () -> 
-            xs
-            |> Observable.filteri (fun i x -> i >= 1)
-            |> Observable.filteri (fun i x -> i < 2))
-    
-    res.Messages
-    |> Seq.seqEqual [| RxRecording( 270L, (RxNext  4))
-                       RxRecording( 340L, (RxNext  5))
-                       RxRecording( 400L , RxCompleted)|]
-    |> Assert.IsTrue
-    res.Messages
-    |> Seq.seqEqual [| RxRecording(  270L, (RxNext  4))
-                       RxRecording(  340L, (RxNext  5))
-                       RxRecording(  400L, RxCompleted)|]
-    |> Assert.IsTrue
-    xs.Subscriptions.AssertEqual(CompletedSubscription(200L, 400L))
+[<Test>]
+let ``ofSeqOn enumerates its sequence on the specified scheduler``() =
+    let result    = ResizeArray()
+    let items     = [ 1; 2; 3]
+    let scheduler = TestScheduler()
+
+    let obs       = items |> Observable.ofSeqOn scheduler
+    obs |> Observable.subscribe(result.Add)
+        |> ignore
+
+    Assert.That(result, Is.Empty)
+    scheduler.Start()
+    Assert.That(result, Is.EqualTo items)
+
+[<Test>]
+let ``intervalOn produces a value at the specified rate on the supplied scheduler``() =
+    let result    = ResizeArray()
+    let scheduler = TestScheduler()
+    let oneSecond = TimeSpan.FromSeconds(1.).Ticks
+
+    let obs = Observable.intervalOn scheduler (TimeSpan.FromSeconds(2.))
+    obs |> Observable.subscribe(result.Add)
+        |> ignore
+
+    Assert.That(result, Is.Empty)
+    scheduler.AdvanceBy oneSecond; Assert.That(result, Is.Empty)
+    scheduler.AdvanceBy oneSecond; Assert.That(result, Has.Count.EqualTo 1)
+    scheduler.AdvanceBy oneSecond; Assert.That(result, Has.Count.EqualTo 1)
+    scheduler.AdvanceBy oneSecond; Assert.That(result, Has.Count.EqualTo 2)
+
+[<Test>]
+let ``throttleOn produces a value at the specified rate on the supplied scheduler``() =
+    let result    = ResizeArray()
+    use obs       = new Subject<int>()
+    let scheduler = TestScheduler()
+    let oneSecond = TimeSpan.FromSeconds(1.).Ticks
+
+    obs |> Observable.throttleOn scheduler (TimeSpan.FromSeconds(2.))
+        |> Observable.subscribe(result.Add)
+        |> ignore
+
+    obs.OnNext(1);                 Assert.That(result, Is.Empty)
+    scheduler.AdvanceBy oneSecond; Assert.That(result, Is.Empty)
+    scheduler.AdvanceBy oneSecond
+    Assert.That(result, Is.EqualTo [1] )
+
+    obs.OnNext(2)
+    scheduler.AdvanceBy oneSecond; Assert.That(result, Is.EqualTo [1] )
+    obs.OnNext(3)
+    scheduler.AdvanceBy oneSecond; Assert.That(result, Is.EqualTo [1] )
+    scheduler.AdvanceBy oneSecond; Assert.That(result, Is.EqualTo [1; 3] )
+
+[<Test>]
+let ``combineLatest calls map function with pairs of latest values``() =
+    let result   = ResizeArray()
+    use obs1     = new Subject<int>()
+    use obs2     = new Subject<int>()
+    let map (x, y)  = x + (y / 2)
+    Observable.combineLatest obs1 obs2
+        |> Observable.map map
+        |> Observable.subscribe(result.Add)
+        |> ignore
+
+    Assert.That(result, Is.Empty)
+    obs1.OnNext 1
+    Assert.That(result, Is.Empty)
+    obs1.OnNext 2
+    Assert.That(result, Is.Empty)
+    obs2.OnNext 10
+    Assert.That(result, Is.EqualTo [ 7 ] )
+    obs2.OnNext 20
+    Assert.That(result, Is.EqualTo [ 7; 12 ] )
+    obs1.OnNext 3
+    Assert.That(result, Is.EqualTo [ 7; 12; 13 ] )
+
+[<Test>]
+let ``combineLatestArray produces arrays of latest values``() =
+    let result   = ResizeArray()
+    use obs1     = new Subject<int>()
+    use obs2     = new Subject<int>()
+    Observable.combineLatestArray [| obs1; obs2 |]
+        |> Observable.subscribe(result.Add)
+        |> ignore
+
+    Assert.That(result, Is.Empty)
+    obs1.OnNext 1
+    Assert.That(result, Is.Empty)
+    obs1.OnNext 2
+    Assert.That(result, Is.Empty)
+    obs2.OnNext 10
+    Assert.That(result, Is.EqualTo [ [| 2; 10 |] ] )
+    obs2.OnNext 20
+    Assert.That(result, Is.EqualTo [ [| 2; 10 |]; [| 2; 20 |] ] )
+    obs1.OnNext 3
+    Assert.That(result, Is.EqualTo [ [| 2; 10 |]; [| 2; 20 |]; [| 3; 20 |] ] )
+
+[<Test>]
+let ``combineLatestSeq produces lists of latest values``() =
+    let result   = ResizeArray()
+    use obs1     = new Subject<int>()
+    use obs2     = new Subject<int>()
+    let sources  = [ obs1 :> IObservable<_>; obs2 :> IObservable<_>] |> Seq.ofList
+    Observable.combineLatestSeq sources
+        |> Observable.subscribe(result.Add)
+        |> ignore
+
+    Assert.That(result, Is.Empty)
+    obs1.OnNext 1
+    Assert.That(result, Is.Empty)
+    obs1.OnNext 2
+    Assert.That(result, Is.Empty)
+    obs2.OnNext 10
+    Assert.That(result, Is.EqualTo [ [2; 10] ] )
+    obs2.OnNext 20
+    Assert.That(result, Is.EqualTo [ [2; 10]; [2; 20] ] )
+    obs1.OnNext 3
+    Assert.That(result, Is.EqualTo [ [2; 10]; [2; 20]; [3; 20] ] )
+
+[<Test>]
+let ``combineLatestSeqMap applies map function to latest values``() =
+    let result   = ResizeArray()
+    use obs1     = new Subject<int>()
+    use obs2     = new Subject<int>()
+    let sources  = [ obs1 :> IObservable<_>; obs2 :> IObservable<_>] |> Seq.ofList
+    let map xs   = xs |> Seq.sum
+    Observable.combineLatestSeqMap map sources
+        |> Observable.subscribe(result.Add)
+        |> ignore
+
+    Assert.That(result, Is.Empty)
+    obs1.OnNext 1
+    Assert.That(result, Is.Empty)
+    obs1.OnNext 2
+    Assert.That(result, Is.Empty)
+    obs2.OnNext 10
+    Assert.That(result, Is.EqualTo [ 12 ] )
+    obs2.OnNext 20
+    Assert.That(result, Is.EqualTo [ 12; 22 ] )
+    obs1.OnNext 3
+    Assert.That(result, Is.EqualTo [ 12; 22; 23 ] )
+
+[<Test>]
+let ``replay replays all notifications upon subscription``() =
+    let result   = ResizeArray()
+    use subject  = new Subject<int>()
+
+    let obs = subject |> Observable.replay
+    obs |> Observable.connect
+        |> ignore
+
+    subject.OnNext 1
+    subject.OnNext 2
+    subject.OnNext 3
+
+    obs |> Observable.subscribe(result.Add)
+        |> ignore
+
+    Assert.That(result, Is.EqualTo [ 1; 2; 3 ] )
+    subject.OnNext 4
+    Assert.That(result, Is.EqualTo [ 1; 2; 3; 4 ] )
 
 
 [<Test>]
-let Select_SelectorThrows() = 
-    let scheduler = new TestScheduler()
-    let invoked = ref 0
-    
-    let xs = 
-        [| OnNext(180L, 1)
-           OnNext(210L, 2)
-           OnNext(240L, 3)
-           OnNext(290L, 4)
-           OnNext(350L, 5)
-           OnCompleted(400L)
-           OnNext(410L, -1)
-           OnCompleted(420L)
-           OnError(430L, new Exception()) |]
-        |> scheduler.createHotObservable
-    
-    let ex = new Exception()
-    let doneFinally = ref false
-    
-    let res = 
-        scheduler.start (fun () -> 
-            xs
-            |> Observable.finallyDo (fun () -> doneFinally := true)
-            |> Observable.map (fun x -> 
-                   incr invoked
-                   if (!invoked = 3) then raise (ex)
-                   x + 1))
-    res.Messages
-    |> Seq.seqEqual [| OnNext(210L, 3)
-                       OnNext(240L, 4)
-                       OnError(290L, ex) |]
-    |> Assert.IsTrue
-    Assert.IsTrue(!doneFinally)
-    xs.Subscriptions.AssertEqual(CompletedSubscription(200L, 290L))
-    Assert.AreEqual(3, !invoked)
+let ``replayBuffer replays only the required count of notifications upon subscription``() =
+    let result   = ResizeArray()
+    use subject  = new Subject<int>()
+
+    let obs = subject |> Observable.replayBuffer 2
+    obs |> Observable.connect
+        |> ignore
+
+    subject.OnNext 1
+    subject.OnNext 2
+    subject.OnNext 3
+
+    obs |> Observable.subscribe(result.Add)
+        |> ignore
+
+    Assert.That(result, Is.EqualTo [ 2; 3 ] )
+    subject.OnNext 4
+    Assert.That(result, Is.EqualTo [ 2; 3; 4 ] )
 
 [<Test>]
-let Select_SelectorThrowsCS() = 
-    let scheduler = new TestScheduler()
-    let invoked = ref 0
-    
-    let xs = 
-        [| OnNext(180L, 1)
-           OnNext(210L, 2)
-           OnNext(240L, 3)
-           OnNext(290L, 4)
-           OnNext(350L, 5)
-           OnCompleted(400L)
-           OnNext(410L, -1)
-           OnCompleted(420L)
-           OnError(430L, new Exception()) |]
-        |> scheduler.createHotObservable
-    
-    let ex = new Exception()
-    
-    let res = 
-        scheduler.start (fun () -> 
-            xs |> Observable.map (fun x -> 
-                      invoked := (!invoked) + 1
-                      if (!invoked = 3) then raise (ex)
-                      x + 1))
+let ``replayWindowOn replays only the required time range of notifications upon subscription``() =
+    let oneSecond = TimeSpan.FromSeconds(1.).Ticks
+    let result    = ResizeArray()
+    use subject  = new Subject<int>()
+    let scheduler = TestScheduler()
 
-    res.Messages
-    |> Seq.seqEqual [| OnNext(210L, 3)
-                       OnNext(240L, 4)
-                       OnError(290L, ex) |]
-    |> Assert.IsTrue
-    xs.Subscriptions.AssertEqual(CompletedSubscription(200L, 290L))
-    Assert.AreEqual(3, !invoked)
+    let obs = subject |> Observable.replayWindowOn scheduler (TimeSpan.FromSeconds(3.))
+    obs |> Observable.connect
+        |> ignore
+
+    scheduler.AdvanceBy(oneSecond); subject.OnNext 1
+    scheduler.AdvanceBy(oneSecond); subject.OnNext 2
+    scheduler.AdvanceBy(oneSecond); subject.OnNext 3
+    scheduler.AdvanceBy(oneSecond); subject.OnNext 4
+    scheduler.AdvanceBy(oneSecond)
+
+    obs |> Observable.subscribe(result.Add)
+        |> ignore
+
+    scheduler.Start()
+    Assert.That(result, Is.EqualTo [ 2; 3; 4 ] )
 
 [<Test>]
-let SelectWithIndex_Completed() = 
-    let scheduler = new TestScheduler()
-    let invoked = ref 0
-    
-    let xs = 
-        scheduler.createHotObservable ([| OnNext(180L, 5)
-                                          OnNext(210L, 4)
-                                          OnNext(240L, 3)
-                                          OnNext(290L, 2)
-                                          OnNext(350L, 1)
-                                          OnCompleted(400L)
-                                          OnNext(410L, -1)
-                                          OnCompleted(420L)
-                                          OnError(430L, new System.Exception()) |])
-    
-    let res = 
-        scheduler.start (fun () -> 
-            xs |> Observable.mapi (fun index x -> 
-                      incr invoked
-                      (x + 1) + (index * 10)))
-    
-    res.Messages
-    |> Seq.seqEqual [| OnNext(210L, 5)
-                       OnNext(240L, 14)
-                       OnNext(290L, 23)
-                       OnNext(350L, 32)
-                       OnCompleted(400L) |]
-    |> Assert.IsTrue
-    xs.Subscriptions.AssertEqual(CompletedSubscription(200L, 400L))
-    Assert.AreEqual(4, !invoked)
+let ``replayBufferWindowOn replays only the required time range of notifications upon subscription``() =
+    let oneSecond = TimeSpan.FromSeconds(1.).Ticks
+    let result    = ResizeArray()
+    use subject  = new Subject<int>()
+    let scheduler = TestScheduler()
+
+    let obs = subject |> Observable.replayBufferWindowOn scheduler 4 (TimeSpan.FromSeconds(3.))
+    obs |> Observable.connect
+        |> ignore
+
+    scheduler.AdvanceBy(oneSecond); subject.OnNext 1
+    scheduler.AdvanceBy(oneSecond); subject.OnNext 2
+    scheduler.AdvanceBy(oneSecond); subject.OnNext 3
+    scheduler.AdvanceBy(oneSecond); subject.OnNext 4
+    scheduler.AdvanceBy(oneSecond)
+
+    obs |> Observable.subscribe(result.Add)
+        |> ignore
+
+    scheduler.Start()
+    Assert.That(result, Is.EqualTo [ 2; 3; 4 ] )
 
 [<Test>]
-let ``Sequence equal tests``() = 
-    let (||>>) f g (x, y) = g (f x y)
-    let testSeqEquality expectedResult = Seq.forall (Seq.seqEqual ||>> ((=) expectedResult)) >> Assert.IsTrue
-    let a = [| 1; 2 |]
-    let a1 = [| 1; 2 |]
-    let b = [| 1; 2; 3 |]
-    let b1 = [| 1; 2; 3 |]
-    [| (a, b)
-       (b, a) |]
-    |> testSeqEquality false
-    [| (a, a)
-       (a, a1)
-       (a1, a)
-       (b, b)
-       (b, b1)
-       (b1, b) |]
-    |> testSeqEquality true
+let ``replayBufferWindowOn replays only the required count of notifications upon subscription``() =
+    let oneSecond = TimeSpan.FromSeconds(1.).Ticks
+    let result    = ResizeArray()
+    use subject  = new Subject<int>()
+    let scheduler = TestScheduler()
 
+    let obs = subject |> Observable.replayBufferWindowOn scheduler 2 (TimeSpan.FromSeconds(3.))
+    obs |> Observable.connect
+        |> ignore
 
+    scheduler.AdvanceBy(oneSecond); subject.OnNext 1
+    scheduler.AdvanceBy(oneSecond); subject.OnNext 2
+    scheduler.AdvanceBy(oneSecond); subject.OnNext 3
+    scheduler.AdvanceBy(oneSecond); subject.OnNext 4
+    scheduler.AdvanceBy(oneSecond)
+
+    obs |> Observable.subscribe(result.Add)
+        |> ignore
+
+    scheduler.Start()
+    Assert.That(result, Is.EqualTo [ 3; 4 ] )
+
+[<Test>]
+let ``timestampOn uses timestamps from the supplied scheduler``() =
+    let oneSecond = TimeSpan.FromSeconds(1.).Ticks
+    let result    = ResizeArray()
+    use subject   = new Subject<int>()
+    let scheduler = TestScheduler()
+
+    let obs = subject |> Observable.materialize
+                      |> Observable.timestampOn scheduler
+                      |> Observable.subscribe(result.Add)
+                      |> ignore
+
+    scheduler.AdvanceBy(oneSecond)
+    let firstNotificationAt = scheduler.Now
+    subject.OnNext 1
+
+    scheduler.AdvanceBy(oneSecond)
+    let secondNotificationAt = scheduler.Now
+    subject.OnNext 2
+
+    Assert.That(result, Has.Count.EqualTo 2)
+    Assert.That(result.[0].Timestamp, Is.EqualTo firstNotificationAt)
+    Assert.That(result.[1].Timestamp, Is.EqualTo secondNotificationAt)
+
+[<Test>]
+let ``Observable.Create should support a simple observable returning fun () -> ()``() =
+    let obs =
+        Observable.Create(fun (o : IObserver<_>) ->
+            o.OnNext("xxx")
+            o.OnCompleted()
+            ignore)
+
+    use x = obs.Subscribe(fun result -> Assert.That(result, Is.EqualTo "xxx"))
+    ()
+
+[<Test>]
+let ``Observable.subscribeOn should run subscription on another thread`` () =
+    let expected  = "Hello World"
+    let scheduler = new TestScheduler()
+    let result    = ResizeArray()
+    let oneSecond = TimeSpan.FromSeconds(1.).Ticks
+    let obs =
+        Observable.Create(fun (o : IObserver<_>) ->
+            scheduler.Schedule(Action(fun () -> o.OnNext(expected)))
+            )
+    use x = obs
+            |> Observable.subscribeOn(scheduler)
+            |> Observable.subscribe(result.Add)
+    Assert.IsTrue(result |> Seq.isEmpty)
+
+    scheduler.AdvanceBy(oneSecond)
+    Assert.That(result.[0], Is.EqualTo expected)
+    ()
+
+[<Test>]
+let ``FlatMapAsync should take F# async workflows and flatmap them to observables``() =
+    let expected = "<head>fake header</head>"
+    let fakeHttpRequest _ =
+        async {  return expected }
+    let result    = ResizeArray()
+    let subject = new Subject<string>()
+
+    use mapper = subject
+                    |> Observable.flatmapAsync fakeHttpRequest
+                    |> Observable.subscribe result.Add
+
+    Assert.That(result.Count, Is.EqualTo 0)
+
+    subject.OnNext("www.google.com")
+    subject.OnNext("www.microsoft.com")
+    subject.OnNext("www.apple.com")
+
+    System.Threading.Thread.Sleep 100
+    // HACK: Yes this is using a Thread.Sleep. This is a problem in the current version of Rx
+    // interoping with other concurrency models. James World has a great Stackoverflow post
+    // on the problems with this : http://stackoverflow.com/a/28236216
+    // Dave Sexton has made a pull request to try to resolve these issues:
+    // https://github.com/Reactive-Extensions/Rx.NET/pull/65
+    //
+    // It looks like this will be in the next version of Rx to allow use of TestScheduler
+    // but for now we live with this hack
+
+    Assert.That(result.Count, Is.EqualTo 3)
+    Assert.That(result.[0], Is.EqualTo expected)
+    Assert.That(result.[1], Is.EqualTo expected)
+    Assert.That(result.[2], Is.EqualTo expected)

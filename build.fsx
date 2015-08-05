@@ -3,7 +3,7 @@
 // --------------------------------------------------------------------------------------
 
 #I "packages/FAKE/tools"
-#r "Nuget.Core.dll"
+#r "NuGet.Core.dll"
 #r "FakeLib.dll"
 open System
 open System.IO
@@ -69,14 +69,10 @@ let release = parseReleaseNotes (IO.File.ReadAllLines "RELEASE_NOTES.md")
 let isAppVeyorBuild = environVar "APPVEYOR" <> null
 let nugetVersion = 
     if isAppVeyorBuild then
-        let versionParts = release.NugetVersion.Split([|'-'|])
-        let version = versionParts.[0]
-        let bugFixIndex = version.LastIndexOf('.')
-        let tempVersion = version.Substring(0, bugFixIndex)
-        // Split version string if it is suffixed with something like "-beta"
-        if versionParts.Length > 1 then
-            sprintf "%s.%s-%s" tempVersion buildVersion versionParts.[1]
-        else sprintf "%s.%s" tempVersion buildVersion
+        // If the `release.NugetVersion` contains a preview release, just append the `buildVersion`.
+        if release.NugetVersion.Contains("-") then
+            sprintf "%s%s" release.NugetVersion buildVersion
+        else sprintf "%s.%s" release.NugetVersion buildVersion
     else release.NugetVersion
 
 // Generate assembly info files with the right version & up-to-date information
@@ -121,12 +117,15 @@ Target "CopyLicense" (fun _ ->
 // Run the unit tests using test runner
 
 Target "RunTests" (fun _ ->
-    !! testAssemblies
-    |> NUnit (fun p -> 
-        { p with 
-            DisableShadowCopy = true
-            TimeOut = TimeSpan.FromMinutes 20.
-            OutputFile = "TestResults.xml" })
+    try
+        !! testAssemblies
+        |> NUnit (fun p ->
+            { p with
+                DisableShadowCopy = true
+                TimeOut = TimeSpan.FromMinutes 20.
+                OutputFile = "bin/TestResults.xml" })
+    finally
+        AppVeyor.UploadTestResultsXml AppVeyor.TestResultsType.NUnit "bin"
 )
 
 #if MONO
@@ -161,15 +160,16 @@ Target "NuGet" (fun _ ->
             Project = project
             Summary = summary
             Description = description
-            Version = nugetVersion
+            Version = release.NugetVersion
             ReleaseNotes = String.Join(Environment.NewLine, release.Notes)
             Tags = tags
             OutputPath = "bin"
             AccessKey = getBuildParamOrDefault "nugetkey" ""
             Publish = hasBuildParam "nugetkey"
-            Dependencies = [ "Rx-Core", GetPackageVersion "packages" "Rx-Core"
+            Dependencies = [ "FSharp.Core"  , GetPackageVersion "packages" "FSharp.Core"
+                             "Rx-Core"      , GetPackageVersion "packages" "Rx-Core"
                              "Rx-Interfaces", GetPackageVersion "packages" "Rx-Interfaces"
-                             "Rx-Linq", GetPackageVersion "packages" "Rx-Linq" ]
+                             "Rx-Linq"      , GetPackageVersion "packages" "Rx-Linq" ]
             Files = [ (@"..\bin\FSharp.Control.Reactive.dll", Some "lib/net40", None)
                       (@"..\bin\FSharp.Control.Reactive.xml", Some "lib/net40", None)
                       (@"..\bin\FSharp.Control.Reactive.pdb", Some "lib/net40", None) ] })
@@ -201,17 +201,17 @@ Target "ReleaseDocs" (fun _ ->
 
     CopyRecursive "docs/output" tempDocsDir true |> tracefn "%A"
     StageAll tempDocsDir
-    Commit tempDocsDir (sprintf "Update generated documentation for version %s" nugetVersion)
+    Commit tempDocsDir (sprintf "Update generated documentation for version %s" release.NugetVersion)
     Branches.push tempDocsDir
 )
 
 Target "Release" (fun _ ->
     StageAll ""
-    Commit "" (sprintf "Bump version to %s" nugetVersion)
+    Commit "" (sprintf "Bump version to %s" release.NugetVersion)
     Branches.push ""
 
-    Branches.tag "" nugetVersion
-    Branches.pushTag "" "origin" nugetVersion
+    Branches.tag "" release.NugetVersion
+    Branches.pushTag "" "origin" release.NugetVersion
 )
 
 Target "BuildPackage" DoNothing
@@ -229,8 +229,8 @@ Target "All" DoNothing
   ==> "RunTests"
   ==> "All"
   =?> ("GenerateReferenceDocs",isLocalBuild && not isMono)
-  =?> ("GenerateDocs",isLocalBuild && not isMono)
-  =?> ("ReleaseDocs",isLocalBuild && not isMono)
+  =?> ("GenerateDocs"         ,isLocalBuild && not isMono)
+  =?> ("ReleaseDocs"          ,isLocalBuild && not isMono)
 
 "All" 
 #if MONO
