@@ -15,7 +15,7 @@ let ``should be`` expectedNext expectedError expectedCompleted (observable:'a IO
     let next = ref 0
     let error = ref false
     let completed = ref false
-
+    
     let subscription = observable |> Observable.subscribeWithCallbacks (fun _ -> incr next) (fun _ -> error := true) (fun () -> completed := true)
 
     Assert.That(!next, Is.EqualTo expectedNext)
@@ -536,8 +536,8 @@ let ``FlatMapAsync should take F# async workflows and flatmap them to observable
     subject.OnNext("www.google.com")
     subject.OnNext("www.microsoft.com")
     subject.OnNext("www.apple.com")
-    
-    System.Threading.Thread.Sleep 100
+
+    Async.Sleep(100) |> Async.RunSynchronously
     // HACK: Yes this is using a Thread.Sleep. This is a problem in the current version of Rx 
     // interoping with other concurrency models. James World has a great Stackoverflow post
     // on the problems with this : http://stackoverflow.com/a/28236216
