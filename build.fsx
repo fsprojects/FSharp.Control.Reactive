@@ -166,10 +166,10 @@ Target "NuGet" (fun _ ->
             OutputPath = "bin"
             AccessKey = getBuildParamOrDefault "nugetkey" ""
             Publish = hasBuildParam "nugetkey"
-            Dependencies = [ "FSharp.Core", GetPackageVersion "packages" "FSharp.Core"
-                             "Rx-Core", GetPackageVersion "packages" "Rx-Core"
+            Dependencies = [ "FSharp.Core"  , GetPackageVersion "packages" "FSharp.Core"
+                             "Rx-Core"      , GetPackageVersion "packages" "Rx-Core"
                              "Rx-Interfaces", GetPackageVersion "packages" "Rx-Interfaces"
-                             "Rx-Linq", GetPackageVersion "packages" "Rx-Linq" ]
+                             "Rx-Linq"      , GetPackageVersion "packages" "Rx-Linq" ]
             Files = [ (@"..\bin\FSharp.Control.Reactive.dll", Some "lib/net40", None)
                       (@"..\bin\FSharp.Control.Reactive.xml", Some "lib/net40", None)
                       (@"..\bin\FSharp.Control.Reactive.pdb", Some "lib/net40", None) ] })
@@ -229,8 +229,8 @@ Target "All" DoNothing
   ==> "RunTests"
   ==> "All"
   =?> ("GenerateReferenceDocs",isLocalBuild && not isMono)
-  =?> ("GenerateDocs",isLocalBuild && not isMono)
-  =?> ("ReleaseDocs",isLocalBuild && not isMono)
+  =?> ("GenerateDocs"         ,isLocalBuild && not isMono)
+  =?> ("ReleaseDocs"          ,isLocalBuild && not isMono)
 
 "All" 
 #if MONO
