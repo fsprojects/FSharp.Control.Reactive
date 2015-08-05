@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Control.Reactive", "src\FSharp.Control.Reactive.fsproj", "{ED23F688-C0D0-4102-93D5-0D832633F66D}"
 EndProject
@@ -40,6 +40,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "img", "img", "{5EB1DFE0-EC6
 		docs\files\img\logo.png = docs\files\img\logo.png
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1C8DDC6C-C9CC-4349-AB08-B202F9D36065}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{A8EBB4A5-80ED-43D5-8D7D-6A0F4E228C2F} = {1C8DDC6C-C9CC-4349-AB08-B202F9D36065}
 		{5D1A5D8E-0DA2-47C6-B604-F059B740ABD4} = {E14EBCFE-FE32-46B2-876D-66D38AB53B1E}
 		{A10EE113-56C8-45E7-8970-B03F17AC3F8E} = {E14EBCFE-FE32-46B2-876D-66D38AB53B1E}
 		{AB2D0E6D-7335-44A6-9A7B-55C58C858279} = {A10EE113-56C8-45E7-8970-B03F17AC3F8E}
