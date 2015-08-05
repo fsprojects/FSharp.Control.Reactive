@@ -271,8 +271,9 @@ let ``combineLatest calls map function with pairs of latest values``() =
     let result   = ResizeArray()
     use obs1     = new Subject<int>()
     use obs2     = new Subject<int>()
-    let map x y  = x + (y / 2)
-    Observable.combineLatest map obs1 obs2
+    let map (x, y)  = x + (y / 2)
+    Observable.combineLatest obs1 obs2
+        |> Observable.map map
         |> Observable.subscribe(result.Add) 
         |> ignore
 
