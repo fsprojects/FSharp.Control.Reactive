@@ -560,7 +560,7 @@ module Observable =
     /// Filters the observable elements of a sequence based on a predicate by 
     /// incorporating the element's index
     let filteri predicate (source: IObservable<'T>)  = 
-        Observable.Where( source, Func<_,_> predicate )
+        Observable.Where( source, Func<_,_,_> (fun i x -> predicate x i) )
 
 
     /// Invokes a specified action after the source observable sequence
