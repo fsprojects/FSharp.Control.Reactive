@@ -10,5 +10,6 @@ nuget Rx-PlatformServices ~> 2.2.5
 nuget Rx-Testing ~> 2.2.5
 nuget NUnit 
 nuget NUnit.Runners 
+nuget FsCheck.NUnit
 nuget FSharp.Formatting
 nuget FSharp.Compiler.Service

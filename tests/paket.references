@@ -1,6 +1,7 @@
 FSharp.Core
 NUnit
 NUnit.Runners
+FsCheck.NUnit
 Rx-Core
 Rx-Experimental
 Rx-Interfaces
