@@ -5,6 +5,7 @@ open System.Reactive.Linq
 open FSharp.Control.Reactive
 open Builders
 open NUnit.Framework
+open FsCheck.NUnit
 open Microsoft.Reactive.Testing
 open System.Reactive.Subjects
 open System.Reactive.Concurrency
@@ -551,3 +552,33 @@ let ``FlatMapAsync should take F# async workflows and flatmap them to observable
     Assert.That(result.[0], Is.EqualTo expected)
     Assert.That(result.[1], Is.EqualTo expected)
     Assert.That(result.[2], Is.EqualTo expected)
+
+[<Property>]
+let ``Observable.mapi should be equivalent to Array.mapi`` (items : int array) =
+    items
+    |> Observable.ofSeq
+    |> Observable.mapi (fun i x -> (i, x))
+    |> Observable.toEnumerable
+    |> Seq.toArray
+    |> (=) (items |> Array.mapi (fun i x -> (i, x)))
+
+[<Property>]
+let ``filteri should be equivalent to mapi then filter`` (items : int array) =
+    let predicate i x = (i % 2 = 0) && (x > 0)
+
+    let filtered =
+        items
+        |> Observable.ofSeq
+        |> Observable.mapi (fun i x -> (i, x))
+        |> Observable.filter (fun (i, x) -> predicate i x)
+        |> Observable.map snd
+        |> Observable.toEnumerable
+        |> Seq.toArray
+
+    let filtered' =
+        Observable.ofSeq items
+        |> Observable.filteri predicate
+        |> Observable.toEnumerable
+        |> Seq.toArray
+    
+    filtered = filtered'
