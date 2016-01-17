@@ -154,6 +154,8 @@ Target "SourceLink" (fun _ ->
 // Build a NuGet package
 
 Target "NuGet" (fun _ ->
+    let profile259Bin = @"..\bin\profile259"
+    let profile259Lib = @"lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid10+xamarinios10+MonoTouch10" 
     NuGet (fun p -> 
         { p with   
             Authors = authors
@@ -172,7 +174,10 @@ Target "NuGet" (fun _ ->
                              "Rx-Linq"      , GetPackageVersion "packages" "Rx-Linq" ]
             Files = [ (@"..\bin\FSharp.Control.Reactive.dll", Some "lib/net40", None)
                       (@"..\bin\FSharp.Control.Reactive.xml", Some "lib/net40", None)
-                      (@"..\bin\FSharp.Control.Reactive.pdb", Some "lib/net40", None) ] })
+                      (@"..\bin\FSharp.Control.Reactive.pdb", Some "lib/net40", None)
+                      (profile259Bin + @"\FSharp.Control.Reactive.dll", Some profile259Lib, None)
+                      (profile259Bin + @"\FSharp.Control.Reactive.xml", Some profile259Lib, None)
+                      (profile259Bin + @"\FSharp.Control.Reactive.pdb", Some profile259Lib, None) ] })
         ("nuget/" + project + ".nuspec")
 )
 
