@@ -155,7 +155,7 @@ Target "SourceLink" (fun _ ->
 
 Target "NuGet" (fun _ ->
     let profile259Bin = @"..\bin\profile259"
-    let profile259Lib = @"lib/portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10" 
+    let profile259Lib = @"lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid10+xamarinios10+MonoTouch10" 
     NuGet (fun p -> 
         { p with   
             Authors = authors
