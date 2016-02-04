@@ -11,6 +11,8 @@ open Fake
 open Fake.Git
 open Fake.AssemblyInfoFile
 open Fake.ReleaseNotesHelper
+open Fake.Testing.NUnit3
+
 #if MONO
 #else
 #load "packages/SourceLink.Fake/tools/SourceLink.fsx"
@@ -119,11 +121,11 @@ Target "CopyLicense" (fun _ ->
 Target "RunTests" (fun _ ->
     try
         !! testAssemblies
-        |> NUnit (fun p ->
+        |> NUnit3 (fun (p:NUnit3Params) ->
             { p with
-                DisableShadowCopy = true
+                ShadowCopy = true
                 TimeOut = TimeSpan.FromMinutes 20.
-                OutputFile = "bin/TestResults.xml" })
+                OutputDir = "bin/TestResults.xml" })
     finally
         AppVeyor.UploadTestResultsXml AppVeyor.TestResultsType.NUnit "bin"
 )
@@ -141,7 +143,7 @@ Target "SourceLink" (fun _ ->
     |> Seq.iter (fun f ->
         let proj = VsProj.LoadRelease f
         logfn "source linking %s" proj.OutputFilePdb
-        let files = proj.Compiles -- "**/AssemblyInfo.fs"
+        let files = proj.Compiles -- "**/AssemblyInfo.fs"        
         repo.VerifyChecksums files
         proj.VerifyPdbChecksums files
         proj.CreateSrcSrv baseUrl repo.Revision (repo.Paths files)

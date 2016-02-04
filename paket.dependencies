@@ -1,6 +1,7 @@
 source http://nuget.org/api/v2
 
 nuget FAKE
+nuget FsCheck
 nuget SourceLink.Fake
 nuget Nuget.CommandLine
 nuget FSharp.Core ~> 4.0.0.1
@@ -10,6 +11,5 @@ nuget Rx-PlatformServices ~> 2.2.5
 nuget Rx-Testing ~> 2.2.5
 nuget NUnit 
 nuget NUnit.Runners 
-nuget FsCheck.NUnit
 nuget FSharp.Formatting
 nuget FSharp.Compiler.Service

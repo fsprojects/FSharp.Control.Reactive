@@ -1,7 +1,6 @@
 FSharp.Core
 NUnit
 NUnit.Runners
-FsCheck.NUnit
 Rx-Core
 Rx-Experimental
 Rx-Interfaces
@@ -10,3 +9,4 @@ Rx-Main
 Rx-PlatformServices
 Rx-Providers
 Rx-Testing
+FsCheck
