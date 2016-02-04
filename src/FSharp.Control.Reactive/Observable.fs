@@ -560,7 +560,7 @@ module Observable =
     /// Filters the observable elements of a sequence based on a predicate by 
     /// incorporating the element's index
     let filteri predicate (source: IObservable<'T>)  = 
-        Observable.Where( source, Func<_,_> predicate )
+        Observable.Where( source, Func<_,_,_> (fun i x -> predicate x i) )
 
 
     /// Invokes a specified action after the source observable sequence
@@ -1028,12 +1028,7 @@ module Observable =
     /// Maps the given observable with the given function and the 
     /// index of the element
     let mapi (f:int -> 'Source -> 'Result) (source:IObservable<'Source>) =
-        source
-        |> Observable.scan ( fun (i,_) x -> (i+1,Some(x))) (-1,None)
-        |> Observable.map
-            (   function
-                | i, Some(x) -> f i x
-                | _, None    -> invalidOp "Invalid state"   )
+        Observable.Select (source, Func<_,_,_> (fun i x -> f x i))
 
 
     /// Maps two observables to the specified function.

@@ -39,12 +39,6 @@
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">12</MinimumVisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\FSharp\Microsoft.Portable.FSharp.Targets" />
-  <ItemGroup>
-    <None Include="paket.references" />
-    <Compile Include="..\Observable.fs">
-      <Link>Observable.fs</Link>
-    </Compile>
-  </ItemGroup>
   <Choose>
     <When Condition="Exists('$(MSBuildExtensionsPath32)\..\Reference Assemblies\Microsoft\FSharp\.NETCore\$(TargetFSharpCoreVersion)\FSharp.Core.dll')">
       <ItemGroup>
@@ -56,15 +50,15 @@
       </ItemGroup>
     </When>
     <Otherwise>
-     <!-- Fall back to FSharp.Core from Nuget package if we cant find it in the canonical path (which can happen in
+      <!-- Fall back to FSharp.Core from Nuget package if we cant find it in the canonical path (which can happen in
      travis builds (https://github.com/travis-ci/travis-ci/issues/4650) -->
-       <ItemGroup>
-          <Reference Include="FSharp.Core">
-             <Name>FSharp.Core</Name>
-             <AssemblyName>FSharp.Core.dll</AssemblyName>
-             <HintPath>..\..\packages\FSharp.Core\lib\portable-net45+netcore45+wpa81+wp8\FSharp.Core.dll</HintPath>
-          </Reference>
-       </ItemGroup>
+      <ItemGroup>
+        <Reference Include="FSharp.Core">
+          <Name>FSharp.Core</Name>
+          <AssemblyName>FSharp.Core.dll</AssemblyName>
+          <HintPath>..\..\packages\FSharp.Core\lib\portable-net45+netcore45+wpa81+wp8\FSharp.Core.dll</HintPath>
+        </Reference>
+      </ItemGroup>
     </Otherwise>
   </Choose>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -74,6 +68,12 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <None Include="paket.references" />
+    <Compile Include="..\FSharp.Control.Reactive\Observable.fs">
+      <Link>Observable.fs</Link>
+    </Compile>
+  </ItemGroup>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETCore'">
       <ItemGroup>

@@ -174,9 +174,9 @@ Target "NuGet" (fun _ ->
                              "Rx-Core"      , GetPackageVersion "packages" "Rx-Core"
                              "Rx-Interfaces", GetPackageVersion "packages" "Rx-Interfaces"
                              "Rx-Linq"      , GetPackageVersion "packages" "Rx-Linq" ]
-            Files = [ (@"..\bin\FSharp.Control.Reactive.dll", Some "lib/net40", None)
-                      (@"..\bin\FSharp.Control.Reactive.xml", Some "lib/net40", None)
-                      (@"..\bin\FSharp.Control.Reactive.pdb", Some "lib/net40", None)
+            Files = [ (@"bin\FSharp.Control.Reactive.dll", Some "lib/net40", None)
+                      (@"bin\FSharp.Control.Reactive.xml", Some "lib/net40", None)
+                      (@"bin\FSharp.Control.Reactive.pdb", Some "lib/net40", None)
                       (profile259Bin + @"\FSharp.Control.Reactive.dll", Some profile259Lib, None)
                       (profile259Bin + @"\FSharp.Control.Reactive.xml", Some profile259Lib, None)
                       (profile259Bin + @"\FSharp.Control.Reactive.pdb", Some profile259Lib, None) ] })
