@@ -60,6 +60,9 @@ let gitHome = "git@github.com:fsprojects"
 let gitName = "FSharp.Control.Reactive"
 let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/fsprojects"
 
+let buildDir = "bin"
+
+
 // --------------------------------------------------------------------------------------
 // The rest of the file includes standard build steps 
 // --------------------------------------------------------------------------------------
@@ -156,35 +159,50 @@ Target "SourceLink" (fun _ ->
 // Build a NuGet package
 
 Target "NuGet" (fun _ ->
-    let profile259Bin = @"..\bin\profile259"
-    let profile259Lib = @"lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid10+xamarinios10+MonoTouch10" 
-    NuGet (fun p -> 
-        { p with   
-            Authors = authors
-            Project = project
-            Summary = summary
-            Description = description
+//    let profile259Bin = @"..\bin\profile259"
+//    let profile259Lib = @"lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid10+xamarinios10+MonoTouch10" 
+//    NuGet (fun p -> 
+//        { p with   
+//            Authors = authors
+//            Project = project
+//            Summary = summary
+//            Description = description
+//            Version = release.NugetVersion
+//            ReleaseNotes = String.Join(Environment.NewLine, release.Notes)
+//            Tags = tags
+//            OutputPath = "bin"
+//            AccessKey = getBuildParamOrDefault "nugetkey" ""
+//            Publish = hasBuildParam "nugetkey"
+//            Dependencies = [ "FSharp.Core"  , GetPackageVersion "packages" "FSharp.Core"
+//                             "Rx-Core"      , GetPackageVersion "packages" "Rx-Core"
+//                             "Rx-Interfaces", GetPackageVersion "packages" "Rx-Interfaces"
+//                             "Rx-Linq"      , GetPackageVersion "packages" "Rx-Linq" ]
+//            Files = [ (@"bin/FSharp.Control.Reactive.dll", Some "lib/net40", None)
+//                      (@"bin/FSharp.Control.Reactive.xml", Some "lib/net40", None)
+//                      (@"bin/FSharp.Control.Reactive.pdb", Some "lib/net40", None)
+//                      (profile259Bin + @"/FSharp.Control.Reactive.dll", Some profile259Lib, None)
+//                      (profile259Bin + @"/FSharp.Control.Reactive.xml", Some profile259Lib, None)
+//                      (profile259Bin + @"/FSharp.Control.Reactive.pdb", Some profile259Lib, None) ] })
+//        ("nuget/" + project + ".nuspec")
+
+    Paket.Pack (fun p -> 
+        { p with 
+            TemplateFile = "nuget/paket.template"
             Version = release.NugetVersion
-            ReleaseNotes = String.Join(Environment.NewLine, release.Notes)
-            Tags = tags
-            OutputPath = "bin"
-            AccessKey = getBuildParamOrDefault "nugetkey" ""
-            Publish = hasBuildParam "nugetkey"
-            Dependencies = [ "FSharp.Core"  , GetPackageVersion "packages" "FSharp.Core"
-                             "Rx-Core"      , GetPackageVersion "packages" "Rx-Core"
-                             "Rx-Interfaces", GetPackageVersion "packages" "Rx-Interfaces"
-                             "Rx-Linq"      , GetPackageVersion "packages" "Rx-Linq" ]
-            Files = [ (@"bin\FSharp.Control.Reactive.dll", Some "lib/net40", None)
-                      (@"bin\FSharp.Control.Reactive.xml", Some "lib/net40", None)
-                      (@"bin\FSharp.Control.Reactive.pdb", Some "lib/net40", None)
-                      (profile259Bin + @"\FSharp.Control.Reactive.dll", Some profile259Lib, None)
-                      (profile259Bin + @"\FSharp.Control.Reactive.xml", Some profile259Lib, None)
-                      (profile259Bin + @"\FSharp.Control.Reactive.pdb", Some profile259Lib, None) ] })
-        ("nuget/" + project + ".nuspec")
+            OutputPath = buildDir
+            ReleaseNotes = toLines release.Notes })
 )
 
 // --------------------------------------------------------------------------------------
 // Generate the documentation
+
+
+Target "PublishNuGet" (fun _ ->
+    Paket.Push (fun p -> 
+        { p with
+            WorkingDir = buildDir }) 
+)
+
 
 Target "GenerateReferenceDocs" (fun _ ->
     if not <| executeFSIWithArgs "docs/tools" "generate.fsx" ["--define:RELEASE"; "--define:REFERENCE"] [] then
@@ -246,6 +264,10 @@ Target "All" DoNothing
 #endif
   ==> "NuGet"
   ==> "BuildPackage"
+
+
+"NuGet"
+  ==> "PublishNuget"
 
 "CleanDocs"
   ==> "GenerateHelp"

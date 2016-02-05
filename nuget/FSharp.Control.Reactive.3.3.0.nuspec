@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>FSharp.Control.Reactive</id>
+    <version>3.3.0</version>
+    <authors>Ryan Riley, Steffen Forkmann, Jared Hester</authors>
+    <owners>Ryan Riley, Steffen Forkmann, Jared Hester</owners>
+    <language>en-US</language>
+    <projectUrl>https://github.com/fsprojects/FSharp.Control.Reactive</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/fsprojects/FSharp.Control.Reactive/master/docs/files/img/logo.png</iconUrl>
+    <licenseUrl>https://github.com/fsprojects/FSharp.Control.Reactive/raw/master/LICENSE.txt</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>A F#-friendly wrapper for the Reactive Extensions.</summary>
+    <description> A F#-friendly wrapper for the Reactive Extensions.</description>
+    <releaseNotes>Added `Disposables` module with a `compose` function that will creates a new `IDisposable` that will dispose the sequence of provided `IDisposable`s.</releaseNotes>
+    <copyright>Copyright 2012-2014</copyright>
+    <tags>F# fsharp reactive extensions rx</tags>
+    <dependencies><group><dependency id="FSharp.Core" version="4.0.0.1" />
+<dependency id="Rx-Core" version="2.2.5" />
+<dependency id="Rx-Interfaces" version="2.2.5" />
+<dependency id="Rx-Linq" version="2.2.5" /></group></dependencies>
+    <references></references>
+  </metadata>
+  <files><file src="bin/FSharp.Control.Reactive.dll" target="lib/net40" />
+<file src="bin/FSharp.Control.Reactive.xml" target="lib/net40" />
+<file src="bin/FSharp.Control.Reactive.pdb" target="lib/net40" />
+<file src="..\bin\profile259/FSharp.Control.Reactive.dll" target="lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid10+xamarinios10+MonoTouch10" />
+<file src="..\bin\profile259/FSharp.Control.Reactive.xml" target="lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid10+xamarinios10+MonoTouch10" />
+<file src="..\bin\profile259/FSharp.Control.Reactive.pdb" target="lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid10+xamarinios10+MonoTouch10" /></files>
+</package>
