@@ -748,7 +748,7 @@ module Observable =
     let groupByCompare ( keySelector  )
                         ( comparer    : IEqualityComparer<_> )
                         ( source      : IObservable<_>    ) : IObservable<IGroupedObservable<_,_>> =
-        Observable.GroupBy( source, Func<_,_> keySelector, keySelector )
+        Observable.GroupBy( source, Func<_,_> keySelector, comparer )
 
 
     /// Groups the elements of an observable sequence and selects the resulting elements by using a specified function.
