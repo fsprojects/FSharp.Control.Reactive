@@ -1,5 +1,6 @@
-### New in 3.3.0 - (Released TBD)
+### New in 3.3.0 - (Released 2016/03/05)
 * Added `Disposables` module with a `compose` function that will creates a new `IDisposable` that will dispose the sequence of provided `IDisposable`s.
+* Fix `groupByCompare` to actually use the provided `comparer`.
 
 ### New in 3.2.0 - (Released 2015/05/16)
 * Bug fix: `subscribeOn` should take an `IScheduler`
