@@ -1,5 +1,5 @@
 type file
-id FSharp.Compiler.Service
+id FSharp.Control.Reactive
 description
      A F#-friendly wrapper for the Reactive Extensions.
 authors
