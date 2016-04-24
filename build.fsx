@@ -141,17 +141,12 @@ Target "RunTests" (fun _ ->
 
 Target "SourceLink" (fun _ ->
     let baseUrl = sprintf "%s/%s/{0}/%%var2%%" gitRaw (project.ToLower())
-    use repo = new GitRepo(__SOURCE_DIRECTORY__)
+    let sourceIndex proj =
+        let p = VsProj.LoadRelease proj
+        let files = p.Compiles -- "**/AssemblyInfo.fs"
+        SourceLink.Index files p.OutputFilePdb __SOURCE_DIRECTORY__ baseUrl
     !! "src/**/*.fsproj"
-    |> Seq.iter (fun f ->
-        let proj = VsProj.LoadRelease f
-        logfn "source linking %s" proj.OutputFilePdb
-        let files = proj.Compiles -- "**/AssemblyInfo.fs"        
-        repo.VerifyChecksums files
-        proj.VerifyPdbChecksums files
-        proj.CreateSrcSrv baseUrl repo.Revision (repo.Paths files)
-        Pdbstr.exec proj.OutputFilePdb proj.OutputFilePdbSrcSrv
-    )
+    |> Seq.iter sourceIndex
 )
 #endif
 
@@ -159,35 +154,8 @@ Target "SourceLink" (fun _ ->
 // Build a NuGet package
 
 Target "NuGet" (fun _ ->
-//    let profile259Bin = @"..\bin\profile259"
-//    let profile259Lib = @"lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid10+xamarinios10+MonoTouch10" 
-//    NuGet (fun p -> 
-//        { p with   
-//            Authors = authors
-//            Project = project
-//            Summary = summary
-//            Description = description
-//            Version = release.NugetVersion
-//            ReleaseNotes = String.Join(Environment.NewLine, release.Notes)
-//            Tags = tags
-//            OutputPath = "bin"
-//            AccessKey = getBuildParamOrDefault "nugetkey" ""
-//            Publish = hasBuildParam "nugetkey"
-//            Dependencies = [ "FSharp.Core"  , GetPackageVersion "packages" "FSharp.Core"
-//                             "Rx-Core"      , GetPackageVersion "packages" "Rx-Core"
-//                             "Rx-Interfaces", GetPackageVersion "packages" "Rx-Interfaces"
-//                             "Rx-Linq"      , GetPackageVersion "packages" "Rx-Linq" ]
-//            Files = [ (@"bin/FSharp.Control.Reactive.dll", Some "lib/net40", None)
-//                      (@"bin/FSharp.Control.Reactive.xml", Some "lib/net40", None)
-//                      (@"bin/FSharp.Control.Reactive.pdb", Some "lib/net40", None)
-//                      (profile259Bin + @"/FSharp.Control.Reactive.dll", Some profile259Lib, None)
-//                      (profile259Bin + @"/FSharp.Control.Reactive.xml", Some profile259Lib, None)
-//                      (profile259Bin + @"/FSharp.Control.Reactive.pdb", Some profile259Lib, None) ] })
-//        ("nuget/" + project + ".nuspec")
-
     Paket.Pack (fun p -> 
         { p with 
-            TemplateFile = "nuget/paket.template"
             Version = release.NugetVersion
             OutputPath = buildDir
             ReleaseNotes = toLines release.Notes })
@@ -264,7 +232,6 @@ Target "All" DoNothing
 #endif
   ==> "NuGet"
   ==> "BuildPackage"
-
 
 "NuGet"
   ==> "PublishNuget"
