@@ -109,8 +109,12 @@ Target "CleanDocs" (fun _ ->
 // Build library & test project
 
 Target "Build" (fun _ ->
-    !! solutionFile
-    |> MSBuildRelease "" "Rebuild"
+    solutionFile
+    |> MSBuildHelper.build (fun defaults ->
+        { defaults with
+            Verbosity = Some Minimal
+            Targets = [ "Rebuild" ]
+            Properties = [ "Configuration", "Release" ] })
     |> ignore
 )
 
