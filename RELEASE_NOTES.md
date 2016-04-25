@@ -1,4 +1,5 @@
-### New in 3.5.0 - (TBD)
+### New in 3.4.1 - (TBD)
+* Restore .NET 4.0 build instead of .NET 4.5.
 
 ### New in 3.4.0 - (Released 2016/04/24)
 * .NET 4.5 and Profile259 builds available.
