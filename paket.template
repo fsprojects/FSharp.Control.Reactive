@@ -22,6 +22,9 @@ files
     ./bin/v4.0/FSharp.Control.Reactive.dll ==> lib/net40
     ./bin/v4.0/FSharp.Control.Reactive.XML ==> lib/net40
     ./bin/v4.0/FSharp.Control.Reactive.?db ==> lib/net40
+    ./bin/v4.5/FSharp.Control.Reactive.dll ==> lib/net45
+    ./bin/v4.5/FSharp.Control.Reactive.XML ==> lib/net45
+    ./bin/v4.5/FSharp.Control.Reactive.?db ==> lib/net45
     ./bin/profile259/FSharp.Control.Reactive.dll     ==> lib/profile259
     ./bin/profile259/FSharp.Control.Reactive.XML     ==> lib/profile259
     ./bin/profile259/FSharp.Control.Reactive.?db     ==> lib/profile259
