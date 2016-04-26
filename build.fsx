@@ -82,7 +82,7 @@ let nugetVersion =
 
 // Generate assembly info files with the right version & up-to-date information
 Target "AssemblyInfo" (fun _ ->
-  let fileName = "src/AssemblyInfo.fs"
+  let fileName = "src/FSharp.Control.Reactive/AssemblyInfo.fs"
   CreateFSharpAssemblyInfo fileName
       [ Attribute.Title project
         Attribute.Product project

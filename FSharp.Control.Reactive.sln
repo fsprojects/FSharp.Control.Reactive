@@ -45,9 +45,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "img", "img", "{5EB1DFE0-EC6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1C8DDC6C-C9CC-4349-AB08-B202F9D36065}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Control.Reactive.Profile259", "src\FSharp.Control.Reactive.Profile259\FSharp.Control.Reactive.Profile259.fsproj", "{62D8F232-59CE-4755-8851-65847DC310E3}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Control.Reactive.Profile259", "targets\FSharp.Control.Reactive.Profile259\FSharp.Control.Reactive.Profile259.fsproj", "{62D8F232-59CE-4755-8851-65847DC310E3}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Control.Reactive", "src\FSharp.Control.Reactive\FSharp.Control.Reactive.fsproj", "{ED23F688-C0D0-4102-93D5-0D832633F66D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "targets", "targets", "{84548CB8-41B3-4E22-AD1B-F78C4E3D3091}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Control.Reactive.Net40", "targets\FSharp.Control.Reactive.Net40\FSharp.Control.Reactive.Net40.fsproj", "{0E1CDEAB-FF72-46CB-A399-612A565A81D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +71,10 @@ Global
 		{ED23F688-C0D0-4102-93D5-0D832633F66D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED23F688-C0D0-4102-93D5-0D832633F66D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED23F688-C0D0-4102-93D5-0D832633F66D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E1CDEAB-FF72-46CB-A399-612A565A81D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E1CDEAB-FF72-46CB-A399-612A565A81D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E1CDEAB-FF72-46CB-A399-612A565A81D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E1CDEAB-FF72-46CB-A399-612A565A81D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,5 +86,7 @@ Global
 		{AB2D0E6D-7335-44A6-9A7B-55C58C858279} = {A10EE113-56C8-45E7-8970-B03F17AC3F8E}
 		{57CF7CB9-B2E3-406A-994D-1C85AD11A524} = {E14EBCFE-FE32-46B2-876D-66D38AB53B1E}
 		{5EB1DFE0-EC60-4031-87E9-771F3848A728} = {57CF7CB9-B2E3-406A-994D-1C85AD11A524}
+		{62D8F232-59CE-4755-8851-65847DC310E3} = {84548CB8-41B3-4E22-AD1B-F78C4E3D3091}
+		{0E1CDEAB-FF72-46CB-A399-612A565A81D7} = {84548CB8-41B3-4E22-AD1B-F78C4E3D3091}
 	EndGlobalSection
 EndGlobal
