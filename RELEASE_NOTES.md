@@ -1,4 +1,6 @@
-### New in 3.4.1 - (TBD)
+### New in 3.5.0 - (TBD)
+
+### New in 3.4.1 - (Released 2016/04/26)
 * Restore .NET 4.0 build instead of .NET 4.5.
 
 ### New in 3.4.0 - (Released 2016/04/24)
