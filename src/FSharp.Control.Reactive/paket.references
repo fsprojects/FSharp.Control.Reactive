@@ -1,5 +1,2 @@
 FSharp.Core
-Rx-Core
-Rx-Interfaces
-Rx-Linq
-Rx-Providers
+System.Reactive
