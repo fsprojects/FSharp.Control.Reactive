@@ -1,15 +1,14 @@
 source http://nuget.org/api/v2
 redirects on
+framework: auto-detect
 
 nuget FAKE
 nuget FsCheck
 nuget SourceLink.Fake
 nuget Nuget.CommandLine
 nuget FSharp.Core ~> 4.0.0.1
-nuget Rx-Experimental ~> 2.2.5
-nuget Rx-Main ~> 2.2.5
-nuget Rx-PlatformServices ~> 2.2.5
-nuget Rx-Testing ~> 2.2.5
+nuget System.Reactive ~> 3.0
+nuget Microsoft.Reactive.Testing
 nuget NUnit 
 nuget NUnit.Runners 
 nuget FSharp.Formatting

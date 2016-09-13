@@ -149,7 +149,7 @@ let ``Zipping two observable sequences of different types creates a single zippe
     let obs1 = Observable.Return 1
     let obs2 = Observable.Return "A"
     let zipped = Observable.zip obs1 obs2
-    let result = zipped |> Observable.First
+    let result = zipped |> Observable.Wait
     let expected = ( 1, "A" )
 
     Assert.That(result, Is.EqualTo expected)
@@ -159,7 +159,7 @@ let ``ZipWith on two observable sequences of different types creates a single zi
     let obs1 = Observable.Return 1
     let obs2 = Observable.Return "A"
     let zipped = Observable.zipWith tuple obs1 obs2
-    let result = zipped |> Observable.First
+    let result = zipped |> Observable.Wait
     let expected = ( 1, "A" )
 
     Assert.That(result, Is.EqualTo expected)
