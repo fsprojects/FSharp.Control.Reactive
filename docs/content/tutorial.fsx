@@ -26,10 +26,12 @@ Observable Module
 As a first, simple example, the built-in module does not include a `zip` operator, but FSharp.Control.Reactive fills in this gap:
 *)
 
-let obs1 = Observable.Return 1
-let obs2 = Observable.Return "A"
+let obs1 = Observable.single 1
+let obs2 = Observable.single "A"
+
 Observable.zip obs1 obs2
 |> Observable.subscribe (printfn "%A")
+|> ignore
 
 (**
 Computation Expressions
