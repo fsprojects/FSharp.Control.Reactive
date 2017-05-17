@@ -51,7 +51,7 @@ let tags = "F# fsharp reactive extensions rx"
 let solutionFile = "FSharp.Control.Reactive.sln"
 
 // Pattern specifying assemblies to be tested using NUnit
-let testAssemblies = "tests/**/bin/Release/*Tests*.dll"
+let testAssemblies = "tests/**/bin/Release/net45/*Tests*.dll"
 
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted 
