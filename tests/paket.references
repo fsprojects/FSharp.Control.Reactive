@@ -1,5 +1,3 @@
-System.Reactive
-
 group Test
 FSharp.Core
 NUnit

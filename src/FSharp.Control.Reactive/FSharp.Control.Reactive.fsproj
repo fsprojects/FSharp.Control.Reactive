@@ -15,7 +15,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FSharp.NET.Sdk" Version="1.0.*" PrivateAssets="All" />
-    <PackageReference Include="System.Reactive" Version="3.*" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

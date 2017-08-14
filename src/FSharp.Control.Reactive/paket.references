@@ -1,2 +1,3 @@
+group Main
 FSharp.Core
 System.Reactive

@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\FSharp.Control.Reactive/Fsharp.Control.Reactive.fsproj" />
+    <ProjectReference Include="..\src\FSharp.Control.Reactive\FSharp.Control.Reactive.fsproj" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

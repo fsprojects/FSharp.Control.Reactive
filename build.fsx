@@ -109,6 +109,8 @@ Target "CleanDocs" (fun _ ->
 // Build library & test project
 
 Target "Build" (fun _ ->
+    // We need to invoke restore in order to create the .NetCore obj files
+    MSBuildHelper.MSBuild "" "Restore" [] [solutionFile] |> ignore
     solutionFile
     |> MSBuildHelper.build (fun defaults ->
         { defaults with

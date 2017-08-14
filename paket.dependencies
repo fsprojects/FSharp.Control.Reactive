@@ -2,8 +2,9 @@ source http://nuget.org/api/v2
 redirects on
 framework: auto-detect
 
-nuget FSharp.Core ~> 4.0.0.1
-nuget System.Reactive ~> 3.0
+group Main
+    nuget FSharp.Core ~> 4.0.0.1
+    nuget System.Reactive ~> 3.0
 
 group Build
     source http://nuget.org/api/v2
