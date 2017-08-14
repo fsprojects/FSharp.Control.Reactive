@@ -1,6 +1,8 @@
+System.Reactive
+
+group Test
 FSharp.Core
 NUnit
 NUnit.Runners
-System.Reactive
 Microsoft.Reactive.Testing
 FsCheck

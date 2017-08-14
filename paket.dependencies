@@ -2,14 +2,21 @@ source http://nuget.org/api/v2
 redirects on
 framework: auto-detect
 
-nuget FAKE
-nuget FsCheck
-nuget SourceLink.Fake
-nuget Nuget.CommandLine
 nuget FSharp.Core ~> 4.0.0.1
 nuget System.Reactive ~> 3.0
-nuget Microsoft.Reactive.Testing
-nuget NUnit 
-nuget NUnit.Runners 
-nuget FSharp.Formatting
-nuget FSharp.Compiler.Service
+
+group Build
+    source http://nuget.org/api/v2
+    nuget FSharp.Formatting
+    nuget FSharp.Compiler.Service
+    nuget FAKE
+    nuget SourceLink.Fake
+    nuget Nuget.CommandLine
+
+group Test
+    source http://nuget.org/api/v2
+    nuget FSharp.Core 
+    nuget Microsoft.Reactive.Testing
+    nuget NUnit 
+    nuget NUnit.Runners 
+    nuget FsCheck

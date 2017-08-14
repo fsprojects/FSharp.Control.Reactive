@@ -42,4 +42,5 @@ test/
 tools/
 *.nupkg
 .paket/paket.exe
+.paket/Paket.Restore.targets
 AssemblyInfo.fs
