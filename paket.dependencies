@@ -15,7 +15,7 @@ group Build
 
 group Test
     source http://nuget.org/api/v2
-    nuget FSharp.Core 
+    nuget FSharp.Core ~> 4.0.0.1
     nuget Microsoft.Reactive.Testing
     nuget NUnit 
     nuget NUnit.Runners 

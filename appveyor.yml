@@ -4,5 +4,6 @@ build_script:
   - ps: .\build.cmd NuGet
 test: off
 version: '{build}'
+image: Visual Studio 2017
 artifacts:
   - path: bin\*.nupkg
