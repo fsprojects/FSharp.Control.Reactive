@@ -9,3 +9,5 @@ env:
 branches:
   except:
     - gh-pages
+
+dist: trusty # Precise doesn't install msbuild, but rather xbuild
