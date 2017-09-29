@@ -118,7 +118,8 @@ Target "RunTests" (fun _ ->
     try
         DotNetCli.Test(fun p ->
             { p with
-                Project = "tests"
+                WorkingDir = "bin"
+                Project = "../tests"
                 Configuration = "Release"
                 TimeOut = TimeSpan.FromMinutes 20. })
     finally
