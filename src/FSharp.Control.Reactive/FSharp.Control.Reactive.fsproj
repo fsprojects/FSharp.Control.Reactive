@@ -1,20 +1,11 @@
-<Project Sdk="FSharp.NET.Sdk;Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <TargetFrameworks>netstandard1.6;net45</TargetFrameworks>
-    <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
-    <RootNamespace>FSharp.Control.Reactive</RootNamespace>
-    <AssemblyName>FSharp.Control.Reactive</AssemblyName>
-    <Name>FSharp.Control.Reactive</Name>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <Version>3.5.0</Version>
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" Condition="Exists('AssemblyInfo.fs')" />
     <Compile Include="Observable.fs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="FSharp.NET.Sdk" Version="1.0.*" PrivateAssets="All" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

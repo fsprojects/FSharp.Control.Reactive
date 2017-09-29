@@ -1,18 +1,12 @@
-<Project Sdk="FSharp.NET.Sdk;Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <TargetFramework>net45</TargetFramework>
-    <PackageTargetFallback>portable-net45+win8+wp8+wpa81</PackageTargetFallback>
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" Condition="Exists('AssemblyInfo.fs')" />
     <Compile Include="ObservableSpecs.fs" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="FSharp.NET.Sdk" Version="1.0.*" PrivateAssets="All" />
-  </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\src\FSharp.Control.Reactive\FSharp.Control.Reactive.fsproj" />
   </ItemGroup>

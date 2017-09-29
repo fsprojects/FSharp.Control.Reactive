@@ -1,23 +1,26 @@
-source http://nuget.org/api/v2
-redirects on
-framework: auto-detect
+source http://api.nuget.org/v3/index.json
+redirects: on
+storage: none
 
-group Main
-    nuget FSharp.Core ~> 4.0.0.1
-    nuget System.Reactive ~> 3.0
+nuget FSharp.Core
+nuget System.Reactive ~> 3.0
 
 group Build
     source http://nuget.org/api/v2
+
     nuget FSharp.Formatting
     nuget FSharp.Compiler.Service
     nuget FAKE
-    nuget SourceLink.Fake
     nuget Nuget.CommandLine
 
 group Test
-    source http://nuget.org/api/v2
-    nuget FSharp.Core ~> 4.0.0.1
+    source http://api.nuget.org/v3/index.json
+    storage: none
+
+    nuget FSharp.Core
+    nuget Microsoft.NET.Test.Sdk
     nuget Microsoft.Reactive.Testing
-    nuget NUnit 
-    nuget NUnit.Runners 
+    nuget NUnit
+    nuget NUnit.Runners
+    nuget NUnit3TestAdapter
     nuget FsCheck
