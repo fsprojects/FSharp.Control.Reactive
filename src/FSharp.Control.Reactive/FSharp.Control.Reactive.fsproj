@@ -2,6 +2,8 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <Version>3.5.0</Version>
+    <Description>A F#-friendly wrapper for the Reactive Extensions.</Description>
+    <Authors>Ryan Riley, Steffen Forkmann, Jared Hester</Authors>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" Condition="Exists('AssemblyInfo.fs')" />

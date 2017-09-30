@@ -1,5 +1,4 @@
-type file
-id FSharp.Control.Reactive
+type project
 description
      A F#-friendly wrapper for the Reactive Extensions.
 authors
@@ -17,8 +16,4 @@ dependencies
     System.Reactive >= LOCKEDVERSION
 excludedependencies
     FSharp.Core
-files
-    ./bin/v4.5/FSharp.Control.Reactive.dll ==> lib/net45
-    ./bin/v4.5/FSharp.Control.Reactive.XML ==> lib/net45
-    ./bin/v4.5/FSharp.Control.Reactive.?db ==> lib/net45
 include-pdbs true

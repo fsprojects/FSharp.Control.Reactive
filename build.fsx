@@ -118,8 +118,7 @@ Target "RunTests" (fun _ ->
     try
         DotNetCli.Test(fun p ->
             { p with
-                WorkingDir = "bin"
-                Project = "../tests"
+                Project = "tests"
                 Configuration = "Release"
                 TimeOut = TimeSpan.FromMinutes 20. })
     finally
@@ -129,7 +128,7 @@ Target "RunTests" (fun _ ->
 // --------------------------------------------------------------------------------------
 // Build a NuGet package
 
-Target "NuGet" (fun _ ->
+Target "Pack" (fun _ ->
     Paket.Pack (fun p -> 
         { p with 
             Version = release.NugetVersion
@@ -137,16 +136,14 @@ Target "NuGet" (fun _ ->
             ReleaseNotes = toLines release.Notes })
 )
 
-// --------------------------------------------------------------------------------------
-// Generate the documentation
-
-
-Target "PublishNuGet" (fun _ ->
+Target "Push" (fun _ ->
     Paket.Push (fun p -> 
         { p with
             WorkingDir = buildDir }) 
 )
 
+// --------------------------------------------------------------------------------------
+// Generate the documentation
 
 Target "GenerateReferenceDocs" (fun _ ->
     if not <| executeFSIWithArgs "docs/tools" "generate.fsx" ["--define:RELEASE"; "--define:REFERENCE"] [] then
@@ -183,8 +180,6 @@ Target "Release" (fun _ ->
     Branches.pushTag "" "origin" release.NugetVersion
 )
 
-Target "BuildPackage" DoNothing
-
 // --------------------------------------------------------------------------------------
 // Run all targets by default. Invoke 'build <Target>' to override
 
@@ -202,11 +197,8 @@ Target "All" DoNothing
   =?> ("ReleaseDocs"          ,isLocalBuild && not isMono)
 
 "All" 
-  ==> "NuGet"
-  ==> "BuildPackage"
-
-"NuGet"
-  ==> "PublishNuget"
+  ==> "Pack"
+  ==> "Push"
 
 "CleanDocs"
   ==> "GenerateHelp"
@@ -216,7 +208,7 @@ Target "All" DoNothing
 "ReleaseDocs"
   ==> "Release"
 
-"BuildPackage"
+"Push"
   ==> "Release"
 
 RunTargetOrDefault "All"
