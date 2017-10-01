@@ -1,6 +1,6 @@
 group Test
+FSharp.Core
 NUnit
-NUnit.Runners
 NUnit3TestAdapter
 Microsoft.NET.Test.Sdk
 Microsoft.Reactive.Testing
