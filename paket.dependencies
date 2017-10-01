@@ -2,7 +2,6 @@ source http://api.nuget.org/v3/index.json
 redirects: on
 storage: none
 
-nuget FSharp.Core
 nuget System.Reactive ~> 3.0
 
 group Build
@@ -17,7 +16,6 @@ group Test
     source http://api.nuget.org/v3/index.json
     storage: none
 
-    nuget FSharp.Core
     nuget Microsoft.NET.Test.Sdk
     nuget Microsoft.Reactive.Testing
     nuget NUnit

@@ -1,5 +1,4 @@
 group Test
-FSharp.Core
 NUnit
 NUnit.Runners
 NUnit3TestAdapter

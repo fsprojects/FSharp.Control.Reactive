@@ -9,40 +9,13 @@ open System
 open System.IO
 open Fake 
 open Fake.Git
-open Fake.AssemblyInfoFile
 open Fake.ReleaseNotesHelper
-open Fake.Testing.NUnit3
 
 // --------------------------------------------------------------------------------------
 // Provide project-specific details below
 // --------------------------------------------------------------------------------------
 
-// Information about the project are used
-//  - for version and project name in generated AssemblyInfo file
-//  - by the generated NuGet package 
-//  - to run tests and to publish documentation on GitHub gh-pages
-//  - for documentation, you also need to edit info in "docs/tools/generate.fsx"
-
-// The name of the project 
-// (used by attributes in AssemblyInfo, name of a NuGet package and directory in 'src')
-let project = "FSharp.Control.Reactive"
-
-// Short summary of the project
-// (used as description in AssemblyInfo and as a short summary for NuGet package)
-let summary = "A F#-friendly wrapper for the Reactive Extensions."
-
-// Longer description of the project
-// (used as a description for NuGet package; line breaks are automatically cleaned up)
-let description = """
-  A F#-friendly wrapper for the Reactive Extensions."""
-// List of author names (for NuGet package)
-let authors = ["Ryan Riley"; "Steffen Forkmann"; "Jared Hester"]
-// Tags for your project (for NuGet package)
-let tags = "F# fsharp reactive extensions rx"
-
-// File system information 
-// (<solutionFile>.sln is built during the building process)
-let solutionFile = "FSharp.Control.Reactive.sln"
+let targetProject = "src/FSharp.Control.Reactive"
 
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted 
@@ -62,25 +35,15 @@ let buildDir = "bin"
 Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
 let (!!) includes = (!! includes).SetBaseDirectory __SOURCE_DIRECTORY__
 let release = parseReleaseNotes (IO.File.ReadAllLines "RELEASE_NOTES.md")
-let isAppVeyorBuild = environVar "APPVEYOR" <> null
-let nugetVersion = 
-    if isAppVeyorBuild then
-        // If the `release.NugetVersion` contains a preview release, just append the `buildVersion`.
-        if release.NugetVersion.Contains("-") then
-            sprintf "%s%s" release.NugetVersion buildVersion
-        else sprintf "%s.%s" release.NugetVersion buildVersion
-    else release.NugetVersion
+let isAppVeyorBuild = environVar "APPVEYOR" |> isNull |> not
+let isTaggedBuild = environVarOrDefault "APPVEYOR_REPO_TAG" "false" |> Boolean.Parse
+let versionSuffix =
+    if isTaggedBuild then ""
+    elif buildVersion = "LocalBuild" then "-LocalBuild"
+    else "-beta" + buildVersion
+let nugetVersion = release.NugetVersion + versionSuffix
 
 // Generate assembly info files with the right version & up-to-date information
-Target "AssemblyInfo" (fun _ ->
-  let fileName = "src/FSharp.Control.Reactive/AssemblyInfo.fs"
-  CreateFSharpAssemblyInfo fileName
-      [ Attribute.Title project
-        Attribute.Product project
-        Attribute.Description summary
-        Attribute.Version release.AssemblyVersion
-        Attribute.FileVersion release.AssemblyVersion ] )
-
 Target "BuildVersion" (fun _ ->
     Shell.Exec("appveyor", sprintf "UpdateBuild -Version \"%s\"" nugetVersion) |> ignore
 )
@@ -103,7 +66,7 @@ Target "Build" (fun _ ->
     // We need to invoke restore in order to create the .NetCore obj files
     DotNetCli.Build (fun defaults ->
         { defaults with
-            Project = solutionFile
+            Project = targetProject
             Configuration = "Release" })
 )
 
@@ -129,11 +92,24 @@ Target "RunTests" (fun _ ->
 // Build a NuGet package
 
 Target "Pack" (fun _ ->
-    Paket.Pack (fun p -> 
-        { p with 
-            Version = release.NugetVersion
+    (*
+    Paket.Pack (fun p ->
+        { p with
+            Version = nugetVersion
             OutputPath = buildDir
             ReleaseNotes = toLines release.Notes })
+    *)
+    DotNetCli.Pack (fun p ->
+        { p with
+            Project = targetProject
+            Configuration = "Release"
+            VersionSuffix = buildVersion
+            OutputPath = buildDir
+            AdditionalArgs =
+              [ "--no-build"
+                //"/p:ReleaseNotes=" + (toLines release.Notes)
+              ]
+        })
 )
 
 Target "Push" (fun _ ->
@@ -188,7 +164,6 @@ Target "All" DoNothing
 "Clean"
   =?> ("BuildVersion", isAppVeyorBuild)
   ==> "CopyLicense"
-  ==> "AssemblyInfo"
   ==> "Build"
   ==> "RunTests"
   ==> "All"
