@@ -1,7 +1,9 @@
+environment:
+  CLI_VERSION: 2.0.0
 init:
   - git config --global core.autocrlf input
 build_script:
-  - ps: .\build.cmd NuGet
+  - ps: .\build.cmd Pack
 test: off
 version: '{build}'
 image: Visual Studio 2017
