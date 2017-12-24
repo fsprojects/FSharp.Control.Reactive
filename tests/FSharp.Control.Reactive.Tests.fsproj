@@ -50,6 +50,8 @@
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
   <ItemGroup>
     <Compile Include="ObservableSpecs.fs" />
+    <Compile Include="SubjectSpecs.fs" />
+    <Compile Include="EmitsSpecs.fs" />
     <None Include="paket.references" />
     <Content Include="App.config" />
   </ItemGroup>
@@ -61,6 +63,11 @@
     <ProjectReference Include="..\src\FSharp.Control.Reactive\FSharp.Control.Reactive.fsproj">
       <Name>FSharp.Control.Reactive</Name>
       <Project>{ed23f688-c0d0-4102-93d5-0d832633f66d}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\src\FSharp.Control.Reactive.Testing\FSharp.Control.Reactive.Testing.fsproj">
+      <Name>FSharp.Control.Reactive.Testing</Name>
+      <Project>{be128b51-fad4-4431-a6c7-0fd08361a6bb}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

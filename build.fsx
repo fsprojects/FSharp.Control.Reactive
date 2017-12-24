@@ -31,7 +31,8 @@ open SourceLink
 
 // The name of the project 
 // (used by attributes in AssemblyInfo, name of a NuGet package and directory in 'src')
-let project = "FSharp.Control.Reactive"
+let projectSource = "FSharp.Control.Reactive"
+let projectTesting = "FSharp.Control.Reactive"
 
 // Short summary of the project
 // (used as description in AssemblyInfo and as a short summary for NuGet package)
@@ -82,13 +83,21 @@ let nugetVersion =
 
 // Generate assembly info files with the right version & up-to-date information
 Target "AssemblyInfo" (fun _ ->
-  let fileName = "src/FSharp.Control.Reactive/AssemblyInfo.fs"
-  CreateFSharpAssemblyInfo fileName
-      [ Attribute.Title project
-        Attribute.Product project
+  let source = "src/FSharp.Control.Reactive/AssemblyInfo.fs"
+  CreateFSharpAssemblyInfo source
+      [ Attribute.Title projectSource
+        Attribute.Product projectSource
         Attribute.Description summary
         Attribute.Version release.AssemblyVersion
-        Attribute.FileVersion release.AssemblyVersion ] )
+        Attribute.FileVersion release.AssemblyVersion ]
+        
+  let testing = "src/FSharp.Control.Reactive.Testing/AssemblyInfo.fs"  
+  CreateFSharpAssemblyInfo testing
+    [ Attribute.Title projectTesting
+      Attribute.Product projectTesting
+      Attribute.Description summary
+      Attribute.Version release.AssemblyVersion
+      Attribute.FileVersion release.AssemblyVersion ] )
 
 Target "BuildVersion" (fun _ ->
     Shell.Exec("appveyor", sprintf "UpdateBuild -Version \"%s\"" nugetVersion) |> ignore
@@ -144,7 +153,7 @@ Target "RunTests" (fun _ ->
 // the ability to step through the source code of external libraries https://github.com/ctaggart/SourceLink
 
 Target "SourceLink" (fun _ ->
-    let baseUrl = sprintf "%s/%s/{0}/%%var2%%" gitRaw (project.ToLower())
+    let baseUrl = sprintf "%s/%s/{0}/%%var2%%" gitRaw (projectSource.ToLower())
     let sourceIndex proj =
         let p = VsProj.LoadRelease proj
         let files = p.Compiles -- "**/AssemblyInfo.fs"
