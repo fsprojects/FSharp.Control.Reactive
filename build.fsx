@@ -32,7 +32,7 @@ open SourceLink
 // The name of the project 
 // (used by attributes in AssemblyInfo, name of a NuGet package and directory in 'src')
 let projectSource = "FSharp.Control.Reactive"
-let projectTesting = "FSharp.Control.Reactive"
+let projectTesting = "FSharp.Control.Reactive.Testing"
 
 // Short summary of the project
 // (used as description in AssemblyInfo and as a short summary for NuGet package)
@@ -171,7 +171,15 @@ Target "NuGet" (fun _ ->
         { p with 
             Version = release.NugetVersion
             OutputPath = buildDir
-            ReleaseNotes = toLines release.Notes })
+            ReleaseNotes = toLines release.Notes
+            TemplateFile = "paket.template" })
+
+    Paket.Pack (fun p ->
+        { p with
+            Version = release.NugetVersion
+            OutputPath = buildDir
+            ReleaseNotes = toLines release.Notes
+            TemplateFile = "paket.testing.template" })
 )
 
 // --------------------------------------------------------------------------------------
@@ -241,7 +249,7 @@ Target "All" DoNothing
 "All" 
 #if MONO
 #else
-  =?> ("SourceLink", Pdbstr.tryFind().IsSome )
+//   =?> ("SourceLink", Pdbstr.tryFind().IsSome )
 #endif
   ==> "NuGet"
   ==> "BuildPackage"
