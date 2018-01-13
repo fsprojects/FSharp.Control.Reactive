@@ -96,6 +96,23 @@ let ``When zip is defined with the applicative, it should match the result of Ob
     Assert.That(!actual, Is.EqualTo (!expected))
 
 [<Test>]
+let ``zip used in rxquery matches output from Observable.zip`` () =
+    let a = Observable.ofSeq [1;2;3]
+    let b = Observable.ofSeq [1;2;3]
+
+    let expected = ResizeArray()
+    (Observable.zip a b).Subscribe(expected.Add) |> ignore
+
+    let actual = ResizeArray()
+    (rxquery {
+        for x in a do
+        zip y in b
+        yield x, y
+     }).Subscribe(actual.Add) |> ignore
+
+    Assert.That(List.ofSeq actual = List.ofSeq expected)
+
+[<Test>]
 let ``Test should show the stack overflow is fixed with Rx 2 beta``() =
     let test() =
         let rec g x = observe {
