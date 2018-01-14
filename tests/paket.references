@@ -1,7 +1,7 @@
-group Test
 FSharp.Core
-NUnit
-NUnit3TestAdapter
+FsCheck
 Microsoft.NET.Test.Sdk
 Microsoft.Reactive.Testing
-FsCheck
+NUnit
+NUnit.Runners
+NUnit3TestAdapter
