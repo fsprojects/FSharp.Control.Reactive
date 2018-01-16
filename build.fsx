@@ -116,7 +116,7 @@ Target "Pack" (fun _ ->
         { p with
             Project = projectSource
             Configuration = "Release"
-            VersionSuffix = buildVersion
+            VersionSuffix = nugetVersion
             OutputPath = buildDir
             AdditionalArgs =
               [ "--no-build"
@@ -128,10 +128,11 @@ Target "Pack" (fun _ ->
         { p with
             Project = projectTesting
             Configuration = "Release"
-            VersionSuffix = buildVersion
+            VersionSuffix = nugetVersion
             OutputPath = buildDir
             AdditionalArgs =
               [ "--no-build"
+                "--no-dependencies"
                 //"/p:ReleaseNotes=" + (toLines release.Notes)
               ]
         })
