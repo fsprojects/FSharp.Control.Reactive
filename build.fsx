@@ -15,7 +15,8 @@ open Fake.ReleaseNotesHelper
 // Provide project-specific details below
 // --------------------------------------------------------------------------------------
 
-let targetProject = "src/FSharp.Control.Reactive"
+let projectSource = "src/FSharp.Control.Reactive"
+let projectTesting = "src/FSharp.Control.Reactive.Testing"
 
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted 
@@ -66,7 +67,11 @@ Target "Build" (fun _ ->
     // We need to invoke restore in order to create the .NetCore obj files
     DotNetCli.Build (fun defaults ->
         { defaults with
-            Project = targetProject
+            Project = projectSource
+            Configuration = "Release" })
+    DotNetCli.Build (fun defaults ->
+        { defaults with
+            Project = projectTesting
             Configuration = "Release" })
 )
 
@@ -97,11 +102,31 @@ Target "Pack" (fun _ ->
         { p with
             Version = nugetVersion
             OutputPath = buildDir
-            ReleaseNotes = toLines release.Notes })
+            ReleaseNotes = toLines release.Notes
+            TemplateFile = "paket.template" })
+
+    Paket.Pack (fun p ->
+        { p with
+            Version = release.NugetVersion
+            OutputPath = buildDir
+            ReleaseNotes = toLines release.Notes
+            TemplateFile = "paket.testing.template" })
     *)
     DotNetCli.Pack (fun p ->
         { p with
-            Project = targetProject
+            Project = projectSource
+            Configuration = "Release"
+            VersionSuffix = buildVersion
+            OutputPath = buildDir
+            AdditionalArgs =
+              [ "--no-build"
+                //"/p:ReleaseNotes=" + (toLines release.Notes)
+              ]
+        })
+
+    DotNetCli.Pack (fun p ->
+        { p with
+            Project = projectTesting
             Configuration = "Release"
             VersionSuffix = buildVersion
             OutputPath = buildDir

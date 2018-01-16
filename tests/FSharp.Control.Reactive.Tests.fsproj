@@ -6,9 +6,14 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" Condition="Exists('AssemblyInfo.fs')" />
     <Compile Include="ObservableSpecs.fs" />
+    <Compile Include="SubjectSpecs.fs" />
+    <Compile Include="EmitsSpecs.fs" />
+    <None Include="paket.references" />
+    <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\FSharp.Control.Reactive\FSharp.Control.Reactive.fsproj" />
+    <ProjectReference Include="..\src\FSharp.Control.Reactive.Testing\FSharp.Control.Reactive.Testing.fsproj" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
