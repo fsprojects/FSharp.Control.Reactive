@@ -115,11 +115,10 @@ Target "Pack" (fun _ ->
     DotNetCli.Pack (fun p ->
         { p with
             Project = projectSource
-            Configuration = "Release"
-            VersionSuffix = nugetVersion
             OutputPath = buildDir
             AdditionalArgs =
               [ "--no-build"
+                sprintf "/p:Version=%s" release.NugetVersion
                 //"/p:ReleaseNotes=" + (toLines release.Notes)
               ]
         })
@@ -127,12 +126,11 @@ Target "Pack" (fun _ ->
     DotNetCli.Pack (fun p ->
         { p with
             Project = projectTesting
-            Configuration = "Release"
-            VersionSuffix = nugetVersion
             OutputPath = buildDir
             AdditionalArgs =
               [ "--no-build"
                 "--no-dependencies"
+                sprintf "/p:Version=%s" release.NugetVersion
                 //"/p:ReleaseNotes=" + (toLines release.Notes)
               ]
         })
