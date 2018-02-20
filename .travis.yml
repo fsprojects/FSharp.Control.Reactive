@@ -1,5 +1,8 @@
 language: csharp
 
+install:
+  - mozroots --import --sync
+
 matrix:
   include:
     - os: linux # Ubuntu 14.04
