@@ -9,7 +9,6 @@
     <PackageProjectUrl>https://github.com/fsprojects/FSharp.Control.Reactive</PackageProjectUrl>
     <PackageIconUrl>http://fsprojects.github.io/FSharp.Control.Reactive/img/logo.png</PackageIconUrl>
     <PackageTags>F#;FSharp;Reactive Extensions;Rx</PackageTags>
-    <IncludeSymbols>true</IncludeSymbols>
     <RepositoryUrl>https://github.com/fsprojects/FSharp.Control.Reactive</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
