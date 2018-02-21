@@ -1,4 +1,4 @@
-### New in 4.0.0 - (TBD)
+### New in 4.0.0 - (Released 2018/02/21)
 * Support for netstandard-2.0
 * Added Subjects to the core library.
 * New FSharp.Control.Reactive.Testing library for a more idiomatic F# API over the Rx Testing library.
