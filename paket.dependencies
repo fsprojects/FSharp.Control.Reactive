@@ -18,3 +18,4 @@ group Build
     nuget FSharp.Compiler.Service
     nuget FAKE
     nuget Nuget.CommandLine
+    nuget RazorEngine
