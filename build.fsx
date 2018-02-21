@@ -25,7 +25,7 @@ let gitHome = "git@github.com:fsprojects"
 let gitName = "FSharp.Control.Reactive"
 let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/fsprojects"
 
-let buildDir = "bin"
+let buildDir = Path.Combine(Environment.CurrentDirectory, "bin")
 
 
 // --------------------------------------------------------------------------------------
