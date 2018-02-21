@@ -1,5 +1,10 @@
-### New in 3.5.0 - (TBD)
+### New in 4.0.0 - (TBD)
 * Support for netstandard-2.0
+* Added Subjects to the core library.
+* New FSharp.Control.Reactive.Testing library for a more idiomatic F# API over the Rx Testing library.
+
+### New in 3.5.0 - (Released 2016/12/05)
+* Update to Rx 3.0
 
 ### New in 3.4.1 - (Released 2016/04/26)
 * Restore .NET 4.0 build instead of .NET 4.5.
