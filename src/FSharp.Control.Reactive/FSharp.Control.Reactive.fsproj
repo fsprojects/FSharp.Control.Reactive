@@ -1,15 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-    <Version>3.5.0</Version>
-    <Authors>Ryan Riley;Steffen Forkmann;Jared Hester</Authors>
-    <Summary>A F#-friendly wrapper for the Reactive Extensions.</Summary>
-    <Description>A F#-friendly wrapper for the Reactive Extensions.</Description>
-    <PackageLicenseUrl>https://github.com/fsprojects/FSharp.Control.Reactive/blob/master/LICENSE.txt</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/fsprojects/FSharp.Control.Reactive</PackageProjectUrl>
-    <PackageIconUrl>http://fsprojects.github.io/FSharp.Control.Reactive/img/logo.png</PackageIconUrl>
-    <PackageTags>F#;FSharp;Reactive Extensions;Rx</PackageTags>
-    <RepositoryUrl>https://github.com/fsprojects/FSharp.Control.Reactive</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Observable.fs" />
