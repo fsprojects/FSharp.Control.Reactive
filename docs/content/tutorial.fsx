@@ -59,3 +59,55 @@ For more information on Rx, check out the [Rx Workshop on Channel 9](http://chan
 
 TODO: Continue tutorial with examples from the above, including use of `rxquery`.
  *)
+
+(**
+Reactive Testing
+-------------------
+
+The Rx.NET has several OOP-minded objects to test Reactive Applications. This package contains some wrappers to make your Reactive Tests more functional.
+
+Following test shows how the Broadcast Subject can be tested:
+*)
+
+[<Test>]
+let ``Broadcast Subject broadcast to all observers`` () =
+    Check.QuickThrowOnFailure <| fun (xs : int list) ->
+        TestSchedule.usage <| fun sch ->
+            use s = Subject.broadcast
+            let observer = TestSchedule.subscribeTestObserver sch s
+
+            Subject.onNexts xs s 
+            |> Subject.onCompleted 
+            |> ignore
+
+    TestObserver.nexts observer = xs
+
+(**
+- The `TestSchedule.usage` call wil make sure we have a virtual time scheduler that we can use to sync our different observables and observers.
+- The `subscribeTestObserver` call will subscribe the given `observable` to a `TestObserver`. 
+- This `TestObserver` can be used to assert on the emits that the SUT sends to it by using the `TesteObserver` module. (`TestObserver.nexts`, `TestObserver.all`, `TestObserver.errors`)
+
+The testing package also contains generated `TestNotifications` which we can use to simulate a stream of emits.
+This values has to be registered first before using.
+
+Following example shows how the Functor Law can be testsd by creating a Hot Observable of simulated emits. *)
+
+[<SetUp>]
+member __.Setup () =
+    Arb.register<GenTestNotification> () |> ignore
+
+[<Test>]
+member __.``Functor Law of Observables`` () =
+    Check.QuickThrowOnFailure <| 
+        fun (TestNotifications ms : TestNotifications<int>) (f : int -> int) (g : int -> int) ->
+            TestSchedule.usage <| fun sch ->
+                TestSchedule.hotObservable sch ms
+                |> Observable.retry
+                |> Observable.map f
+                |> Observable.map g
+                |> TestSchedule.subscribeTestObserverStart sch
+                |> TestObserver.nexts = TestNotification.mapNexts (f >> g) ms
+
+(**
+NOTE: the previous test contains a `Observable.retry` call because the simulated emits will possible contain 'OnError' emits as well.
+See: https://github.com/fsprojects/FSharp.Control.Reactive/blob/master/src/FSharp.Control.Reactive.Testing/TestNotifications.fs for more info on how the simulated emits are generated.*)
