@@ -582,6 +582,16 @@ let ``Observable.mapi should be equivalent to Array.mapi`` ()=
         |> (=) (items |> Array.mapi (fun i x -> (i, x)))
 
 [<Test>]
+let ``Observable.mapTo always maps to constant`` () =
+    Check.QuickThrowOnFailure <|
+    fun (xs : int array) (y : int) ->
+        Observable.ofSeq xs
+        |> Observable.mapTo y
+        |> Observable.toEnumerable
+        |> Seq.toList
+        |> (=) (List.replicate xs.Length y)
+
+[<Test>]
 let ``filteri should be equivalent to mapi then filter`` () =
     Check.QuickThrowOnFailure <|
     fun (items : int array) ->    

@@ -1034,13 +1034,26 @@ module Observable =
     /// Maps two observables to the specified function.
     let map2 f a b = apply (apply f a) b
 
+    
+    /// Maps every emission to a constant value.
+    let mapTo x (source : IObservable<'T>) =
+        Observable.Select (source, Func<_, _> (fun _ -> x))
 
+    
+    /// Maps every emission to a constant lazy value.
+    let mapToLazy (xLazy : Lazy<'T>) (source : IObservable<'T>) =
+        Observable.Select (source, Func<_, _> (fun _ -> xLazy.Force ()))
+    
+    
     /// Materializes the implicit notifications of an observable sequence as
     /// explicit notification values
     let materialize source = 
         Observable.Materialize( source )
 
     
+
+
+
     /// Merges the two observables
     let merge (second: IObservable<'T>) (first: IObservable<'T>) = Observable.Merge(first, second)
 
@@ -1357,13 +1370,11 @@ module Observable =
                 observer.OnCompleted()
                 { new IDisposable with member this.Dispose() = () }
         }
-
-
-
         
     /// Samples the observable at the given interval
     let sample (interval: TimeSpan) source =
         Observable.Sample(source, interval)
+
 
 
     /// Samples the source observable sequence using a samper observable sequence producing sampling ticks.
@@ -1693,10 +1704,10 @@ module Observable =
     let toArray  source = 
         Observable.ToArray(source)
 
-
     /// Creates an observable sequence according to a specified key selector function
     let toDictionary keySelector source = 
         Observable.ToDictionary(source, Func<_,_> keySelector)
+
 
 
     /// Creates an observable sequence according to a specified key selector function
@@ -1875,7 +1886,6 @@ module Observable =
                    ( second        : seq<'Source2>                       )
                    ( first         : IObservable<'Source1>               ) : IObservable<'Result> =
         Observable.Zip(first, second, Func<_,_,_> resultSelector )
- 
 
  module Disposables = 
      /// Returns an IDisposable that disposes all the underlying disposables
