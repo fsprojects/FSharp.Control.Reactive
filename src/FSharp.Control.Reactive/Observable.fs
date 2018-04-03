@@ -1051,6 +1051,9 @@ module Observable =
         Observable.Materialize( source )
 
     
+
+
+
     /// Merges the two observables
     let merge (second: IObservable<'T>) (first: IObservable<'T>) = Observable.Merge(first, second)
 
@@ -1371,6 +1374,7 @@ module Observable =
     /// Samples the observable at the given interval
     let sample (interval: TimeSpan) source =
         Observable.Sample(source, interval)
+
 
 
     /// Samples the source observable sequence using a samper observable sequence producing sampling ticks.
@@ -1703,6 +1707,7 @@ module Observable =
     /// Creates an observable sequence according to a specified key selector function
     let toDictionary keySelector source = 
         Observable.ToDictionary(source, Func<_,_> keySelector)
+
 
 
     /// Creates an observable sequence according to a specified key selector function
