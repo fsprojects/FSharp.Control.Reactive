@@ -57,7 +57,8 @@ Reactive Extensions
 
 For more information on Rx, check out the [Rx Workshop on Channel 9](http://channel9.msdn.com/series/Rx-Workshop). The examples provided in the workshop should be easy to port to FSharp.Control.Reactive. The [Beginner's Guide to the Reactive Extensions](http://msdn.microsoft.com/en-us/data/gg577611.aspx) includes many other links to excellent content.
 
-TODO: Continue tutorial with examples from the above, including use of `rxquery`.
+* [Introduction](introduction.html)
+* TODO: Continue tutorial with examples from the above, including use of `rxquery`.
  *)
 
 (**
