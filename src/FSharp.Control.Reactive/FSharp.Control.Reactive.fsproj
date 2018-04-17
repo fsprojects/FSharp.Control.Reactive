@@ -3,6 +3,7 @@
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Disposable.fs" />
     <Compile Include="Observable.fs" />
     <Compile Include="Scheduler.fs" />
     <Compile Include="Subject.fs" />

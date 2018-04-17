@@ -2197,10 +2197,3 @@ module Observable =
                    ( second        : seq<'Source2>                       )
                    ( first         : IObservable<'Source1>               ) : IObservable<'Result> =
         Observable.Zip(first, second, Func<_,_,_> resultSelector )
-
- module Disposables = 
-     /// Returns an IDisposable that disposes all the underlying disposables
-     let compose (disposables: #seq<IDisposable>) =
-         Disposable.Create(fun _ -> 
-             disposables 
-             |> Seq.iter(fun x -> x.Dispose()))
