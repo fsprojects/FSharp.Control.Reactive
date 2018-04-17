@@ -10,6 +10,7 @@ open Microsoft.Reactive.Testing
 open System.Reactive.Subjects
 open System.Reactive.Concurrency
 open FSharp.Control.Reactive.Observable
+open FSharp.Control.Reactive.Testing
 
 
 let ``should be`` expectedNext expectedError expectedCompleted (observable:'a IObservable) =

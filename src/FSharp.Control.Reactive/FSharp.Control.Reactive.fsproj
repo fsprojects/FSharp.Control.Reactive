@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Observable.fs" />
+    <Compile Include="Scheduler.fs" />
     <Compile Include="Subject.fs" />
     <None Include="paket.references" />
   </ItemGroup>

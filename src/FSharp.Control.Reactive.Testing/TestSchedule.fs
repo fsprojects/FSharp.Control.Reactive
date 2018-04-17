@@ -25,10 +25,10 @@ let advanceBy (s : TestScheduler) time =
 /// Advances the scheduler's clock to the specified time, running all work till that point.
 let advanceTo (s : TestScheduler) time =
     s.AdvanceTo time; s
-    
+
 /// Creates an observer that records received notification messages and timestamps those.
-let createObserver (s : TestScheduler) =
-    s.CreateObserver ()
+let createObserver<'a> (s : TestScheduler) =
+    s.CreateObserver<'a> ()
 
 /// Schedules an action to be executed at dueTime
 let schedule (s : TestScheduler) state (dueTime : DateTimeOffset) f =
