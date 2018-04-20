@@ -11,11 +11,11 @@ let usage f =
     f <| TestScheduler ()
     
 /// Creates a cold observable using the specified timestamped notification messages.
-let coldObservable (s : TestScheduler) (TestNotifications ms : TestNotifications<'a>) =
+let coldObservable (s : TestScheduler) (TestNotifications ms) =
     s.CreateColdObservable<'a> (ms |> List.toArray)
 
 /// Creates a hot observable using the specified timestamped notification messages.
-let hotObservable (s : TestScheduler) (TestNotifications ms : TestNotifications<'a>) = 
+let hotObservable (s : TestScheduler) (TestNotifications ms) = 
     s.CreateHotObservable (ms |> List.toArray)
     
 /// Advances the scheduler's clock by the specified relative time, running all work scheduled for that timespan.
@@ -31,6 +31,7 @@ let createObserver<'a> (s : TestScheduler) =
     s.CreateObserver<'a> ()
 
 /// Schedules an action to be executed at dueTime
+[<Obsolete("Use the 'Schedule' module for scheduling actions")>]
 let schedule (s : TestScheduler) state (dueTime : DateTimeOffset) f =
     s.Schedule (state, dueTime, fun x y -> f x y)
 

@@ -10,9 +10,9 @@ let all (o : ITestableObserver<'a>) =
 
 /// Gets recorded timestamped "OnNext" notification messages received by the observer.
 let nexts (o : ITestableObserver<'a>) = 
-    o.Messages |> Seq.toList |> TestNotification.nexts
+    o.Messages |> Seq.toList |> TestNotifications |> TestNotification.nexts
 
 /// Gets recorded timestamped "OnError" notification messages received by the observer.
 let errors (o : ITestableObserver<'a>) =
-    o.Messages |> Seq.toList |> TestNotification.errors
+    o.Messages |> Seq.toList |> TestNotifications |> TestNotification.errors
 

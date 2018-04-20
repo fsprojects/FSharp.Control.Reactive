@@ -4,13 +4,21 @@ open System.Reactive
 open Microsoft.Reactive.Testing
 
 /// Represents a recorded notification list to an observer.
-type TestNotifications<'a> = TestNotifications of Recorded<Notification<'a>> list
+type TestNotification<'a> = Recorded<Notification<'a>>
+type TestNotifications<'a> = TestNotifications of TestNotification<'a> list
 
 /// The Reactive module provides operators for working with TestObserver<_> in F#.
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module TestNotification =     
-    open System.Reactive
-    open Microsoft.Reactive.Testing
+    open System
+
+    /// Active pattern on the different kind of 'TestNotification''s (a.k.a. 'Recorded<Notification<'a>>').
+    let (|Next|Error|Completed|) (x : TestNotification<'a>) =
+        match x.Value.Kind with
+        | NotificationKind.OnNext -> Next x.Value.Value
+        | NotificationKind.OnError -> Error x.Value.Exception
+        | NotificationKind.OnCompleted -> Completed
+        | _ -> Error (new ArgumentOutOfRangeException ("NotificationKind") :> exn)
 
     /// Factory function for an OnNext notification record at a given time with a given value.
     let onNext t (x : 'a) = ReactiveTest.OnNext (t, x)
@@ -22,22 +30,18 @@ module TestNotification =
     let onCompleted t = ReactiveTest.OnCompleted t
 
     /// Filters the OnNexts recorded notifiations of the specified list.
-    let nexts (xs : Recorded<Notification<'a>> list) = 
-        xs 
-        |> List.filter (fun x -> x.Value.HasValue)
-        |> List.map (fun x -> x.Value.Value)
+    let nexts (TestNotifications xs) = 
+        List.choose (function | Next x -> Some x | _ -> None) xs
 
     /// Maps the OnNext recorded notifications of the specified list to other values.
-    let mapNexts f (TestNotifications ms : TestNotifications<'a>) = (nexts >> List.map f) ms
+    let mapNexts f = (nexts >> List.map f)
 
     /// Filters the OnError recorded notifications of the specified list.
-    let errors (xs : Recorded<Notification<'a>> list) =
-        xs
-        |> List.filter (fun x -> x.Value.Kind = NotificationKind.OnError)
-        |> List.map (fun x -> x.Value.Exception)
+    let errors (TestNotifications xs) =
+        List.choose (function | Error ex -> Some ex | _ -> None) xs
 
     /// Maps the OnError recorded notifications of the specified list to other values.
-    let mapErrors f (TestNotifications ms : TestNotifications<'a>) = (errors >> List.map f) ms
+    let mapErrors f = (errors >> List.map f)
 
 open FsCheck
 
