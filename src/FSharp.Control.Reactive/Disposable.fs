@@ -18,10 +18,14 @@ module Disposable =
     /// Creates an disposable object that invokes the specified function when disposed.
     let create f = Disposable.Create (Action f)
 
+    /// Execute and action without the resource while the disposable is still 'active'.
+    /// The used resource will be disposed afterwards.
     let ignoring f d =
         use x = d
         f () |> ignore
 
+    /// Execute and action with the resource while the disposable is still 'active'.
+    /// The used resource will be disposed afterwards.
     let using f d =
         use x = d 
         f x
@@ -33,13 +37,14 @@ module Disposable =
     let composite = (fun () -> new CompositeDisposable ()) () :> IDisposable
 
     /// Compose two disposables together so they are both disposed when disposed is called on the 'composite' disposable.
-    let compose x (d : IDisposable) =
-        match d with
-        | :? CompositeDisposable as d -> d.Add x; d :> IDisposable
-        | d -> let acc = new CompositeDisposable ()
-               acc.Add d
-               acc.Add x
-               acc :> IDisposable
+    let compose (x : IDisposable) (d : IDisposable) =
+        match d, x with
+        | :? CompositeDisposable as d, x -> d.Add x; d :> IDisposable
+        | d, (:? CompositeDisposable as x) -> x.Add d; x :> IDisposable
+        | d, x -> let acc = new CompositeDisposable ()
+                  acc.Add d
+                  acc.Add x
+                  acc :> IDisposable
 
     /// Uses the double-indirection pattern to assign the disposable returned by the specified disposableFactory
     /// to the 'Disposable' property of the specified serial disposable.
