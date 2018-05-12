@@ -224,6 +224,12 @@ module Observable =
     let bufferSpan (timeSpan:TimeSpan) source = 
         Observable.Buffer(source, timeSpan)
 
+    
+    /// Projects each element of an observable sequence into consecutive non-overlapping buffers 
+    /// which are produced based on timing information, using the specified scheduler to run timers.
+    let bufferSpanOn (scheduler:IScheduler) timeSpan source =
+        Observable.Buffer (source, timeSpan, scheduler)
+    
 
     /// Projects each element of an observable sequence into a buffer that goes
     /// sent out when either it's full or a specific amount of time has elapsed
@@ -231,7 +237,13 @@ module Observable =
     let bufferSpanCount (timeSpan:TimeSpan) (count:int) source = 
         Observable.Buffer(source, timeSpan, count)
 
-
+    
+    /// Projects each element of an observable sequence into a buffer that's sent out 
+    /// when either it's full or a given amount of time has elapsed, using the specified scheduler to run timers.
+    /// Analogy - A ferry leaves the dock when all the seats are taken, or at the scheduled time or departure, 
+    /// whichever event occurs first.
+    let bufferSpanCountOn (scheduler:IScheduler) (timeSpan:TimeSpan) (count:int) source =
+        Observable.Buffer(source, timeSpan, count, scheduler)
 
 
     /// Projects each element of an observable sequence into zero of more buffers. 
@@ -247,6 +259,12 @@ module Observable =
     let bufferSpanShift (timeSpan:TimeSpan) (timeShift:TimeSpan) source = 
         Observable.Buffer(source, timeSpan, timeShift)
 
+    
+    /// Projects each element of an observable sequence into
+    /// zero or more buffers which are produced based on timing information,
+    /// using the specified scheduler to run timers.
+    let bufferSpanShiftOn (scheduler:IScheduler) (timeSpan:TimeSpan) (timeShift:TimeSpan) source =
+        Observable.Buffer(source, timeSpan, timeShift, scheduler)
 
     // #endregion
 
@@ -267,6 +285,11 @@ module Observable =
     let caseDefault selector (defaulSource:IObservable<'Result>) (sources:IDictionary<'Value,IObservable<'Result>>) =
         Observable.Case( Func<'Value> selector, sources, defaulSource )
 
+    
+    /// Uses selector to determine which source in sources to return,
+    /// choosing an empty sequence on the specified scheduler if no match is found.
+    let caseOn (scheduler:IScheduler) selector sources =
+        Observable.Case (selector, sources, scheduler)
 
     /// Continues an observable sequence that is terminated
     /// by an exception with the next observable sequence.
@@ -425,12 +448,22 @@ module Observable =
     let delay ( dueTime:TimeSpan ) ( source:IObservable<'Source> ): IObservable<'Source>=
         Observable.Delay(source, dueTime)
 
+    /// Time shifts the observable sequence by the specified relative time duration,
+    /// using the specified scheduler to run timers.
+    /// The relative time intervals between the values are preserved.
+    let delayOn (scheduler:IScheduler) (dueTime:TimeSpan) source =
+        Observable.Delay(source, dueTime, scheduler)
 
     /// Time shifts the observable sequence to start propagating notifications at the specified absolute time.
     /// The relative time intervals between the values are preserved.
     let delayUntil ( source:IObservable<'Source> ) ( dueTime:DateTimeOffset ) : IObservable<'Source> =
         Observable.Delay(source, dueTime )
         
+    /// Time shifts the observable sequence to start propagating notifications at the specified absolute time,
+    /// using the specified scheduler to run timers.
+    /// The relative time intervals between the values are preserved.
+    let delayUntilOn (scheduler:IScheduler) (dueTime:DateTimeOffset) source =
+        Observable.Delay(source, dueTime, scheduler)
 
     /// Time shifts the observable sequence based on a delay selector function for each element.
     let delayMap ( delayDurationSelector:'Source -> IObservable<'TDelay> )  ( source:IObservable<'Source> ): IObservable<'Source> =
@@ -448,10 +481,21 @@ module Observable =
     let delaySubscription ( dueTime:TimeSpan) ( source:IObservable<'Source> ): IObservable<'Source> =
         Observable.DelaySubscription( source, dueTime )
 
+    
+    /// Time shifts the observable sequence by delaying the subscription with the specified relative time duration,
+    /// using the specified scheduler to run timers.
+    let delaySubscriptionOn (scheduler:IScheduler) (dueTime:TimeSpan) source =
+        Observable.DelaySubscription(source, dueTime, scheduler)
 
     /// Time shifts the observable sequence by delaying the subscription to the specified absolute time.
     let delaySubscriptionUntil ( dueTime:DateTimeOffset) ( source:IObservable<'Source> ) : IObservable<'Source> =
         Observable.DelaySubscription( source, dueTime )
+
+   
+    /// Time shifts the observable sequence by delaying the subscription to the specified absolute time,
+    /// using the specified scheduler to run timers.
+    let delaySubscriptionUntilOn (scheduler:IScheduler) (dueTime:DateTimeOffset) source =
+        Observable.DelaySubscription(source, dueTime, scheduler)
 
 
     /// Dematerializes the explicit notification values of an observable sequence as implicit notifications.
@@ -516,6 +560,16 @@ module Observable =
     /// Returns an empty Observable sequence
     let emptyWitness<'T>(witness:'T) :IObservable<'T> =
         Observable.Empty( witness )
+
+
+    /// Returns an empty sequence, using the specified scheduler to send out the single OnCompleted message.
+    let emptyCompleted (scheduler:IScheduler) =
+        Observable.Empty( scheduler )
+
+
+    /// Returns an empty sequence, using the specified scheduler to send out the single OnCompleted message.
+    let emptyCompletedWitness scheduler witness =
+        Observable.Empty( scheduler, witness )
 
 
     /// Determines whether two sequences are equal by comparing the elements pairwise.
@@ -654,12 +708,26 @@ module Observable =
     let fromEvent ( addHandler )( removeHandler ) : IObservable<unit> =
         Observable.FromEvent( Action<'Delegate> addHandler, Action<'Delegate> removeHandler )
 
+    
+    /// Converts an Action-based .NET event to an observable sequence. Each event invocation is surfaced through an OnNext message in the resulting sequence.
+    /// For conversion of events conforming to the standard .NET event pattern, use any of the FromEventPattern overloads instead.
+    let fromEventOn scheduler addHandler removeHandler =
+        Observable.FromEvent(Action<_> addHandler, Action<_> removeHandler, scheduler)
+    
 
     /// Converts an generic Action-based .NET event to an observable sequence. Each event invocation is surfaced through an OnNext message in the resulting sequence.
     /// For conversion of events conforming to the standard .NET event pattern, use any of the FromEventPattern overloads instead.
     let fromEventGeneric ( addHandler    : ('TEventArgs -> unit ) -> unit )
                          ( removeHandler : ('TEventArgs -> unit ) -> unit ) : IObservable<'TEventArgs> =
         Observable.FromEvent(Action<'TEventArgs->unit> addHandler, Action<'TEventArgs->unit> removeHandler )
+
+    
+    /// Converts an generic Action-based .NET event to an observable sequence. Each event invocation is surfaced through an OnNext message in the resulting sequence.
+    /// For conversion of events conforming to the standard .NET event pattern, use any of the FromEventPattern overloads instead.
+    let fromEventGenericOn ( scheduler:IScheduler )
+                           ( addHandler    : ('TEventArgs -> unit ) -> unit )
+                           ( removeHandler : ('TEventArgs -> unit ) -> unit ) =
+        Observable.FromEvent(Action<'TEventArgs->unit> addHandler, Action<'TEventArgs->unit> removeHandler, scheduler)
 
 
     /// Converts a .NET event to an observable sequence, using a conversion function to obtain the event delegate. 
@@ -679,6 +747,14 @@ module Observable =
         }
 
 
+    /// Converts a .NET event to an observable sequence, using a conversion function to obtain the event delegate, using a specified scheduler to run timers. 
+    /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
+    /// For conversion of events conforming to the standard .NET event pattern, use any of the FromEventPattern functions instead.
+    let fromEventConversionOn scheduler conversion addHandler removeHandler =
+        Observable.FromEventPattern 
+            (Func<EventHandler<'TEventArgs>, 'TDelegate> conversion, Action<'TDelegate> addHandler, Action<'TDelegate> removeHandler, scheduler)
+
+
     /// Converts a .NET event to an observable sequence, using a supplied event delegate type. 
     /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
     let fromEventHandler<'EventArgs when 'EventArgs:> EventArgs>
@@ -693,11 +769,21 @@ module Observable =
                     {   new IDisposable with member this.Dispose() = remove ()  }
         }
 
+    
+    /// Converts a .NET event to an observable sequence, using a supplied event delegate type on a specified scheduler. 
+    /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
+    let fromEventHandlerOn (scheduler:IScheduler) addHandler removeHandler =
+        Observable.FromEventPattern<'TEventArgs> (
+            Action<EventHandler<'EventArgs>> addHandler, 
+            Action<EventHandler<'EventArgs>> removeHandler, 
+            scheduler)
+
 
     /// Generates an observable from an IEvent<_> as an EventPattern.
     let fromEventPattern eventName (target:obj) =
         Observable.FromEventPattern( target, eventName )
 
+    
 
     /// Generates an observable sequence by running a state-driven loop producing the sequence's elements.
     let generate initialState condition iterator resultMap = 
@@ -706,6 +792,15 @@ module Observable =
                                 Func<'State,'State>   iterator    , 
                                 Func<'State,'Result>  resultMap   )
 
+    /// Generates an observable sequence by running a state-driven loop producing the sequence's elements.
+    let generateOn (scheduler:IScheduler) initialState condition iterator resultMap =
+        Observable.Generate(
+            initialState, 
+            Func<'State, bool> condition, 
+            Func<'State, 'State> iterator, 
+            Func<'TState, 'TResult> resultMap, 
+            scheduler)
+      
 
     /// Generates an observable sequence by running a state-driven and temporal loop producing the sequence's elements.
     let generateTimed( initialState:'State   )
@@ -720,10 +815,30 @@ module Observable =
                                 Func<'State,DateTimeOffset>timeSelector    )
 
 
+    /// Generates an observable sequence by running a state-driven and temporal loop producing the sequence's elements,
+    /// using a specified scheduler to run timers and to send out observer messages.
+    let generateTimedOn( scheduler             )
+                       ( initialState:'State   )
+                       ( condition             )
+                       ( iterate               )
+                       ( resultMap             )
+                       ( timeSelector          ) : IObservable<'Result> =
+        Observable.Generate(                                initialState   , 
+                                Func<'State,bool>          condition       , 
+                                Func<'State,'State>       iterate          , 
+                                Func<'State,'Result>      resultMap        ,
+                                Func<'State,DateTimeOffset>timeSelector    ,
+                                scheduler)
+
     /// Generates an observable sequence by running a state-driven and temporal loop producing the sequence's elements.
     let generateTimeSpan ( initialState:'State )( condition )( iterate )( resultMap )( genTime ) : IObservable<'Result> =
         Observable.Generate( initialState, Func<_,_> condition, Func<_,_> iterate, Func<'State,'Result> resultMap, Func<'State,TimeSpan> genTime )
 
+
+     /// Generates an observable sequence by running a state-driven and temporal loop producing the sequence's elements,
+     /// using a specified scheduler to run timers and to send out observer messages.
+    let generateTimeSpanOn scheduler ( initialState:'State )( condition )( iterate )( resultMap )( genTime ) : IObservable<'Result> =
+        Observable.Generate( initialState, Func<_,_> condition, Func<_,_> iterate, Func<'State,'Result> resultMap, Func<'State,TimeSpan> genTime, scheduler )
 
     /// Returns an enumerator that enumerates all values of the observable sequence.
     let getEnumerator ( source ) : IEnumerator<_> =
@@ -1058,9 +1173,20 @@ module Observable =
     let merge (second: IObservable<'T>) (first: IObservable<'T>) = Observable.Merge(first, second)
 
 
+    /// Merges the two observables, using a specified scheduler for enumeration of and subscription to the sources.
+    let mergeOn (scheduler:IScheduler) (second:IObservable<'T>) (first:IObservable<'T>) =
+        Observable.Merge(first, second, scheduler)
+
+
     /// Merges all the observable sequences into a single observable sequence.
     let mergeArray (sources:IObservable<'T>[]) =
         Observable.Merge(sources)
+
+    
+    /// Merges all the observable sequences into a single observable sequence,
+    /// using a specified scheduler for enumeration of and subscription to the sources.
+    let mergeArrayOn (scheduler:IScheduler) (sources:IObservable<'T>[]) =
+        Observable.Merge(scheduler, sources)
 
 
     /// Merges elements from all inner observable sequences 
@@ -1081,10 +1207,23 @@ module Observable =
         Observable.Merge(sources)
 
 
+    /// Merges an enumerable sequence of observable sequences into a single observable sequence,
+    /// using a specified scheduler for enumeration of and subscription to the sources.
+    let mergeSeqOn (scheduler:IScheduler) (sources:seq<IObservable<'T>>) =
+        Observable.Merge(sources, scheduler)
+
+
     /// Merges an enumerable sequence of observable sequences into an observable sequence,
     ///  limiting the number of concurrent subscriptions to inner sequences.
     let mergeSeqMax (maxConcurrent:int)(sources:seq<IObservable<'T>>) =
         Observable.Merge(sources, maxConcurrent)
+
+    
+    /// Merges an enumerable sequence of observable sequences into an observable sequence,
+    ///  limiting the number of concurrent subscriptions to inner sequences,
+    /// using a specified scheduler for enumeration of and subscription to the sources.
+    let mergeSeqMaxOn (scheduler:IScheduler) (maxConcurrent:int) (sources:seq<IObservable<'T>>) =
+        Observable.Merge(sources, maxConcurrent, scheduler)
 
 
     /// Merge results from all source tasks into a single observable sequence
@@ -1254,6 +1393,10 @@ module Observable =
     let range start count = Observable.Range(start, count)
 
 
+    /// Creates a range as an observable, using the specified scheduler to send out observer messages.
+    let rangeOn scheduler start count = Observable.Range(start, count, scheduler)
+
+
     /// Reduces the observable
     let reduce f source = Observable.Aggregate(source, Func<_,_,_> f)
 
@@ -1375,6 +1518,12 @@ module Observable =
     let sample (interval: TimeSpan) source =
         Observable.Sample(source, interval)
 
+    
+    /// Samples the observable sequence at each interval, using the specified scheduler to run sampling timers.
+    /// Upon each sampling tick, the latest element (if any) in the source sequence during the 
+    /// last sampling interval is sent to the resulting sequence.
+    let sampleOn scheduler interval source =
+        Observable.Sample(source, interval, scheduler)
 
 
     /// Samples the source observable sequence using a samper observable sequence producing sampling ticks.
@@ -1399,6 +1548,12 @@ module Observable =
     let selectIf condition thenSource =
         Observable.If( Func<bool> condition, thenSource )
 
+    
+    /// If the condition evaluates true, select the "thenSource" sequence. 
+    /// Otherwise, return an empty sequence generated on the specified scheduler.
+    let selectIfOn (scheduler:IScheduler) condition thenSource =
+        Observable.If( Func<bool> condition, thenSource, scheduler)
+
 
     /// If the condition evaluates true, select the "thenSource" sequence. Otherwise, select the else source 
     let selectIfElse condition ( elseSource : IObservable<'Result>) 
@@ -1410,6 +1565,10 @@ module Observable =
     let single ( value:'Result) : IObservable<'Result> =
        Observable.Return(value)
 
+    ///  Returns an observable sequence that contains a single element,
+    /// using a specified scheduler to send out observer messages.
+    let singleOn scheduler value =
+        Observable.Return(value, scheduler)
 
     /// Bypasses a specified number of elements in an observable sequence and then returns the remaining elements.
     let skip (count:int) (source:IObservable<'Source>)  : IObservable<'Source> =
@@ -1419,6 +1578,12 @@ module Observable =
     /// Skips elements for the specified duration from the start of the observable source sequence.
     let skipSpan  (duration:TimeSpan ) (source:IObservable<'Source> ): IObservable<'Source> =
         Observable.Skip(source, duration)
+
+    
+    /// Skips elements for the specified duration from the start of the observable source sequence,
+    /// using a specified scheduler to run timers.
+    let skipSpanOn (scheduler:IScheduler) duration source =
+        Observable.Skip(source, duration, scheduler)
 
 
     /// Bypasses a specified number of elements at the end of an observable sequence.
@@ -1430,12 +1595,23 @@ module Observable =
     let skipLastSpan (duration:TimeSpan ) ( source:IObservable<'Source>) : IObservable<'Source> =
         Observable.SkipLast ( source, duration)
 
+    
+    /// Skips elements for the specified duration from the end of the observable source sequence,
+    /// using the specified scheduler to run timers.
+    let skipLastSpanOn (scheduler:IScheduler) duration source =
+        Observable.SkipLast(source, duration, scheduler)
 
 
     /// Skips elements from the observable source sequence until the specified start time.
     let skipUntil (startTime:DateTimeOffset ) ( source:IObservable<'Source> )  : IObservable<'Source> =
         Observable.SkipUntil(source, startTime )
 
+    
+    /// Skips elements from the observable source sequence until the specified start time,
+    /// using the specified scheduler to run timers.
+    let skipUntilOn (scheduler:IScheduler) startTime source =
+        Observable.SkipUntil(source, startTime, scheduler)
+    
 
     /// Returns the elements from the source observable sequence only after the other observable sequence produces an element.
     let skipUntilOther ( other:IObservable<'Other> )  ( source:IObservable<'Source> ): IObservable<'Source> =
@@ -1458,6 +1634,11 @@ module Observable =
     let startWith  (values: #seq<'T>)  (source: IObservable<'T>) : IObservable<'T> = 
         // TODO: re-evaluate wrapping the overload that takes a params array when params are supported by F#.
         Observable.StartWith( source, values )
+
+    
+    /// Prepends a sequence of values to an observable sequence.
+    let startWithOn (scheduler:IScheduler) (values:#seq<'T>) source =
+        Observable.StartWith(source, scheduler, values)
 
 
     /// Subscribes to the Observable with a next fuction.
@@ -1537,20 +1718,55 @@ module Observable =
     let take (n: int) source : IObservable<'Source> = 
         Observable.Take(source, n)    
 
+    
+    /// Returns a specified number of contiguous elemenents from the start of an observable sequence,
+    /// using the specified scheduler for the edge case of take(0).
+    let takeOn (scheduler:IScheduler) (n:int) source =
+        Observable.Take( source, n, scheduler )
+
+
+    /// Takes elements for a specified duration from the start of the observable source sequence.
+    let takeSpan (duration:TimeSpan) source =
+        Observable.Take( source, duration )
+
+    
+    /// Takes elements for a specified duration from the start of the observable source sequence,
+    /// using the specified scheduler to run timers.
+    let takeSpanOn (scheduler:IScheduler) (duration:TimeSpan) source =
+        Observable.Take( source, duration, scheduler )
+
 
     /// Returns a specified number of contiguous elements from the end of an obserable sequence
     let takeLast ( count:int ) source = 
         Observable.TakeLast(source, count)
 
 
+    /// Returns a specified number of contiguous elements from the end of an obserable sequence,
+    /// using the specified scheduler to drain the queue.
+    let takeLastOn (scheduler:IScheduler) (count:int) source =
+        Observable.TakeLast( source, count, scheduler )
+
+
     /// Returns elements within the specified duration from the end of the observable source sequence.
     let takeLastSpan ( duration:TimeSpan ) ( source:IObservable<'Source> ): IObservable<'Source> =
         Observable.TakeLast( source, duration )
+
+    
+    /// Returns elements within the specified duration from the end of the observable source sequence,
+    /// using the specified scheduler to run timers.
+    let takeLastSpanOn (scheduler:IScheduler) (duration:TimeSpan) source =
+        Observable.TakeLast( source, duration, scheduler)
 
 
     /// Returns a list with the elements within the specified duration from the end of the observable source sequence.
     let takeLastBuffer ( duration:TimeSpan )( source:IObservable<'Source> ): IObservable<Collections.Generic.IList<'Source>> =
         Observable.TakeLastBuffer( source, duration )
+
+    
+    /// Returns a list with the elements within the specified duration from the end of the observable source sequence,
+    /// using the specified scheduler to run timers.
+    let takeLastBufferOn (scheduler:IScheduler) duration source =
+        Observable.TakeLastBuffer( source, duration, scheduler )
 
 
     /// Returns a list with the specified number of contiguous elements from the end of an observable sequence.
@@ -1566,6 +1782,12 @@ module Observable =
     /// Returns the elements from the source observable until the specified time
     let takeUntilTime<'Source> (endtime:DateTimeOffset) source =
         Observable.TakeUntil<'Source>(source , endtime )
+
+
+    /// Returns the elements from the source observable until the specified time,
+    /// using the specified scheduler to run timers.
+    let takeUntilTimeOn (scheduler:IScheduler) endtime source =
+        Observable.TakeUntil( source, endtime, scheduler )
 
 
     /// Returns elements from an observable sequence as long as a specified condition is true.
@@ -1596,6 +1818,24 @@ module Observable =
     let throw ( except:exn ) : IObservable<'Result> =
         Observable.Throw( except )
 
+
+    /// Returns an observable sequence that terminates with an exception.
+    let throwWitness witness ex =
+        Observable.Throw( ex, witness=witness )
+
+
+    /// Returns an observable sequence that terminates with an exception, 
+    /// using the specified scheduler to send out the single OnError message.
+    let throwOn scheduler ex =
+        Observable.Throw( ex, scheduler=scheduler )
+
+    
+    /// Returns an observable sequence that terminates with an exception, 
+    /// using the specified scheduler to send out the single OnError message.
+    let throwWitnessOn scheduler witeness ex =
+        Observable.Throw( ex, witeness, scheduler )
+
+
     /// matches when the observable sequence has an available element and 
     /// applies the map
     let thenMap map source = 
@@ -1607,10 +1847,22 @@ module Observable =
         Observable.TimeInterval( source )
 
 
+    /// Records the time interval between consecutive elements in an observable sequence,
+    /// using the specified scheduler to compute time intervals.
+    let timeIntervalOn scheduler source =
+        Observable.TimeInterval( source, scheduler)
+
+
     /// Applies a timeout policy to the observable sequence based on an absolute time.
     /// If the sequence doesn't terminate before the specified absolute due time, a TimeoutException is propagated to the observer.
     let timeout ( timeout:System.DateTimeOffset ) ( source:IObservable<'Source>) =
         Observable.Timeout( source, timeout)
+
+    
+    /// Applies a timeout policy to the observable sequence based on an absolute time, using the specified scheduler to run timeout timers.
+    /// If the sequence doesn't terminate before the specified absolute due time, a TimeoutException is propagated to the observer.
+    let timeoutOn (scheduler:IScheduler) (timeout:DateTimeOffset) source =
+        Observable.Timeout( source, timeout, scheduler )
 
 
     /// Applies a timeout policy to the observable sequence based on an absolute time.
@@ -1618,6 +1870,14 @@ module Observable =
     /// observable sequence is used to produce future messages from that point on.
     let timeoutOther ( timeout:System.DateTimeOffset ) ( other:IObservable<'Source>) ( source:IObservable<'Source>) =
         Observable.Timeout( source, timeout, other)
+
+    
+    /// Applies a timeout policy to the observable sequence based on an absolute time,
+    /// using the specified scheduler to run timeout timers.
+    /// If the sequence doesn't terminate before the specified absolute due time, the other 
+    /// observable sequence is used to produce future messages from that point on.
+    let timeoutOtherOn (scheduler:IScheduler) (timeout:DateTimeOffset) other source =
+        Observable.Timeout( source, timeout, other, scheduler )
 
 
     /// Applies a timeout policy for each element in the observable sequence.
@@ -1627,11 +1887,25 @@ module Observable =
         Observable.Timeout( source, timeout)
         
 
+    /// Applies a timeout policy for each element in the observable sequence, using the specified scheduler to run timeout timers.
+    /// If the next element isn't received within the specified timeout duration starting from its
+    /// predecessor, a TimeoutException is propagated to the observer.
+    let timeoutSpanOn (scheduler:IScheduler) (timeout:TimeSpan) source =
+        Observable.Timeout( source, timeout, scheduler ) 
+
+
     /// Applies a timeout policy for each element in the observable sequence.
     /// If the next element isn't received within the specified timeout duration starting from 
     /// its predecessor, the other observable sequence is used to produce future messages from that point on.
     let timeoutSpanOther( timeout:TimeSpan ) ( other:IObservable<'Source> ) ( source:IObservable<'Source> ) =
         Observable.Timeout( source, timeout, other)
+
+    
+    /// Applies a timeout policy for each element in the observable sequence, using the specified scheduler to run timeout timers.
+    /// If the next element isn't received within the specified timeout duration starting from 
+    /// its predecessor, the other observable sequence is used to produce future messages from that point on.
+    let timeoutSpanOtherOn (scheduler:IScheduler) (timeout:TimeSpan) other source =
+        Observable.Timeout( source, timeout, other, scheduler)
 
 
     /// Applies a timeout policy to the observable sequence based on a timeout duration computed for each element.
@@ -1664,11 +1938,17 @@ module Observable =
 
 
 //    #endregion
-    
+
 
     /// Returns an observable sequence that produces a single value at the specified absolute due time.
     let timer ( dueTime:DateTimeOffset ) : IObservable<int64> =
         Observable.Timer( dueTime )
+
+    
+    /// Returns an observable sequence that produces a single value at the specified absolute due time,
+    /// using the specified scheduler to run the timer.
+    let timerOn (scheduler:IScheduler) (dueTime:DateTimeOffset) =
+        Observable.Timer( dueTime, scheduler )
 
 
     /// Returns an observable sequence that periodically produces a value starting at the specified initial absolute due time.
@@ -1681,10 +1961,22 @@ module Observable =
         Observable.Timer( dueTime )
 
 
+    /// Returns an observable sequence that produces a single value after the specified relative due time has elapsed,
+    /// using the specified scheduler to run the timer.
+    let timerSpanOn (scheduler:IScheduler) (dueTime:TimeSpan) =
+        Observable.Timer( dueTime, scheduler)
+
+
     /// Returns an observable sequence that periodically produces a value after the specified
     /// initial relative due time has elapsed.
     let timerSpanPeriod ( dueTime:TimeSpan, period:TimeSpan ) : IObservable<int64> =
         Observable.Timer( dueTime, period)
+
+
+    /// Returns an observable sequence that periodically produces a value after the specified
+    /// initial relative due time has elapsed, using the specified scheduler to run the timer.
+    let timerSpanPeriodOn (scheduler:IScheduler) (dueTime:TimeSpan) (period:TimeSpan) =
+        Observable.Timer( dueTime, period, scheduler)
 
 
     /// Timestamps each element in an observable sequence using the local system clock.
@@ -1803,6 +2095,12 @@ module Observable =
         Observable.Window( source, timeSpan )
 
 
+   /// Projects each element of an observable sequence into consecutive non-overlapping windows 
+    /// which are produced based on timing information, using the specified scheduler to run timers.
+    let windowTimeSpanOn (scheduler:IScheduler) timeSpan source =
+        Observable.Window( source, timeSpan, scheduler )
+
+
     /// Projects each element of an observable sequence into zero or more windows.
     /// windowOpenings - Observable sequence whose elements denote the creation of new windows.
     /// windowClosingSelector - A function invoked to define the closing of each produced window.
@@ -1817,6 +2115,11 @@ module Observable =
     let windowTimeShift ( timeSpan:TimeSpan )( timeShift:TimeSpan )( source:IObservable<'Source> ) : IObservable<IObservable<'Source>> =
         Observable.Window( source, timeSpan, timeShift )
 
+    
+    /// Projects each element of an observable sequence into consecutive non-overlapping windows, using the specified scheduler to run timers.
+    /// windowBoundaries - Sequence of window boundary markers. The current window is closed and a new window is opened upon receiving a boundary marker.
+    let windowTimeShiftOn (scheduler:IScheduler) (timeSpan:TimeSpan) (timeShift:TimeSpan) source =
+        Observable.Window( source, timeSpan, timeShift, scheduler)
 
 
     /// Projects each element of an observable sequence into consecutive non-overlapping windows
@@ -1843,6 +2146,14 @@ module Observable =
     /// taken, or at the scheduled time of departure, whichever event occurs first
     let windowTimeCount ( timeSpan:TimeSpan ) (count:int) ( source:IObservable<'Source> ): IObservable<IObservable<'Source>> =
         Observable.Window( source, timeSpan, count )
+
+    
+    /// Projects each element of an observable sequence into a window that is completed when either it's full or 
+    /// a given amount of time has elapsed, using the specified scheduler to run timers.
+    /// A useful real-world analogy of this overload is the behavior of a ferry leaving the dock when all seats are 
+    /// taken, or at the scheduled time of departure, whichever event occurs first
+    let windowTimeCountOn (scheduler:IScheduler) (timeSpan:TimeSpan) (count:int) source =
+        Observable.Window( source, timeSpan, count, scheduler)
 
 
     /// Merges two observable sequences into one observable sequence of pairs.
@@ -1886,10 +2197,3 @@ module Observable =
                    ( second        : seq<'Source2>                       )
                    ( first         : IObservable<'Source1>               ) : IObservable<'Result> =
         Observable.Zip(first, second, Func<_,_,_> resultSelector )
-
- module Disposables = 
-     /// Returns an IDisposable that disposes all the underlying disposables
-     let compose (disposables: #seq<IDisposable>) =
-         Disposable.Create(fun _ -> 
-             disposables 
-             |> Seq.iter(fun x -> x.Dispose()))

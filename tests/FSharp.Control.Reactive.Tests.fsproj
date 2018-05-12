@@ -5,11 +5,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" Condition="Exists('AssemblyInfo.fs')" />
+    <None Include="paket.references" />
+    <Content Include="App.config" />
+    <Compile Include="SchedulerSpecs.fs" />
     <Compile Include="ObservableSpecs.fs" />
     <Compile Include="SubjectSpecs.fs" />
     <Compile Include="EmitsSpecs.fs" />
-    <None Include="paket.references" />
-    <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\FSharp.Control.Reactive\FSharp.Control.Reactive.fsproj" />

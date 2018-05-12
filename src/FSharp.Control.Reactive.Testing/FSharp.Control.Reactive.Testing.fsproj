@@ -3,10 +3,10 @@
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="paket.references" />
     <Compile Include="TestNotifications.fs" />
     <Compile Include="TestSchedule.fs" />
     <Compile Include="TestObserver.fs" />
-    <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FSharp.Control.Reactive\FSharp.Control.Reactive.fsproj" />
