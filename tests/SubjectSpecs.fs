@@ -2,6 +2,7 @@
 
 open NUnit.Framework
 open FsCheck
+open FSharp.Control.Reactive
 open FSharp.Control.Reactive.Testing
 
 [<Test>]
