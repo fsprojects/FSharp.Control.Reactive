@@ -6,15 +6,18 @@ type Subject<'a> private () =
     
         /// Represents and object that is both an observable sequence as well as an observer.
         /// Each notification is broadcasted to all subscribed observers.
-        static member broadcast = new System.Reactive.Subjects.Subject<'a> ()
+        static member broadcast 
+            with get () = new System.Reactive.Subjects.Subject<'a> ()
 
         /// Represents the result of an asynchronous operation.
         /// The last value before the OnCompleted notification, or the error received through OnError, is sent to all subscribed observers.
-        static member async = new AsyncSubject<'a> ()
+        static member async 
+            with get () = new AsyncSubject<'a> ()
 
         /// Represents an object that is both an observable sequence as well as an observer.
         /// Each notification is broadcasted to all subscribed and future observers, subject to buffer trimming policies.
-        static member replay = new ReplaySubject<'a> ()
+        static member replay 
+            with get () = new ReplaySubject<'a> ()
 
         /// Represents a value that changes over time.
         /// Observers can subscribe to the subject to receive the last (or initial) value and all subsequent notifications.
