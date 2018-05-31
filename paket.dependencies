@@ -3,8 +3,8 @@ redirects: on
 storage: none
 
 nuget FSharp.Core
-nuget System.Reactive ~> 3.0
-nuget Microsoft.Reactive.Testing
+nuget System.Reactive ~> 4.0
+nuget Microsoft.Reactive.Testing ~> 4.0
 nuget Microsoft.NET.Test.Sdk
 nuget NUnit
 nuget NUnit.Runners

@@ -1,12 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <IsPackable>false</IsPackable>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" Condition="Exists('AssemblyInfo.fs')" />
     <None Include="paket.references" />
-    <Content Include="App.config" />
     <Compile Include="SchedulerSpecs.fs" />
     <Compile Include="ObservableSpecs.fs" />
     <Compile Include="SubjectSpecs.fs" />
