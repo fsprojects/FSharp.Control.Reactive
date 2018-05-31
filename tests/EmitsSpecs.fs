@@ -5,6 +5,8 @@ open FsCheck
 open FSharp.Control.Reactive
 open FSharp.Control.Reactive.Testing
 
+#nowarn "988"
+
 [<TestFixture>]
 type EmitTest () = 
     
@@ -54,4 +56,4 @@ type EmitTest () =
                     |> TestSchedule.subscribeTestObserverStart sch
                     |> TestObserver.nexts = TestNotification.mapNexts f ms
 
-        
+
