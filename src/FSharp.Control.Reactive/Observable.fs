@@ -773,7 +773,7 @@ module Observable =
     /// Converts a .NET event to an observable sequence, using a supplied event delegate type on a specified scheduler. 
     /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
     let fromEventHandlerOn (scheduler:IScheduler) addHandler removeHandler =
-        Observable.FromEventPattern<'TEventArgs> (
+        Observable.FromEventPattern<'EventArgs> (
             Action<EventHandler<'EventArgs>> addHandler, 
             Action<EventHandler<'EventArgs>> removeHandler, 
             scheduler)
@@ -798,7 +798,7 @@ module Observable =
             initialState, 
             Func<'State, bool> condition, 
             Func<'State, 'State> iterator, 
-            Func<'TState, 'TResult> resultMap, 
+            Func<'State, 'TResult> resultMap, 
             scheduler)
       
 
