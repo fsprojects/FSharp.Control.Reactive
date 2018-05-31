@@ -2156,6 +2156,13 @@ module Observable =
         Observable.Window( source, timeSpan, count, scheduler)
 
 
+    /// Merges the specified observable sequences into one observable sequence by using the selector function
+    /// only when the first observable sequence produces an element and there was some element produced by the second
+    /// observable sequence
+    let withLatestFrom resultSelector second first =
+        Observable.WithLatestFrom( first, second, Func<_,_,_> resultSelector )
+
+
     /// Merges two observable sequences into one observable sequence of pairs.
     let zip ( first:IObservable<'Source1> ) ( second:IObservable<'Source2> ) : IObservable<'Source1 * 'Source2> =
         Observable.Zip( first, second, fun a b -> a,b)
