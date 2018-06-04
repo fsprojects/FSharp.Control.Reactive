@@ -28,7 +28,7 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 build/
 deploy/
-docs/
+docs/output
 packages/
 temp/
 test/

@@ -1,18 +1,18 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
-#r "System.Reactive.Core.dll"
-#r "System.Reactive.Interfaces.dll"
-#r "System.Reactive.Linq.dll"
-#r "System.Reactive.Providers.dll"
-#r "System.Reactive.PlatformServices.dll"
-#r "System.Reactive.Experimental.dll"
+#I "../../src/FSharp.Control.Reactive/bin/Release/net46"
+#I "../../src/FSharp.Control.Reactive.Testing/bin/Release/net46"
+#I "../../packages/build/NUnit/lib/net45/"
+#I "../../packages/build/FsCheck"
+#r "nunit.framework.dll"
+#r "FsCheck.dll"
+#r "System.Reactive.dll"
 #r "FSharp.Control.Reactive.dll"
-open System
-open System.Reactive.Linq
-open FSharp.Control.Reactive
-open Builders
+#r "FSharp.Control.Reactive.Testing.dll"
+#r "Microsoft.Reactive.Testing.dll"
+
+
 
 (**
 Getting Started
@@ -25,6 +25,7 @@ Observable Module
 
 As a first, simple example, the built-in module does not include a `zip` operator, but FSharp.Control.Reactive fills in this gap:
 *)
+open FSharp.Control.Reactive
 
 let obs1 = Observable.single 1
 let obs2 = Observable.single "A"
@@ -39,6 +40,7 @@ Computation Expressions
 
 The provided computation expressions open new approaches for constructing and combining `Observable` computations. The `observe` computation expression provides a simple workflow using the essential LINQ operators:
 *)
+open FSharp.Control.Reactive.Builders
 
 let rec generate x =
     observe {
@@ -57,8 +59,6 @@ Reactive Extensions
 
 For more information on Rx, check out the [Rx Workshop on Channel 9](http://channel9.msdn.com/series/Rx-Workshop). The examples provided in the workshop should be easy to port to FSharp.Control.Reactive. The [Beginner's Guide to the Reactive Extensions](http://msdn.microsoft.com/en-us/data/gg577611.aspx) includes many other links to excellent content.
 
-* [Introduction](introduction.html)
-* TODO: Continue tutorial with examples from the above, including use of `rxquery`.
  *)
 
 (**
@@ -69,6 +69,9 @@ The Rx.NET has several OOP-minded objects to test Reactive Applications. This pa
 
 Following test shows how the Broadcast Subject can be tested:
 *)
+open NUnit.Framework
+open FsCheck
+open FSharp.Control.Reactive.Testing
 
 [<Test>]
 let ``Broadcast Subject broadcast to all observers`` () =
@@ -80,8 +83,8 @@ let ``Broadcast Subject broadcast to all observers`` () =
             Subject.onNexts xs s 
             |> Subject.onCompleted 
             |> ignore
-
-    TestObserver.nexts observer = xs
+            
+            TestObserver.nexts observer = xs
 
 (**
 - The `TestSchedule.usage` call wil make sure we have a virtual time scheduler that we can use to sync our different observables and observers.

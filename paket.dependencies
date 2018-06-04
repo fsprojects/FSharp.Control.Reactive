@@ -11,11 +11,22 @@ nuget NUnit.Runners
 nuget NUnit3TestAdapter
 nuget FsCheck
 
+// [ FAKE GROUP ]
 group Build
-    source http://nuget.org/api/v2
-
-    nuget FSharp.Formatting
-    nuget FSharp.Compiler.Service
-    nuget FAKE
-    nuget Nuget.CommandLine
-    nuget RazorEngine
+    source https://api.nuget.org/v3/index.json
+    source https://ci.appveyor.com/nuget/fsharp-formatting
+    nuget Fake.Core.ReleaseNotes
+    nuget Fake.DotNet.Cli
+    nuget Fake.Tools.Git
+    nuget Fake.IO.FileSystem
+    nuget Fake.Core.Target
+    nuget Fake.DotNet.FSFormatting
+    nuget FSharp.Formatting >= 3 prerelease
+    nuget FSharp.Formatting.CommandTool >= 3 prerelease
+    nuget Fake.BuildServer.AppVeyor
+    nuget Fake.DotNet.Paket
+    nuget NUnit
+    nuget FsCheck
+    nuget Microsoft.AspNetCore
+    nuget Microsoft.AspNetCore.Hosting
+    nuget Microsoft.AspNetCore.StaticFiles

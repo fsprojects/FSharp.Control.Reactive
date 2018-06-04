@@ -1,129 +1,118 @@
+
 // --------------------------------------------------------------------------------------
 // FAKE build script 
 // --------------------------------------------------------------------------------------
 
-#I "packages/build/FAKE/tools"
-#r "NuGet.Core.dll"
-#r "FakeLib.dll"
-open System
-open System.IO
-open Fake 
-open Fake.Git
-open Fake.ReleaseNotesHelper
+#load ".fake/build.fsx/intellisense.fsx"
+#if !FAKE
+    #r "netstandard"
+#endif
 
+open Fake.Tools
+open Fake.Core
+open Fake.DotNet
+open Fake.BuildServer
+open Fake.IO
+open Fake.IO.FileSystemOperators
+open Fake.IO.Globbing.Operators
+open System.IO
+open Microsoft.AspNetCore.Builder
+open Microsoft.AspNetCore.Hosting
+open System.Threading
 // --------------------------------------------------------------------------------------
 // Provide project-specific details below
 // --------------------------------------------------------------------------------------
 
-let projectSource = "src/FSharp.Control.Reactive"
-let projectTesting = "src/FSharp.Control.Reactive.Testing"
-
+let projects = [ "src/FSharp.Control.Reactive/FSharp.Control.Reactive.fsproj" 
+                 "src/FSharp.Control.Reactive.Testing/FSharp.Control.Reactive.Testing.fsproj" ]
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted 
 let gitHome = "git@github.com:fsprojects"
 // The name of the project on GitHub
 let gitName = "FSharp.Control.Reactive"
-let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/fsprojects"
 
-let buildDir = Path.Combine(Environment.CurrentDirectory, "bin")
+let buildDir = Path.GetFullPath "bin"
 
+let docsDir = Path.GetFullPath "docs"
 
 // --------------------------------------------------------------------------------------
 // The rest of the file includes standard build steps 
 // --------------------------------------------------------------------------------------
 
 // Read additional information from the release notes document
-Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
-let (!!) includes = (!! includes).SetBaseDirectory __SOURCE_DIRECTORY__
-let release = parseReleaseNotes (IO.File.ReadAllLines "RELEASE_NOTES.md")
-let isAppVeyorBuild = environVar "APPVEYOR" |> isNull |> not
-let isTaggedBuild = environVarOrDefault "APPVEYOR_REPO_TAG" "false" |> Boolean.Parse
+
+let release = ReleaseNotes.load  "RELEASE_NOTES.md"
+let isAppVeyorBuild = Environment.environVar "APPVEYOR" |> isNull |> not
+let isTaggedBuild = Environment.environVarAsBoolOrDefault "APPVEYOR_REPO_TAG" false
 let versionSuffix =
+    let buildVersion = BuildServer.buildVersion
     if isTaggedBuild then ""
     elif buildVersion = "LocalBuild" then "-LocalBuild"
     else "-beta" + buildVersion
 let nugetVersion = release.NugetVersion + versionSuffix
 
+BuildServer.install [
+    AppVeyor.Installer
+]
 // Generate assembly info files with the right version & up-to-date information
-Target "BuildVersion" (fun _ ->
+Target.create "BuildVersion" (fun _ ->
     Shell.Exec("appveyor", sprintf "UpdateBuild -Version \"%s\"" nugetVersion) |> ignore
 )
 
 // --------------------------------------------------------------------------------------
 // Clean build results & restore NuGet packages
 
-Target "Clean" (fun _ ->
-    CleanDirs ["bin"; "temp"]
-    !!"src/**/bin" ++ "src/**/obj" |> DeleteDirs
+Target.create "Clean" (fun _ ->
+    !! "src/**/bin"
+    ++ "src/**/obj"
+    ++ "bin"
+    ++ "temp"
+    |> Shell.cleanDirs 
 )
 
-Target "CleanDocs" (fun _ ->
-    CleanDirs ["docs/output"]
+Target.create "CleanDocs" (fun _ ->
+    Shell.cleanDir "docs/output"
 )
 
 // --------------------------------------------------------------------------------------
 // Build library & test project
 
-Target "Build" (fun _ ->
-    // We need to invoke restore in order to create the .NetCore obj files
-    DotNetCli.Build (fun defaults ->
-        { defaults with
-            Project = projectSource
-            Configuration = "Release" })
-    DotNetCli.Build (fun defaults ->
-        { defaults with
-            Project = projectTesting
-            Configuration = "Release" })
+Target.create "Build" (fun _ ->
+    Environment.setEnvironVar "GenerateDocumentationFile" "true"
+    projects
+    |> List.iter (DotNet.build id)
+
 )
 
-Target "CopyLicense" (fun _ ->
-    [ "LICENSE.txt" ] |> CopyTo "bin"
+Target.create "CopyLicense" (fun _ ->
+    [ "LICENSE.txt" ] |> Shell.copyTo "bin"
 )
 
 // --------------------------------------------------------------------------------------
 // Run the unit tests using test runner
 
-Target "RunTests" (fun _ ->
-    try
-        DotNetCli.Test(fun p ->
-            { p with
-                Project = "tests"
-                Configuration = "Release"
-                TimeOut = TimeSpan.FromMinutes 20. })
-    finally
-        AppVeyor.UploadTestResultsXml AppVeyor.TestResultsType.NUnit "bin"
+Target.create "RunTests" (fun _ ->
+        DotNet.test (fun p -> { p with Configuration = DotNet.BuildConfiguration.Release}) "tests"
+        Trace.publish (ImportData.Nunit NunitDataVersion.Nunit3) buildDir
 )
 
 // --------------------------------------------------------------------------------------
 // Build a NuGet package
 
-Target "Pack" (fun _ ->
-    DotNetCli.Pack (fun p ->
-        { p with
-            Project = projectSource
-            OutputPath = buildDir
-            AdditionalArgs =
-              [ "--no-build"
-                sprintf "/p:Version=%s" release.NugetVersion
-                //"/p:ReleaseNotes=" + (toLines release.Notes)
-              ]
-        })
-
-    DotNetCli.Pack (fun p ->
-        { p with
-            Project = projectTesting
-            OutputPath = buildDir
-            AdditionalArgs =
-              [ "--no-build"
-                "--no-dependencies"
-                sprintf "/p:Version=%s" release.NugetVersion
-                //"/p:ReleaseNotes=" + (toLines release.Notes)
-              ]
-        })
+Target.create "Pack" (fun _ ->
+    Environment.setEnvironVar "PackageVersion" nugetVersion
+    Environment.setEnvironVar "Version" nugetVersion
+    Environment.setEnvironVar "PackageReleaseNotes" (release.Notes |> String.toLines)
+    projects
+    |> List.iter (DotNet.pack (fun p -> 
+            { p with
+                OutputPath = Some buildDir
+                NoBuild = true
+            }) )
 )
 
-Target "Push" (fun _ ->
-    Paket.Push (fun p -> 
+Target.create "Push" (fun _ ->
+    Paket.push (fun p -> 
         { p with
             WorkingDir = buildDir }) 
 )
@@ -131,45 +120,114 @@ Target "Push" (fun _ ->
 // --------------------------------------------------------------------------------------
 // Generate the documentation
 
-Target "GenerateReferenceDocs" (fun _ ->
-    if not <| executeFSIWithArgs "docs/tools" "generate.fsx" ["--define:RELEASE"; "--define:REFERENCE"] [] then
-      failwith "generating reference documentation failed"
+Target.create "GenerateDocs" (fun _ ->
+    
+    let githubLink = "https://github.com/fsprojects/FSharp.Control.Reactive"
+    // Paths with template/source/output locations
+
+    let content    = docsDir @@ "content"
+    let output     = docsDir @@ "output"
+    let outputContent = output @@ "content"
+    let outputReference = output @@ "reference"
+    let files      = docsDir @@ "files"
+    let templates  = docsDir @@ "tools/templates"
+    let formatting = Path.GetFullPath "packages/build/FSharp.Formatting.CommandTool"
+    let docTemplate = formatting @@ "templates/docpage.cshtml"
+
+    // Where to look for *.csproj templates (in this order)
+    let layoutRoots = [ templates; formatting @@ "templates"
+                        formatting @@ "templates/reference" ]
+    let info =
+      [ "project-name", "FSharp.Control.Reactive"
+        "project-author", "Ryan Riley, Steffen Forkmann, and Jared Heseter"
+        "project-summary", "A F#-friendly wrapper for the Reactive Extensions."
+        "project-github", "http://github.com/fsprojects/FSharp.Reactive"
+        "project-nuget", "https://www.nuget.org/packages/FSharp.Control.Reactive" ]
+
+    Shell.copyDir output files FileFilter.allFiles
+    Directory.ensure outputContent
+    Shell.copyDir outputContent (formatting @@ "styles") FileFilter.allFiles         
+    FSFormatting.createDocs (fun s ->
+        { s with
+            Source = content
+            OutputDirectory = output
+            Template = docTemplate
+            ProjectParameters = info
+            LayoutRoots = layoutRoots })
+
+    Directory.ensure outputReference
+    let dlls =
+        !! "src/FSharp.Control.*/bin/Release/**/FSharp.Control.Reactive*.dll"
+        |> Seq.distinctBy Path.GetFileName
+        |> List.ofSeq
+    let libDirs =
+        dlls
+        |> Seq.map Path.GetDirectoryName
+        |> Seq.distinct
+        |> List.ofSeq
+
+    dlls
+    |> FSFormatting.createDocsForDlls (fun s ->
+        { s with
+            OutputDirectory = outputReference
+            LayoutRoots =  layoutRoots
+            LibDirs = libDirs
+            ProjectParameters = info
+            SourceRepository = githubLink @@ "tree/master" })
 )
 
-Target "GenerateHelp" (fun _ ->
-    if not <| executeFSIWithArgs "docs/tools" "generate.fsx" ["--define:RELEASE"; "--define:HELP"] [] then
-      failwith "generating help documentation failed"
+Target.create "HostDocs" (fun _ ->
+    let configureApp (app:IApplicationBuilder) = 
+       app.UseFileServer(FileServerOptions(EnableDefaultFiles = true))
+       |> ignore
+    let port = 8081
+    let directory = docsDir @@ "output"
+    let host = 
+        WebHostBuilder()
+            .UseWebRoot(directory)
+            .UseContentRoot(directory)
+            .PreferHostingUrls(false)
+            .UseKestrel(fun o -> o.ListenLocalhost(port))
+            .Configure(System.Action<IApplicationBuilder> configureApp)
+            .Build()
+    use cts =  new CancellationTokenSource()        
+    host.RunAsync(cts.Token) |> ignore
+    let psi = System.Diagnostics.ProcessStartInfo(sprintf "http://localhost:%d/index.html" port)
+    psi.UseShellExecute <- true
+    System.Diagnostics.Process.Start (psi) |> ignore
+    Trace.traceImportant "Press any key to stop."
+    System.Console.ReadKey() |> ignore
+    cts.Cancel()   
 )
-
-Target "GenerateDocs" DoNothing
 
 // --------------------------------------------------------------------------------------
 // Release Scripts
 
-Target "ReleaseDocs" (fun _ ->
+Target.create "ReleaseDocs" (fun _ ->
     let tempDocsDir = "temp/gh-pages"
-    CleanDir tempDocsDir
-    Repository.cloneSingleBranch "" (gitHome + "/" + gitName + ".git") "gh-pages" tempDocsDir
+    Shell.cleanDir tempDocsDir
+    Git.Repository.cloneSingleBranch "" (gitHome + "/" + gitName + ".git") "gh-pages" tempDocsDir
 
-    CopyRecursive "docs/output" tempDocsDir true |> tracefn "%A"
-    StageAll tempDocsDir
-    Commit tempDocsDir (sprintf "Update generated documentation for version %s" release.NugetVersion)
-    Branches.push tempDocsDir
+    Shell.copyRecursive "docs/output" tempDocsDir true |> Trace.tracefn "%A"
+    Git.Staging.stageAll tempDocsDir
+    Git.Commit.exec tempDocsDir (sprintf "Update generated documentation for version %s" release.NugetVersion)
+    Git.Branches.push tempDocsDir
 )
 
-Target "Release" (fun _ ->
-    StageAll ""
-    Commit "" (sprintf "Bump version to %s" release.NugetVersion)
-    Branches.push ""
+Target.create "Release" (fun _ ->
+    Git.Staging.stageAll ""
+    Git.Commit.exec "" (sprintf "Bump version to %s" release.NugetVersion)
+    Git.Branches.push ""
 
-    Branches.tag "" release.NugetVersion
-    Branches.pushTag "" "origin" release.NugetVersion
+    Git.Branches.tag "" release.NugetVersion
+    Git.Branches.pushTag "" "origin" release.NugetVersion
 )
 
 // --------------------------------------------------------------------------------------
 // Run all targets by default. Invoke 'build <Target>' to override
 
-Target "All" DoNothing
+Target.create "All" ignore
+open Fake.Core.TargetOperators
 
 "Clean"
   =?> ("BuildVersion", isAppVeyorBuild)
@@ -177,17 +235,14 @@ Target "All" DoNothing
   ==> "Build"
   ==> "RunTests"
   ==> "All"
-  =?> ("GenerateReferenceDocs",isLocalBuild && not isMono)
-  =?> ("GenerateDocs"         ,isLocalBuild && not isMono)
-  =?> ("ReleaseDocs"          ,isLocalBuild && not isMono)
+  =?> ("GenerateDocs", BuildServer.isLocalBuild && not Environment.isMono)
+  =?> ("ReleaseDocs", BuildServer.isLocalBuild && not Environment.isMono)
 
 "All" 
   ==> "Pack"
   ==> "Push"
 
 "CleanDocs"
-  ==> "GenerateHelp"
-  ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"
 (*    
 "ReleaseDocs"
@@ -196,4 +251,4 @@ Target "All" DoNothing
 "Push"
   ==> "Release"
 
-RunTargetOrDefault "All"
+Target.runOrDefault "All"
