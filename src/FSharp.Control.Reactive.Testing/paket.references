@@ -2,3 +2,5 @@ FSharp.Core
 System.Reactive
 Microsoft.Reactive.Testing
 FsCheck
+fparsec
+Unquote
