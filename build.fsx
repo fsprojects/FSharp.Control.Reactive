@@ -54,6 +54,7 @@ Target "BuildVersion" (fun _ ->
 
 Target "Clean" (fun _ ->
     CleanDirs ["bin"; "temp"]
+    !!"src/**/bin" ++ "src/**/obj" |> DeleteDirs
 )
 
 Target "CleanDocs" (fun _ ->
