@@ -1,3 +1,6 @@
+### New in 4.1.0 - (Released 2018/06/06)
+* Update to System.Reactive 4.0.
+
 ### New in 4.0.0 - (Released 2018/02/21)
 * Support for netstandard-2.0
 * Added Subjects to the core library.
