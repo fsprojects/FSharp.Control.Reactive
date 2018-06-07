@@ -6,7 +6,9 @@
     <None Include="paket.references" />
     <Compile Include="TestNotifications.fs" />
     <Compile Include="TestSchedule.fs" />
+    <Compile Include="TestObservable.fs" />
     <Compile Include="TestObserver.fs" />
+    <Compile Include="Marbles.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FSharp.Control.Reactive\FSharp.Control.Reactive.fsproj" />

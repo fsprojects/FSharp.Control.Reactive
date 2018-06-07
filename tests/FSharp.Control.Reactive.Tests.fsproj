@@ -12,6 +12,7 @@
     <Compile Include="ObservableSpecs.fs" />
     <Compile Include="SubjectSpecs.fs" />
     <Compile Include="EmitsSpecs.fs" />
+    <Compile Include="MarbleSpecs.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\FSharp.Control.Reactive\FSharp.Control.Reactive.fsproj" />
