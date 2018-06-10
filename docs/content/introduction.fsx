@@ -1,14 +1,8 @@
-#I "../../bin/v4.5"
 
-#r "FSharp.Control.Reactive"
-#r "System.Reactive.Linq"
-#r "System.Reactive.Interfaces"
-
-open System
-open System.Windows.Forms
-open FSharp.Control.Reactive
-
-let form = new Form ()
+(*** hide ***)
+#I "../../src/FSharp.Control.Reactive/bin/Release/net46"
+#r "System.Reactive.dll"
+#r "FSharp.Control.Reactive.dll"
 
 (** 
 # Introduction to Observables
@@ -26,6 +20,12 @@ The following example show how the Enabling/Disabling of a button can be control
 
 *)
 
+open System
+open FSharp.Control.Reactive
+open System.Windows.Forms
+
+
+let buttonForm = new Form ()
 let btn = new Button()
 let txb = new TextBox()
 
@@ -36,9 +36,9 @@ txb.TextChanged
 btn.Text <- "OK"
 btn.Top <- 20
 
-form.Controls.Add txb
-form.Controls.Add btn
-form.Show ()
+buttonForm.Controls.Add txb
+buttonForm.Controls.Add btn
+buttonForm.Show ()
 
 (** 
 ## Transforming Observable
@@ -60,10 +60,10 @@ input.TextChanged
 |> Observable.subscribe (fun x -> reversed.Text <- x)
 
 reversed.Top <- 20
-
-form.Controls.Add input
-form.Controls.Add reversed
-form.Show ()
+let reverseForm = new Form ()
+reverseForm.Controls.Add input
+reverseForm.Controls.Add reversed
+reverseForm.Show ()
 
 (**
 ## Merging Two emits into one
@@ -87,8 +87,8 @@ redBtn.Text <- "Red"
 greenBtn.Text <- "Green"
 greenBtn.Top <- 20
 result.Left <- 100
-
-form.Controls.Add redBtn
-form.Controls.Add greenBtn
-form.Controls.Add result
-form.Show ()
+let colorForm = new Form ()
+colorForm.Controls.Add redBtn
+colorForm.Controls.Add greenBtn
+colorForm.Controls.Add result
+colorForm.Show ()

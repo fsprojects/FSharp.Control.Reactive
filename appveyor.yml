@@ -1,10 +1,8 @@
-environment:
-  CLI_VERSION: 2.0.0
 image: Visual Studio 2017
 init:
   - git config --global core.autocrlf input
 build_script:
-  - ps: .\build.cmd Pack
+  - ps: .\fake.cmd build target pack
 test: off
 version: '{build}'
 artifacts:

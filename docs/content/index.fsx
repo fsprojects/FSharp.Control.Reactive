@@ -1,19 +1,3 @@
-(*** hide ***)
-// This block of code is omitted in the generated HTML documentation. Use 
-// it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
-#r "System.Reactive.Core.dll"
-#r "System.Reactive.Interfaces.dll"
-#r "System.Reactive.Linq.dll"
-#r "System.Reactive.Providers.dll"
-#r "System.Reactive.PlatformServices.dll"
-#r "System.Reactive.Experimental.dll"
-#r "FSharp.Control.Reactive.dll"
-open System
-open System.Reactive.Linq
-open FSharp.Control.Reactive
-open Builders
-
 (**
 FSharp.Control.Reactive
 ===================
