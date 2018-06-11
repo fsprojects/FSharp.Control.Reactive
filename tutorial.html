@@ -13,8 +13,8 @@
     <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
 
-    <link type="text/css" rel="stylesheet" href="/FSharp.Control.Reactive/content/style.css" />
-    <script type="text/javascript" src="/FSharp.Control.Reactive/content/tips.js"></script>
+    <link type="text/css" rel="stylesheet" href="/content/style.css" />
+    <script type="text/javascript" src="/content/tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -27,44 +27,17 @@
           <li><a href="http://fsharp.org">fsharp.org</a></li>
           <li><a href="http://github.com/fsprojects/FSharp.Reactive">github page</a></li>
         </ul>
-        <h3 class="muted"><a href="/FSharp.Control.Reactive/index.html">FSharp.Control.Reactive</a></h3>
+        <h3 class="muted"><a href="/index.html">FSharp.Control.Reactive</a></h3>
       </div>
       <hr />
       <div class="row">
         <div class="span9" id="main">
           
-<h1>Getting Started</h1>
-
+<h1><a name="Getting-Started" class="anchor" href="#Getting-Started">Getting Started</a></h1>
 <p>The easiest way to get started using FSharp.Control.Reactive is to take a look at the <a href="https://github.com/fsprojects/FSharp.Control.Reactive/blob/master/tests/ObservableSpecs.fs">tests</a>. In general, you can consider the <code>Observable</code> module as providing a set of extensions to the built-in <code>Observable</code> module.</p>
-
-<h2>Observable Module</h2>
-
+<h2><a name="Observable-Module" class="anchor" href="#Observable-Module">Observable Module</a></h2>
 <p>As a first, simple example, the built-in module does not include a <code>zip</code> operator, but FSharp.Control.Reactive fills in this gap:</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
-<span class="l">2: </span>
-<span class="l">3: </span>
-<span class="l">4: </span>
-<span class="l">5: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs8', 9)" onmouseover="showTip(event, 'fs8', 9)" class="i">tuple</span> <span onmouseout="hideTip(event, 'fs9', 10)" onmouseover="showTip(event, 'fs9', 10)" class="i">x</span> <span onmouseout="hideTip(event, 'fs10', 11)" onmouseover="showTip(event, 'fs10', 11)" class="i">y</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="i">x</span>,<span onmouseout="hideTip(event, 'fs10', 13)" onmouseover="showTip(event, 'fs10', 13)" class="i">y</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 14)" onmouseover="showTip(event, 'fs11', 14)" class="i">obs1</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs12', 15)" onmouseover="showTip(event, 'fs12', 15)" class="i">Observable</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs13', 16)" onmouseover="showTip(event, 'fs13', 16)" class="i">Return</span> <span class="n">1</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs14', 17)" onmouseover="showTip(event, 'fs14', 17)" class="i">obs2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs12', 18)" onmouseover="showTip(event, 'fs12', 18)" class="i">Observable</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs13', 19)" onmouseover="showTip(event, 'fs13', 19)" class="i">Return</span> <span class="s">&quot;</span><span class="s">A</span><span class="s">&quot;</span>
-<span onmouseout="hideTip(event, 'fs12', 20)" onmouseover="showTip(event, 'fs12', 20)" class="i">Observable</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs15', 21)" onmouseover="showTip(event, 'fs15', 21)" class="i">zip</span> <span onmouseout="hideTip(event, 'fs11', 22)" onmouseover="showTip(event, 'fs11', 22)" class="i">obs1</span> <span onmouseout="hideTip(event, 'fs14', 23)" onmouseover="showTip(event, 'fs14', 23)" class="i">obs2</span> <span onmouseout="hideTip(event, 'fs8', 24)" onmouseover="showTip(event, 'fs8', 24)" class="i">tuple</span>
-<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs12', 25)" onmouseover="showTip(event, 'fs12', 25)" class="i">Observable</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs16', 26)" onmouseover="showTip(event, 'fs16', 26)" class="i">subscribe</span> (<span onmouseout="hideTip(event, 'fs17', 27)" onmouseover="showTip(event, 'fs17', 27)" class="i">printfn</span> <span class="s">&quot;</span><span class="s">%</span><span class="s">A</span><span class="s">&quot;</span>)</pre>
-</td>
-</tr>
-</table>
-
-<h2>Computation Expressions</h2>
-
-<p>The provided computation expressions open new approaches for constructing and combining <code>Observable</code> computations. The <code>observe</code> computation expression provides a simple workflow using the essential LINQ operators:</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
@@ -72,58 +45,188 @@
 <span class="l">6: </span>
 <span class="l">7: </span>
 <span class="l">8: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs18', 28)" onmouseover="showTip(event, 'fs18', 28)" class="i">generate</span> <span onmouseout="hideTip(event, 'fs19', 29)" onmouseover="showTip(event, 'fs19', 29)" class="i">x</span> <span class="o">=</span>
-    <span onmouseout="hideTip(event, 'fs20', 30)" onmouseover="showTip(event, 'fs20', 30)" class="i">observe</span> {
-        <span class="k">yield</span> <span onmouseout="hideTip(event, 'fs19', 31)" onmouseover="showTip(event, 'fs19', 31)" class="i">x</span>
-        <span class="k">if</span> <span onmouseout="hideTip(event, 'fs19', 32)" onmouseover="showTip(event, 'fs19', 32)" class="i">x</span> <span class="o">&lt;</span> <span class="n">100000</span> <span class="k">then</span>
-            <span class="k">yield!</span> <span class="i">g</span> (<span onmouseout="hideTip(event, 'fs19', 33)" onmouseover="showTip(event, 'fs19', 33)" class="i">x</span> <span class="o">+</span> <span class="n">1</span>) }
-<span onmouseout="hideTip(event, 'fs18', 34)" onmouseover="showTip(event, 'fs18', 34)" class="i">generate</span> <span class="n">5</span>
-<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs12', 35)" onmouseover="showTip(event, 'fs12', 35)" class="i">Observable</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs21', 36)" onmouseover="showTip(event, 'fs21', 36)" class="i">subscribeWithCallbacks</span> <span onmouseout="hideTip(event, 'fs22', 37)" onmouseover="showTip(event, 'fs22', 37)" class="i">ignore</span> <span onmouseout="hideTip(event, 'fs22', 38)" onmouseover="showTip(event, 'fs22', 38)" class="i">ignore</span> <span onmouseout="hideTip(event, 'fs22', 39)" onmouseover="showTip(event, 'fs22', 39)" class="i">ignore</span>
-<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs22', 40)" onmouseover="showTip(event, 'fs22', 40)" class="i">ignore</span></pre>
-</td>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharp</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">Control</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="id">Reactive</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="id">obs1</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="m">Observable</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="id">single</span> <span class="n">1</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs7', 7)" onmouseover="showTip(event, 'fs7', 7)" class="id">obs2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs5', 8)" onmouseover="showTip(event, 'fs5', 8)" class="m">Observable</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs6', 9)" onmouseover="showTip(event, 'fs6', 9)" class="id">single</span> <span class="s">&quot;A&quot;</span>
+
+<span onmouseout="hideTip(event, 'fs5', 10)" onmouseover="showTip(event, 'fs5', 10)" class="m">Observable</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="id">zip</span> <span onmouseout="hideTip(event, 'fs4', 12)" onmouseover="showTip(event, 'fs4', 12)" class="id">obs1</span> <span onmouseout="hideTip(event, 'fs7', 13)" onmouseover="showTip(event, 'fs7', 13)" class="id">obs2</span>
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs5', 14)" onmouseover="showTip(event, 'fs5', 14)" class="m">Observable</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs9', 15)" onmouseover="showTip(event, 'fs9', 15)" class="id">subscribe</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs10', 16)" onmouseover="showTip(event, 'fs10', 16)" class="fn">printfn</span> <span class="s">&quot;</span><span class="pf">%A</span><span class="s">&quot;</span><span class="pn">)</span>
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs11', 17)" onmouseover="showTip(event, 'fs11', 17)" class="fn">ignore</span>
+</code></pre></td>
 </tr>
 </table>
+<h2><a name="Computation-Expressions" class="anchor" href="#Computation-Expressions">Computation Expressions</a></h2>
+<p>The provided computation expressions open new approaches for constructing and combining <code>Observable</code> computations. The <code>observe</code> computation expression provides a simple workflow using the essential LINQ operators:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 18)" onmouseover="showTip(event, 'fs1', 18)" class="id">FSharp</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 19)" onmouseover="showTip(event, 'fs2', 19)" class="id">Control</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 20)" onmouseover="showTip(event, 'fs3', 20)" class="id">Reactive</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs12', 21)" onmouseover="showTip(event, 'fs12', 21)" class="id">Builders</span>
 
+<span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs13', 22)" onmouseover="showTip(event, 'fs13', 22)" class="fn">generate</span> <span onmouseout="hideTip(event, 'fs14', 23)" onmouseover="showTip(event, 'fs14', 23)" class="id">x</span> <span class="o">=</span>
+    <span onmouseout="hideTip(event, 'fs15', 24)" onmouseover="showTip(event, 'fs15', 24)" class="k">observe</span> <span class="pn">{</span>
+        <span class="k">yield</span> <span onmouseout="hideTip(event, 'fs14', 25)" onmouseover="showTip(event, 'fs14', 25)" class="id">x</span>
+        <span class="k">if</span> <span onmouseout="hideTip(event, 'fs14', 26)" onmouseover="showTip(event, 'fs14', 26)" class="id">x</span> <span class="o">&lt;</span> <span class="n">100000</span> <span class="k">then</span>
+            <span class="k">yield!</span> <span onmouseout="hideTip(event, 'fs13', 27)" onmouseover="showTip(event, 'fs13', 27)" class="fn">generate</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs14', 28)" onmouseover="showTip(event, 'fs14', 28)" class="id">x</span> <span class="o">+</span> <span class="n">1</span><span class="pn">)</span> <span class="pn">}</span>
+<span onmouseout="hideTip(event, 'fs13', 29)" onmouseover="showTip(event, 'fs13', 29)" class="fn">generate</span> <span class="n">5</span>
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs5', 30)" onmouseover="showTip(event, 'fs5', 30)" class="m">Observable</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs16', 31)" onmouseover="showTip(event, 'fs16', 31)" class="id">subscribeWithCallbacks</span> <span onmouseout="hideTip(event, 'fs11', 32)" onmouseover="showTip(event, 'fs11', 32)" class="fn">ignore</span> <span onmouseout="hideTip(event, 'fs11', 33)" onmouseover="showTip(event, 'fs11', 33)" class="fn">ignore</span> <span onmouseout="hideTip(event, 'fs11', 34)" onmouseover="showTip(event, 'fs11', 34)" class="fn">ignore</span>
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs11', 35)" onmouseover="showTip(event, 'fs11', 35)" class="fn">ignore</span>
+</code></pre></td>
+</tr>
+</table>
 <p>You can find a few additional examples of both the <code>observe</code> and <code>rxquery</code> computation expressions <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html">on the source blog post</a>.</p>
-
-<h2>Reactive Extensions</h2>
-
+<h2><a name="Reactive-Extensions" class="anchor" href="#Reactive-Extensions">Reactive Extensions</a></h2>
 <p>For more information on Rx, check out the <a href="http://channel9.msdn.com/series/Rx-Workshop">Rx Workshop on Channel 9</a>. The examples provided in the workshop should be easy to port to FSharp.Control.Reactive. The <a href="http://msdn.microsoft.com/en-us/data/gg577611.aspx">Beginner's Guide to the Reactive Extensions</a> includes many other links to excellent content.</p>
+<h2><a name="Reactive-Testing" class="anchor" href="#Reactive-Testing">Reactive Testing</a></h2>
+<p>The Rx.NET has several OOP-minded objects to test Reactive Applications. This package contains some wrappers to make your Reactive Tests more functional.</p>
+<p>Following test shows how the Broadcast Subject can be tested:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs17', 36)" onmouseover="showTip(event, 'fs17', 36)" class="id">NUnit</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs18', 37)" onmouseover="showTip(event, 'fs18', 37)" class="id">Framework</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs19', 38)" onmouseover="showTip(event, 'fs19', 38)" class="id">FsCheck</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 39)" onmouseover="showTip(event, 'fs1', 39)" class="id">FSharp</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 40)" onmouseover="showTip(event, 'fs2', 40)" class="id">Control</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 41)" onmouseover="showTip(event, 'fs3', 41)" class="id">Reactive</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs20', 42)" onmouseover="showTip(event, 'fs20', 42)" class="id">Testing</span>
 
-<p>TODO: Continue tutorial with examples from the above, including use of <code>rxquery</code>.</p>
+<span class="pn">[&lt;</span><span onmouseout="hideTip(event, 'fs21', 43)" onmouseover="showTip(event, 'fs21', 43)" class="rt">Test</span><span class="pn">&gt;]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs22', 44)" onmouseover="showTip(event, 'fs22', 44)" class="fn">``Broadcast Subject broadcast to all observers``</span> <span class="pn">(</span><span class="pn">)</span> <span class="o">=</span>
+    <span onmouseout="hideTip(event, 'fs23', 45)" onmouseover="showTip(event, 'fs23', 45)" class="rt">Check</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs24', 46)" onmouseover="showTip(event, 'fs24', 46)" class="id">QuickThrowOnFailure</span> <span class="o">&lt;|</span> <span class="k">fun</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs25', 47)" onmouseover="showTip(event, 'fs25', 47)" class="id">xs</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs26', 48)" onmouseover="showTip(event, 'fs26', 48)" class="vt">int</span> <span onmouseout="hideTip(event, 'fs27', 49)" onmouseover="showTip(event, 'fs27', 49)" class="rt">list</span><span class="pn">)</span> <span class="k">-&gt;</span>
+        <span onmouseout="hideTip(event, 'fs28', 50)" onmouseover="showTip(event, 'fs28', 50)" class="m">TestSchedule</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs29', 51)" onmouseover="showTip(event, 'fs29', 51)" class="id">usage</span> <span class="o">&lt;|</span> <span class="k">fun</span> <span onmouseout="hideTip(event, 'fs30', 52)" onmouseover="showTip(event, 'fs30', 52)" class="id">sch</span> <span class="k">-&gt;</span>
+            <span class="k">use</span> <span onmouseout="hideTip(event, 'fs31', 53)" onmouseover="showTip(event, 'fs31', 53)" class="id">s</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs32', 54)" onmouseover="showTip(event, 'fs32', 54)" class="m">Subject</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs33', 55)" onmouseover="showTip(event, 'fs33', 55)" class="id">broadcast</span>
+            <span class="k">let</span> <span onmouseout="hideTip(event, 'fs34', 56)" onmouseover="showTip(event, 'fs34', 56)" class="id">observer</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs28', 57)" onmouseover="showTip(event, 'fs28', 57)" class="m">TestSchedule</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs35', 58)" onmouseover="showTip(event, 'fs35', 58)" class="id">subscribeTestObserver</span> <span onmouseout="hideTip(event, 'fs30', 59)" onmouseover="showTip(event, 'fs30', 59)" class="id">sch</span> <span onmouseout="hideTip(event, 'fs31', 60)" onmouseover="showTip(event, 'fs31', 60)" class="id">s</span>
 
-<div class="tip" id="fs1">namespace System</div>
-<div class="tip" id="fs2">namespace System.Reactive</div>
-<div class="tip" id="fs3">namespace System.Reactive.Linq</div>
-<div class="tip" id="fs4">namespace FSharp</div>
-<div class="tip" id="fs5">namespace FSharp.Control</div>
-<div class="tip" id="fs6">namespace FSharp.Control.Reactive</div>
-<div class="tip" id="fs7">module Builders<br /><br />from FSharp.Control.Reactive</div>
-<div class="tip" id="fs8">val tuple : x:&#39;a -&gt; y:&#39;b -&gt; &#39;a * &#39;b<br /><br />Full name: Tutorial.tuple</div>
-<div class="tip" id="fs9">val x : &#39;a</div>
-<div class="tip" id="fs10">val y : &#39;b</div>
-<div class="tip" id="fs11">val obs1 : IObservable&lt;int&gt;<br /><br />Full name: Tutorial.obs1</div>
-<div class="tip" id="fs12">type Observable =<br />&#160;&#160;static member Aggregate&lt;&#39;TSource&gt; : source:IObservable&lt;&#39;TSource&gt; * accumulator:Func&lt;&#39;TSource, &#39;TSource, &#39;TSource&gt; -&gt; IObservable&lt;&#39;TSource&gt; + 2 overloads<br />&#160;&#160;static member All&lt;&#39;TSource&gt; : source:IObservable&lt;&#39;TSource&gt; * predicate:Func&lt;&#39;TSource, bool&gt; -&gt; IObservable&lt;bool&gt;<br />&#160;&#160;static member Amb&lt;&#39;TSource&gt; : params sources:IObservable&lt;&#39;TSource&gt;[] -&gt; IObservable&lt;&#39;TSource&gt; + 2 overloads<br />&#160;&#160;static member And&lt;&#39;TLeft, &#39;TRight&gt; : left:IObservable&lt;&#39;TLeft&gt; * right:IObservable&lt;&#39;TRight&gt; -&gt; Pattern&lt;&#39;TLeft, &#39;TRight&gt;<br />&#160;&#160;static member Any&lt;&#39;TSource&gt; : source:IObservable&lt;&#39;TSource&gt; -&gt; IObservable&lt;bool&gt; + 1 overload<br />&#160;&#160;static member AsObservable&lt;&#39;TSource&gt; : source:IObservable&lt;&#39;TSource&gt; -&gt; IObservable&lt;&#39;TSource&gt;<br />&#160;&#160;static member Average : source:IObservable&lt;float&gt; -&gt; IObservable&lt;float&gt; + 19 overloads<br />&#160;&#160;static member Buffer&lt;&#39;TSource, &#39;TBufferClosing&gt; : source:IObservable&lt;&#39;TSource&gt; * bufferClosingSelector:Func&lt;IObservable&lt;&#39;TBufferClosing&gt;&gt; -&gt; IObservable&lt;IList&lt;&#39;TSource&gt;&gt; + 10 overloads<br />&#160;&#160;static member Case&lt;&#39;TValue, &#39;TResult&gt; : selector:Func&lt;&#39;TValue&gt; * sources:IDictionary&lt;&#39;TValue, IObservable&lt;&#39;TResult&gt;&gt; -&gt; IObservable&lt;&#39;TResult&gt; + 2 overloads<br />&#160;&#160;static member Cast&lt;&#39;TResult&gt; : source:IObservable&lt;obj&gt; -&gt; IObservable&lt;&#39;TResult&gt;<br />&#160;&#160;...<br /><br />Full name: System.Reactive.Linq.Observable</div>
-<div class="tip" id="fs13">Observable.Return&lt;&#39;TResult&gt;(value: &#39;TResult) : IObservable&lt;&#39;TResult&gt;<br />Observable.Return&lt;&#39;TResult&gt;(value: &#39;TResult, scheduler: Reactive.Concurrency.IScheduler) : IObservable&lt;&#39;TResult&gt;</div>
-<div class="tip" id="fs14">val obs2 : IObservable&lt;string&gt;<br /><br />Full name: Tutorial.obs2</div>
-<div class="tip" id="fs15">val zip : first:IObservable&lt;&#39;Source1&gt; -&gt; second:IObservable&lt;&#39;Source2&gt; -&gt; resultSelector:(&#39;Source1 -&gt; &#39;Source2 -&gt; &#39;Result) -&gt; IObservable&lt;&#39;Result&gt;<br /><br />Full name: FSharp.Control.Reactive.Observable.zip</div>
-<div class="tip" id="fs16">Multiple items<br />val subscribe : onNext:(&#39;T -&gt; unit) -&gt; observable:IObservable&lt;&#39;T&gt; -&gt; IDisposable<br /><br />Full name: FSharp.Control.Reactive.Observable.subscribe<br /><br />--------------------<br />val subscribe : callback:(&#39;T -&gt; unit) -&gt; source:IObservable&lt;&#39;T&gt; -&gt; IDisposable<br /><br />Full name: Microsoft.FSharp.Control.Observable.subscribe</div>
-<div class="tip" id="fs17">val printfn : format:Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.printfn</div>
-<div class="tip" id="fs18">val generate : x:int -&gt; IObservable&lt;int&gt;<br /><br />Full name: Tutorial.generate</div>
-<div class="tip" id="fs19">val x : int</div>
-<div class="tip" id="fs20">val observe : ObservableBuilder<br /><br />Full name: FSharp.Control.Reactive.Builders.observe</div>
-<div class="tip" id="fs21">val subscribeWithCallbacks : onNext:(&#39;T -&gt; unit) -&gt; onError:(exn -&gt; unit) -&gt; onCompleted:(unit -&gt; unit) -&gt; observable:IObservable&lt;&#39;T&gt; -&gt; IDisposable<br /><br />Full name: FSharp.Control.Reactive.Observable.subscribeWithCallbacks</div>
-<div class="tip" id="fs22">val ignore : value:&#39;T -&gt; unit<br /><br />Full name: Microsoft.FSharp.Core.Operators.ignore</div>
+            <span onmouseout="hideTip(event, 'fs32', 61)" onmouseover="showTip(event, 'fs32', 61)" class="m">Subject</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs36', 62)" onmouseover="showTip(event, 'fs36', 62)" class="id">onNexts</span> <span onmouseout="hideTip(event, 'fs25', 63)" onmouseover="showTip(event, 'fs25', 63)" class="id">xs</span> <span onmouseout="hideTip(event, 'fs31', 64)" onmouseover="showTip(event, 'fs31', 64)" class="id">s</span> 
+            <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs32', 65)" onmouseover="showTip(event, 'fs32', 65)" class="m">Subject</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs37', 66)" onmouseover="showTip(event, 'fs37', 66)" class="id">onCompleted</span> 
+            <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs11', 67)" onmouseover="showTip(event, 'fs11', 67)" class="fn">ignore</span>
+            
+            <span onmouseout="hideTip(event, 'fs38', 68)" onmouseover="showTip(event, 'fs38', 68)" class="m">TestObserver</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs39', 69)" onmouseover="showTip(event, 'fs39', 69)" class="id">nexts</span> <span onmouseout="hideTip(event, 'fs34', 70)" onmouseover="showTip(event, 'fs34', 70)" class="id">observer</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs25', 71)" onmouseover="showTip(event, 'fs25', 71)" class="id">xs</span>
+</code></pre></td>
+</tr>
+</table>
+<ul>
+<li>The <code>TestSchedule.usage</code> call wil make sure we have a virtual time scheduler that we can use to sync our different observables and observers.</li>
+<li>The <code>subscribeTestObserver</code> call will subscribe the given <code>observable</code> to a <code>TestObserver</code>.</li>
+<li>This <code>TestObserver</code> can be used to assert on the emits that the SUT sends to it by using the <code>TesteObserver</code> module. (<code>TestObserver.nexts</code>, <code>TestObserver.all</code>, <code>TestObserver.errors</code>)</li>
+</ul>
+<p>The testing package also contains generated <code>TestNotifications</code> which we can use to simulate a stream of emits.
+This values has to be registered first before using.</p>
+<p>Following example shows how the Functor Law can be testsd by creating a Hot Observable of simulated emits.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="pn">[&lt;</span><span onmouseout="hideTip(event, 'fs40', 72)" onmouseover="showTip(event, 'fs40', 72)" class="rt">SetUp</span><span class="pn">&gt;]</span>
+<span class="k">member</span> <span class="id">__</span><span class="pn">.</span><span class="id">Setup</span> <span class="pn">(</span><span class="pn">)</span> <span class="o">=</span>
+    <span onmouseout="hideTip(event, 'fs41', 73)" onmouseover="showTip(event, 'fs41', 73)" class="id">Arb</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs42', 74)" onmouseover="showTip(event, 'fs42', 74)" class="id">register</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs43', 75)" onmouseover="showTip(event, 'fs43', 75)" class="id">GenTestNotification</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="pn">)</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs11', 76)" onmouseover="showTip(event, 'fs11', 76)" class="id">ignore</span>
+
+<span class="pn">[&lt;</span><span onmouseout="hideTip(event, 'fs21', 77)" onmouseover="showTip(event, 'fs21', 77)" class="id">Test</span><span class="pn">&gt;]</span>
+<span class="k">member</span> <span class="id">__</span><span class="pn">.</span><span class="id">``Functor Law of Observables``</span> <span class="pn">(</span><span class="pn">)</span> <span class="o">=</span>
+    <span onmouseout="hideTip(event, 'fs23', 78)" onmouseover="showTip(event, 'fs23', 78)" class="id">Check</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs24', 79)" onmouseover="showTip(event, 'fs24', 79)" class="id">QuickThrowOnFailure</span> <span class="o">&lt;|</span> 
+        <span class="k">fun</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs44', 80)" onmouseover="showTip(event, 'fs44', 80)" class="id">TestNotifications</span> <span class="id">ms</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs44', 81)" onmouseover="showTip(event, 'fs44', 81)" class="id">TestNotifications</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs26', 82)" onmouseover="showTip(event, 'fs26', 82)" class="id">int</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="pn">(</span><span class="id">f</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs26', 83)" onmouseover="showTip(event, 'fs26', 83)" class="id">int</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs26', 84)" onmouseover="showTip(event, 'fs26', 84)" class="id">int</span><span class="pn">)</span> <span class="pn">(</span><span class="id">g</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs26', 85)" onmouseover="showTip(event, 'fs26', 85)" class="id">int</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs26', 86)" onmouseover="showTip(event, 'fs26', 86)" class="id">int</span><span class="pn">)</span> <span class="k">-&gt;</span>
+            <span onmouseout="hideTip(event, 'fs28', 87)" onmouseover="showTip(event, 'fs28', 87)" class="id">TestSchedule</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs29', 88)" onmouseover="showTip(event, 'fs29', 88)" class="id">usage</span> <span class="o">&lt;|</span> <span class="k">fun</span> <span class="id">sch</span> <span class="k">-&gt;</span>
+                <span onmouseout="hideTip(event, 'fs28', 89)" onmouseover="showTip(event, 'fs28', 89)" class="id">TestSchedule</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs45', 90)" onmouseover="showTip(event, 'fs45', 90)" class="id">hotObservable</span> <span class="id">sch</span> <span class="id">ms</span>
+                <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs5', 91)" onmouseover="showTip(event, 'fs5', 91)" class="id">Observable</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs46', 92)" onmouseover="showTip(event, 'fs46', 92)" class="id">retry</span>
+                <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs5', 93)" onmouseover="showTip(event, 'fs5', 93)" class="id">Observable</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs47', 94)" onmouseover="showTip(event, 'fs47', 94)" class="id">map</span> <span class="id">f</span>
+                <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs5', 95)" onmouseover="showTip(event, 'fs5', 95)" class="id">Observable</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs47', 96)" onmouseover="showTip(event, 'fs47', 96)" class="id">map</span> <span class="id">g</span>
+                <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs28', 97)" onmouseover="showTip(event, 'fs28', 97)" class="id">TestSchedule</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs48', 98)" onmouseover="showTip(event, 'fs48', 98)" class="id">subscribeTestObserverStart</span> <span class="id">sch</span>
+                <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs38', 99)" onmouseover="showTip(event, 'fs38', 99)" class="id">TestObserver</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs39', 100)" onmouseover="showTip(event, 'fs39', 100)" class="id">nexts</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs49', 101)" onmouseover="showTip(event, 'fs49', 101)" class="id">TestNotification</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs50', 102)" onmouseover="showTip(event, 'fs50', 102)" class="id">mapNexts</span> <span class="pn">(</span><span class="id">f</span> <span class="pn">&gt;</span><span class="pn">&gt;</span> <span class="id">g</span><span class="pn">)</span> <span class="id">ms</span>
+</code></pre></td>
+</tr>
+</table>
+<p>NOTE: the previous test contains a <code>Observable.retry</code> call because the simulated emits will possible contain 'OnError' emits as well.
+See: <a href="https://github.com/fsprojects/FSharp.Control.Reactive/blob/master/src/FSharp.Control.Reactive.Testing/TestNotifications.fs">https://github.com/fsprojects/FSharp.Control.Reactive/blob/master/src/FSharp.Control.Reactive.Testing/TestNotifications.fs</a> for more info on how the simulated emits are generated.</p>
+
+<div class="tip" id="fs1">Multiple items<br />namespace FSharp<br /><br />--------------------<br />namespace Microsoft.FSharp</div>
+<div class="tip" id="fs2">Multiple items<br />namespace FSharp.Control<br /><br />--------------------<br />namespace Microsoft.FSharp.Control</div>
+<div class="tip" id="fs3">namespace FSharp.Control.Reactive</div>
+<div class="tip" id="fs4">val obs1 : System.IObservable&lt;int&gt;</div>
+<div class="tip" id="fs5">Multiple items<br />module Observable<br /><br />from FSharp.Control.Reactive<br /><br />--------------------<br />module Observable<br /><br />from Microsoft.FSharp.Control</div>
+<div class="tip" id="fs6">val single : value:&#39;Result -&gt; System.IObservable&lt;&#39;Result&gt;</div>
+<div class="tip" id="fs7">val obs2 : System.IObservable&lt;string&gt;</div>
+<div class="tip" id="fs8">val zip : first:System.IObservable&lt;&#39;Source1&gt; -&gt; second:System.IObservable&lt;&#39;Source2&gt; -&gt; System.IObservable&lt;&#39;Source1 * &#39;Source2&gt;</div>
+<div class="tip" id="fs9">Multiple items<br />val subscribe : onNext:(&#39;T -&gt; unit) -&gt; observable:System.IObservable&lt;&#39;T&gt; -&gt; System.IDisposable<br /><br />--------------------<br />val subscribe : callback:(&#39;T -&gt; unit) -&gt; source:System.IObservable&lt;&#39;T&gt; -&gt; System.IDisposable</div>
+<div class="tip" id="fs10">val printfn : format:Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T</div>
+<div class="tip" id="fs11">val ignore : value:&#39;T -&gt; unit</div>
+<div class="tip" id="fs12">module Builders<br /><br />from FSharp.Control.Reactive</div>
+<div class="tip" id="fs13">val generate : x:int -&gt; System.IObservable&lt;int&gt;</div>
+<div class="tip" id="fs14">val x : int</div>
+<div class="tip" id="fs15">val observe : ObservableBuilder</div>
+<div class="tip" id="fs16">val subscribeWithCallbacks : onNext:(&#39;T -&gt; unit) -&gt; onError:(exn -&gt; unit) -&gt; onCompleted:(unit -&gt; unit) -&gt; observable:System.IObservable&lt;&#39;T&gt; -&gt; System.IDisposable</div>
+<div class="tip" id="fs17">namespace NUnit</div>
+<div class="tip" id="fs18">namespace NUnit.Framework</div>
+<div class="tip" id="fs19">namespace FsCheck</div>
+<div class="tip" id="fs20">namespace FSharp.Control.Reactive.Testing</div>
+<div class="tip" id="fs21">Multiple items<br />type TestAttribute =<br />&#160;&#160;inherit NUnitAttribute<br />&#160;&#160;new : unit -&gt; TestAttribute<br />&#160;&#160;member ApplyToTest : test:Test -&gt; unit<br />&#160;&#160;member Author : string with get, set<br />&#160;&#160;member BuildFrom : method:IMethodInfo * suite:Test -&gt; TestMethod<br />&#160;&#160;member Description : string with get, set<br />&#160;&#160;member ExpectedResult : obj with get, set<br />&#160;&#160;member TestOf : Type with get, set<br /><br />--------------------<br />TestAttribute() : TestAttribute</div>
+<div class="tip" id="fs22">val ( Broadcast Subject broadcast to all observers ) : unit -&gt; unit</div>
+<div class="tip" id="fs23">type Check =<br />&#160;&#160;static member All : config:Config -&gt; unit<br />&#160;&#160;static member All : config:Config * test:Type -&gt; unit<br />&#160;&#160;static member Method : config:Config * methodInfo:MethodInfo * ?target:obj -&gt; unit<br />&#160;&#160;static member One : config:Config * property:&#39;Testable -&gt; unit<br />&#160;&#160;static member One : name:string * config:Config * property:&#39;Testable -&gt; unit<br />&#160;&#160;static member Quick : property:&#39;Testable -&gt; unit<br />&#160;&#160;static member Quick : name:string * property:&#39;Testable -&gt; unit<br />&#160;&#160;static member QuickAll : unit -&gt; unit<br />&#160;&#160;static member QuickAll : test:Type -&gt; unit<br />&#160;&#160;static member QuickThrowOnFailure : property:&#39;Testable -&gt; unit<br />&#160;&#160;...</div>
+<div class="tip" id="fs24">static member Check.QuickThrowOnFailure : property:&#39;Testable -&gt; unit</div>
+<div class="tip" id="fs25">val xs : int list</div>
+<div class="tip" id="fs26">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int</div>
+<div class="tip" id="fs27">type &#39;T list = List&lt;&#39;T&gt;</div>
+<div class="tip" id="fs28">module TestSchedule<br /><br />from FSharp.Control.Reactive.Testing</div>
+<div class="tip" id="fs29">val usage : f:(Reactive.Testing.TestScheduler -&gt; &#39;a) -&gt; &#39;a</div>
+<div class="tip" id="fs30">val sch : Reactive.Testing.TestScheduler</div>
+<div class="tip" id="fs31">val s : System.Reactive.Subjects.Subject&lt;int&gt;</div>
+<div class="tip" id="fs32">Multiple items<br />module Subject<br /><br />from FSharp.Control.Reactive<br /><br />--------------------<br />type Subject&lt;&#39;a&gt; =<br />&#160;&#160;private new : unit -&gt; Subject&lt;&#39;a&gt;<br />&#160;&#160;static member behavior : x:&#39;a -&gt; BehaviorSubject&lt;&#39;a&gt;<br />&#160;&#160;static member async : AsyncSubject&lt;&#39;a&gt;<br />&#160;&#160;static member broadcast : Subject&lt;&#39;a&gt;<br />&#160;&#160;static member replay : ReplaySubject&lt;&#39;a&gt;</div>
+<div class="tip" id="fs33">property Subject.broadcast: System.Reactive.Subjects.Subject&lt;&#39;a&gt;</div>
+<div class="tip" id="fs34">val observer : Reactive.Testing.ITestableObserver&lt;int&gt;</div>
+<div class="tip" id="fs35">val subscribeTestObserver : sch:Reactive.Testing.TestScheduler -&gt; source:System.IObservable&lt;&#39;a&gt; -&gt; Reactive.Testing.ITestableObserver&lt;&#39;a&gt;</div>
+<div class="tip" id="fs36">val onNexts : xs:seq&lt;&#39;a&gt; -&gt; s:&#39;b -&gt; &#39;b (requires &#39;b :&gt; System.Reactive.Subjects.SubjectBase&lt;&#39;a&gt;)</div>
+<div class="tip" id="fs37">val onCompleted : s:System.Reactive.Subjects.SubjectBase&lt;&#39;a&gt; -&gt; System.Reactive.Subjects.SubjectBase&lt;&#39;a&gt;</div>
+<div class="tip" id="fs38">module TestObserver<br /><br />from FSharp.Control.Reactive.Testing</div>
+<div class="tip" id="fs39">val nexts : o:Reactive.Testing.ITestableObserver&lt;&#39;a&gt; -&gt; &#39;a list</div>
+<div class="tip" id="fs40">Multiple items<br />type SetUpAttribute =<br />&#160;&#160;inherit NUnitAttribute<br />&#160;&#160;new : unit -&gt; SetUpAttribute<br /><br />--------------------<br />SetUpAttribute() : SetUpAttribute</div>
+<div class="tip" id="fs41">module Arb<br /><br />from FsCheck</div>
+<div class="tip" id="fs42">val register&lt;&#39;t&gt; : unit -&gt; TypeClass.TypeClassComparison</div>
+<div class="tip" id="fs43">type GenTestNotification =<br />&#160;&#160;static member GenNotifications : unit -&gt; Arbitrary&lt;TestNotifications&lt;&#39;a&gt;&gt;</div>
+<div class="tip" id="fs44">Multiple items<br />union case TestNotifications.TestNotifications: TestNotification&lt;&#39;a&gt; list -&gt; TestNotifications&lt;&#39;a&gt;<br /><br />--------------------<br />type TestNotifications&lt;&#39;a&gt; = | TestNotifications of TestNotification&lt;&#39;a&gt; list</div>
+<div class="tip" id="fs45">val hotObservable : s:Reactive.Testing.TestScheduler -&gt; TestNotifications&lt;&#39;a&gt; -&gt; Reactive.Testing.ITestableObservable&lt;&#39;a&gt;</div>
+<div class="tip" id="fs46">val retry : source:System.IObservable&lt;&#39;Source&gt; -&gt; System.IObservable&lt;&#39;Source&gt;</div>
+<div class="tip" id="fs47">Multiple items<br />val map : f:(&#39;a -&gt; &#39;b) -&gt; source:System.IObservable&lt;&#39;a&gt; -&gt; System.IObservable&lt;&#39;b&gt;<br /><br />--------------------<br />val map : mapping:(&#39;T -&gt; &#39;U) -&gt; source:System.IObservable&lt;&#39;T&gt; -&gt; System.IObservable&lt;&#39;U&gt;</div>
+<div class="tip" id="fs48">val subscribeTestObserverStart : sch:Reactive.Testing.TestScheduler -&gt; source:System.IObservable&lt;&#39;a&gt; -&gt; Reactive.Testing.ITestableObserver&lt;&#39;a&gt;</div>
+<div class="tip" id="fs49">Multiple items<br />module TestNotification<br /><br />from FSharp.Control.Reactive.Testing<br /><br />--------------------<br />type TestNotification&lt;&#39;a&gt; = Reactive.Testing.Recorded&lt;System.Reactive.Notification&lt;&#39;a&gt;&gt;</div>
+<div class="tip" id="fs50">val mapNexts : f:(&#39;a -&gt; &#39;b) -&gt; (TestNotifications&lt;&#39;a&gt; -&gt; &#39;b list)</div>
 
         </div>
         <div class="span3">
-          <img src="/FSharp.Control.Reactive/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <img src="/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
           <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
             <li class="nav-header">FSharp.Control.Reactive</li>
-            <li><a href="/FSharp.Control.Reactive/index.html">Home page</a></li>
+            <li><a href="/index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="https://www.nuget.org/packages/FSharp.Control.Reactive">Get Library via NuGet</a></li>
             <li><a href="http://github.com/fsprojects/FSharp.Reactive">Source Code on GitHub</a></li>
@@ -131,10 +234,11 @@
             <li><a href="http://github.com/fsprojects/FSharp.Reactive/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
             
             <li class="nav-header">Getting started</li>
-            <li><a href="/FSharp.Control.Reactive/tutorial.html">Sample tutorial</a></li>
+            <li><a href="/introduction.html">Introduction</a></li>
+            <li><a href="/tutorial.html">Sample tutorial</a></li>
 
             <li class="nav-header">Documentation</li>
-            <li><a href="/FSharp.Control.Reactive/reference/index.html">API Reference</a></li>
+            <li><a href="/reference/index.html">API Reference</a></li>
           </ul>
         </div>
       </div>

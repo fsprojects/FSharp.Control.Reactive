@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Builders - FSharp.Control.Reactive</title>
+    <title>Disposables - FSharp.Control.Reactive</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Ryan Riley, Steffen Forkmann, and Jared Heseter"/>
@@ -35,51 +35,14 @@
 
 
 
-<h1>Builders</h1>
+<h1>Disposables</h1>
 <p>
   <span>Namespace: FSharp.Control.Reactive</span><br />
-        <span>
-          Attributes:<br />
-[&lt;CompilationRepresentation(4)&gt;]<br />
-          
-      </span>
-</p>
+  </p>
 <div class="xmldoc">
 </div>
 
 <!-- Render nested types and modules, if there are any -->
-  <h2>Nested types and modules</h2>
-  <div>
-      <table class="table table-bordered type-list">
-    <thead>
-      <tr><td>Type</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td class="type-name">
-            <a href="fsharp-control-reactive-buildersmodule-observablebuilder.html">ObservableBuilder</a>
-          </td>
-          <td class="xmldoc">
-          <p>An Observable computation builder.</p>
-
-
-          </td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fsharp-control-reactive-buildersmodule-rxquerybuilder.html">RxQueryBuilder</a>
-          </td>
-          <td class="xmldoc">
-          <p>A reactive query builder.
-See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html">http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html</a></p>
-
-
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  </div>
 
   <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
@@ -90,37 +53,21 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1', 1)" onmouseover="showTip(event, '1', 1)">
-            observe 
+          <code onmouseout="hideTip(event, '10', 10)" onmouseover="showTip(event, '10', 10)">
+            compose disposables
           </code>
-          <div class="tip" id="1">
-            <strong>Signature:</strong> ObservableBuilder<br />
-                                  </div>
+          <div class="tip" id="10">
+            <strong>Signature:</strong> disposables:&#39;a -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> 'a                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L33-33" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Disposable.fs#L9-9" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
+          <p>Returns an IDisposable that disposes all the underlying disposables</p>
 
-          <code onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)">
-            rxquery 
-          </code>
-          <div class="tip" id="2">
-            <strong>Signature:</strong> RxQueryBuilder<br />
-                                  </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L98-98" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
+
         </td>
       </tr>
     </tbody>

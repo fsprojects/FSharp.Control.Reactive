@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Builders - FSharp.Control.Reactive</title>
+    <title>Scheduler - FSharp.Control.Reactive</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Ryan Riley, Steffen Forkmann, and Jared Heseter"/>
@@ -35,15 +35,10 @@
 
 
 
-<h1>Builders</h1>
+<h1>Scheduler</h1>
 <p>
   <span>Namespace: FSharp.Control.Reactive</span><br />
-        <span>
-          Attributes:<br />
-[&lt;CompilationRepresentation(4)&gt;]<br />
-          
-      </span>
-</p>
+  </p>
 <div class="xmldoc">
 </div>
 
@@ -57,23 +52,10 @@
     <tbody>
         <tr>
           <td class="type-name">
-            <a href="fsharp-control-reactive-buildersmodule-observablebuilder.html">ObservableBuilder</a>
+            <a href="fsharp-control-reactive-scheduler-scheduler.html">Scheduler</a>
           </td>
           <td class="xmldoc">
-          <p>An Observable computation builder.</p>
-
-
-          </td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fsharp-control-reactive-buildersmodule-rxquerybuilder.html">RxQueryBuilder</a>
-          </td>
-          <td class="xmldoc">
-          <p>A reactive query builder.
-See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html">http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html</a></p>
-
-
+          
           </td>
         </tr>
     </tbody>
@@ -90,37 +72,21 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1', 1)" onmouseover="showTip(event, '1', 1)">
-            observe 
+          <code onmouseout="hideTip(event, '377', 377)" onmouseover="showTip(event, '377', 377)">
+            asLongRunning sch
           </code>
-          <div class="tip" id="1">
-            <strong>Signature:</strong> ObservableBuilder<br />
+          <div class="tip" id="377">
+            <strong>Signature:</strong> sch:IScheduler -&gt; ISchedulerLongRunning option<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L33-33" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L15-15" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
+          <p>Returns the 'ISchedulerLongRunning' implementation of the specified scheduler, or 'None' if no such implementation is available.</p>
 
-          <code onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)">
-            rxquery 
-          </code>
-          <div class="tip" id="2">
-            <strong>Signature:</strong> RxQueryBuilder<br />
-                                  </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L98-98" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
+
         </td>
       </tr>
     </tbody>

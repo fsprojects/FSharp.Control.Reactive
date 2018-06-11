@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Builders - FSharp.Control.Reactive</title>
+    <title>Subject - FSharp.Control.Reactive</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Ryan Riley, Steffen Forkmann, and Jared Heseter"/>
@@ -35,7 +35,7 @@
 
 
 
-<h1>Builders</h1>
+<h1>Subject</h1>
 <p>
   <span>Namespace: FSharp.Control.Reactive</span><br />
         <span>
@@ -45,41 +45,11 @@
       </span>
 </p>
 <div class="xmldoc">
+<p>The Reactive module provides operators working with Subjects in F#.</p>
+
 </div>
 
 <!-- Render nested types and modules, if there are any -->
-  <h2>Nested types and modules</h2>
-  <div>
-      <table class="table table-bordered type-list">
-    <thead>
-      <tr><td>Type</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td class="type-name">
-            <a href="fsharp-control-reactive-buildersmodule-observablebuilder.html">ObservableBuilder</a>
-          </td>
-          <td class="xmldoc">
-          <p>An Observable computation builder.</p>
-
-
-          </td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fsharp-control-reactive-buildersmodule-rxquerybuilder.html">RxQueryBuilder</a>
-          </td>
-          <td class="xmldoc">
-          <p>A reactive query builder.
-See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html">http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html</a></p>
-
-
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  </div>
 
   <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
@@ -90,37 +60,81 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1', 1)" onmouseover="showTip(event, '1', 1)">
-            observe 
+          <code onmouseout="hideTip(event, '378', 378)" onmouseover="showTip(event, '378', 378)">
+            onCompleted s
           </code>
-          <div class="tip" id="1">
-            <strong>Signature:</strong> ObservableBuilder<br />
-                                  </div>
+          <div class="tip" id="378">
+            <strong>Signature:</strong> s:SubjectBase&lt;&#39;a&gt; -&gt; SubjectBase&lt;&#39;a&gt;<br />
+                          <strong>Type parameters:</strong> 'a                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L33-33" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Subject.fs#L43-43" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Notifies all subscribed observers about the end of the sequence.</p>
+
+
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)">
-            rxquery 
+          <code onmouseout="hideTip(event, '379', 379)" onmouseover="showTip(event, '379', 379)">
+            onError ex s
           </code>
-          <div class="tip" id="2">
-            <strong>Signature:</strong> RxQueryBuilder<br />
-                                  </div>
+          <div class="tip" id="379">
+            <strong>Signature:</strong> ex:exn -&gt; s:SubjectBase&lt;&#39;a&gt; -&gt; SubjectBase&lt;&#39;a&gt;<br />
+                          <strong>Type parameters:</strong> 'a                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L98-98" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Subject.fs#L39-39" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Notifies all subscribed observers about the specified exception.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '380', 380)" onmouseover="showTip(event, '380', 380)">
+            onNext x s
+          </code>
+          <div class="tip" id="380">
+            <strong>Signature:</strong> x:&#39;a -&gt; s:SubjectBase&lt;&#39;a&gt; -&gt; SubjectBase&lt;&#39;a&gt;<br />
+                          <strong>Type parameters:</strong> 'a                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Subject.fs#L31-31" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Notifies all subscribed observers about the arrival of the specified element in the sequence.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '381', 381)" onmouseover="showTip(event, '381', 381)">
+            onNexts xs s
+          </code>
+          <div class="tip" id="381">
+            <strong>Signature:</strong> xs:seq&lt;&#39;?7904&gt; -&gt; s:&#39;?7905 -&gt; &#39;?7905<br />
+                          <strong>Type parameters:</strong> '?7904, '?7905                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Subject.fs#L35-35" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Notifies all subscribed observers about the arrival of the specified elements in the sequence.</p>
+
+
         </td>
       </tr>
     </tbody>

@@ -12,8 +12,8 @@
     <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
 
-    <link type="text/css" rel="stylesheet" href="/FSharp.Control.Reactive/content/style.css" />
-    <script type="text/javascript" src="/FSharp.Control.Reactive/content/tips.js"></script>
+    <link type="text/css" rel="stylesheet" href="/content/style.css" />
+    <script type="text/javascript" src="/content/tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -26,7 +26,7 @@
           <li><a href="http://fsharp.org">fsharp.org</a></li>
           <li><a href="http://github.com/fsprojects/FSharp.Reactive">github page</a></li>
         </ul>
-        <h3 class="muted"><a href="/FSharp.Control.Reactive/index.html">FSharp.Control.Reactive</a></h3>
+        <h3 class="muted"><a href="/index.html">FSharp.Control.Reactive</a></h3>
       </div>
       <hr />
       <div class="row">
@@ -36,9 +36,15 @@
 
 
 <h1>RxQueryBuilder</h1>
+<p>
+
+    <span>Namespace: FSharp.Control.Reactive</span><br />
+        <span>Parent Module: <a href="fsharp-control-reactive-buildersmodule.html">Builders</a></span><br />
+    </p>
 <div class="xmldoc">
 <p>A reactive query builder.
 See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html">http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html</a></p>
+
 </div>
   <h3>Constructors</h3>
   <table class="table table-bordered member-list">
@@ -49,19 +55,20 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '268', 268)" onmouseover="showTip(event, '268', 268)">
+          <code onmouseout="hideTip(event, '431', 431)" onmouseover="showTip(event, '431', 431)">
             new()
           </code>
-          <div class="tip" id="268">
+          <div class="tip" id="431">
             <strong>Signature:</strong> unit -&gt; RxQueryBuilder<br />
-                      </div>
+                                  </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L35-35" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L37-37" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
           
+              <p>CompiledName: <code>.ctor</code></p>
         </td>
       </tr>
     </tbody>
@@ -75,15 +82,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '269', 269)" onmouseover="showTip(event, '269', 269)">
+          <code onmouseout="hideTip(event, '432', 432)" onmouseover="showTip(event, '432', 432)">
             All(s, predicate)
           </code>
-          <div class="tip" id="269">
-            <strong>Signature:</strong> (s:IObservable&lt;&#39;?6148&gt; * predicate:(&#39;?6148 -&gt; bool)) -&gt; IObservable&lt;bool&gt;<br />
-                          <strong>Type parameters:</strong> '?6148          </div>
+          <div class="tip" id="432">
+            <strong>Signature:</strong> (s:IObservable&lt;&#39;?8038&gt; * predicate:(&#39;?8038 -&gt; bool)) -&gt; IObservable&lt;bool&gt;<br />
+                          <strong>Type parameters:</strong> '?8038                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;all&quot;)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L54-54" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L56-56" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -93,15 +104,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '270', 270)" onmouseover="showTip(event, '270', 270)">
+          <code onmouseout="hideTip(event, '433', 433)" onmouseover="showTip(event, '433', 433)">
             Contains(s, key)
           </code>
-          <div class="tip" id="270">
-            <strong>Signature:</strong> (s:IObservable&lt;&#39;?6150&gt; * key:&#39;?6150) -&gt; IObservable&lt;bool&gt;<br />
-                          <strong>Type parameters:</strong> '?6150          </div>
+          <div class="tip" id="433">
+            <strong>Signature:</strong> (s:IObservable&lt;&#39;?8040&gt; * key:&#39;?8040) -&gt; IObservable&lt;bool&gt;<br />
+                          <strong>Type parameters:</strong> '?8040                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;contains&quot;)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L56-56" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L58-58" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -111,15 +126,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '271', 271)" onmouseover="showTip(event, '271', 271)">
+          <code onmouseout="hideTip(event, '434', 434)" onmouseover="showTip(event, '434', 434)">
             Count(s)
           </code>
-          <div class="tip" id="271">
-            <strong>Signature:</strong> s:IObservable&lt;&#39;?6146&gt; -&gt; IObservable&lt;int&gt;<br />
-                          <strong>Type parameters:</strong> '?6146          </div>
+          <div class="tip" id="434">
+            <strong>Signature:</strong> s:IObservable&lt;&#39;?8036&gt; -&gt; IObservable&lt;int&gt;<br />
+                          <strong>Type parameters:</strong> '?8036                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;count&quot;)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L52-52" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L54-54" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -129,15 +148,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '272', 272)" onmouseover="showTip(event, '272', 272)">
+          <code onmouseout="hideTip(event, '435', 435)" onmouseover="showTip(event, '435', 435)">
             Distinct(s)
           </code>
-          <div class="tip" id="272">
-            <strong>Signature:</strong> s:IObservable&lt;&#39;?6152&gt; -&gt; IObservable&lt;&#39;?6152&gt;<br />
-                          <strong>Type parameters:</strong> '?6152          </div>
+          <div class="tip" id="435">
+            <strong>Signature:</strong> s:IObservable&lt;&#39;?8042&gt; -&gt; IObservable&lt;&#39;?8042&gt;<br />
+                          <strong>Type parameters:</strong> '?8042                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;distinct&quot;, MaintainsVariableSpace = true, AllowIntoPattern = true)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L58-58" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L60-60" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -147,15 +170,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '273', 273)" onmouseover="showTip(event, '273', 273)">
+          <code onmouseout="hideTip(event, '436', 436)" onmouseover="showTip(event, '436', 436)">
             ExactlyOne(s)
           </code>
-          <div class="tip" id="273">
-            <strong>Signature:</strong> s:IObservable&lt;&#39;?6154&gt; -&gt; &#39;?6154<br />
-                          <strong>Type parameters:</strong> '?6154          </div>
+          <div class="tip" id="436">
+            <strong>Signature:</strong> s:IObservable&lt;&#39;?8044&gt; -&gt; IObservable&lt;&#39;?8044&gt;<br />
+                          <strong>Type parameters:</strong> '?8044                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;exactlyOne&quot;)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L60-60" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L62-62" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -165,15 +192,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '274', 274)" onmouseover="showTip(event, '274', 274)">
+          <code onmouseout="hideTip(event, '437', 437)" onmouseover="showTip(event, '437', 437)">
             ExactlyOneOrDefault(s)
           </code>
-          <div class="tip" id="274">
-            <strong>Signature:</strong> s:IObservable&lt;&#39;?6156&gt; -&gt; &#39;?6156<br />
-                          <strong>Type parameters:</strong> '?6156          </div>
+          <div class="tip" id="437">
+            <strong>Signature:</strong> s:IObservable&lt;&#39;?8046&gt; -&gt; IObservable&lt;&#39;?8046&gt;<br />
+                          <strong>Type parameters:</strong> '?8046                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;exactlyOneOrDefault&quot;)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L62-62" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L64-64" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -183,15 +214,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '275', 275)" onmouseover="showTip(event, '275', 275)">
+          <code onmouseout="hideTip(event, '438', 438)" onmouseover="showTip(event, '438', 438)">
             Find(s, predicate)
           </code>
-          <div class="tip" id="275">
-            <strong>Signature:</strong> (s:IObservable&lt;&#39;?6158&gt; * predicate:(&#39;?6158 -&gt; bool)) -&gt; &#39;?6158<br />
-                          <strong>Type parameters:</strong> '?6158          </div>
+          <div class="tip" id="438">
+            <strong>Signature:</strong> (s:IObservable&lt;&#39;?8048&gt; * predicate:(&#39;?8048 -&gt; bool)) -&gt; IObservable&lt;&#39;?8048&gt;<br />
+                          <strong>Type parameters:</strong> '?8048                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;find&quot;)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L64-64" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L66-66" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -201,15 +236,15 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '276', 276)" onmouseover="showTip(event, '276', 276)">
+          <code onmouseout="hideTip(event, '439', 439)" onmouseover="showTip(event, '439', 439)">
             For(s, body)
           </code>
-          <div class="tip" id="276">
-            <strong>Signature:</strong> (s:IObservable&lt;&#39;?6126&gt; * body:(&#39;?6126 -&gt; IObservable&lt;&#39;?6127&gt;)) -&gt; IObservable&lt;&#39;?6127&gt;<br />
-                          <strong>Type parameters:</strong> '?6126, '?6127          </div>
+          <div class="tip" id="439">
+            <strong>Signature:</strong> (s:IObservable&lt;&#39;?8016&gt; * body:(&#39;?8016 -&gt; IObservable&lt;&#39;?8017&gt;)) -&gt; IObservable&lt;&#39;?8017&gt;<br />
+                          <strong>Type parameters:</strong> '?8016, '?8017                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L36-36" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L38-38" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -219,15 +254,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '277', 277)" onmouseover="showTip(event, '277', 277)">
+          <code onmouseout="hideTip(event, '440', 440)" onmouseover="showTip(event, '440', 440)">
             GroupBy(s, keySelector)
           </code>
-          <div class="tip" id="277">
-            <strong>Signature:</strong> (s:IObservable&lt;&#39;?6180&gt; * keySelector:(&#39;?6180 -&gt; &#39;?6181)) -&gt; IObservable&lt;IGroupedObservable&lt;&#39;?6181,&#39;?6180&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?6180, '?6181          </div>
+          <div class="tip" id="440">
+            <strong>Signature:</strong> (s:IObservable&lt;&#39;?8070&gt; * keySelector:(&#39;?8070 -&gt; &#39;?8071)) -&gt; IObservable&lt;IGroupedObservable&lt;&#39;?8071,&#39;?8070&gt;&gt;<br />
+                          <strong>Type parameters:</strong> '?8070, '?8071                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;groupBy&quot;, AllowIntoPattern = true)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L82-82" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L84-84" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -237,15 +276,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '278', 278)" onmouseover="showTip(event, '278', 278)">
+          <code onmouseout="hideTip(event, '441', 441)" onmouseover="showTip(event, '441', 441)">
             GroupJoin(...)
           </code>
-          <div class="tip" id="278">
-            <strong>Signature:</strong> (s1:IObservable&lt;&#39;?6193&gt; * s2:IObservable&lt;&#39;?6194&gt; * s1KeySelector:(&#39;?6193 -&gt; IObservable&lt;&#39;?6195&gt;) * s2KeySelector:(&#39;?6194 -&gt; IObservable&lt;&#39;?6196&gt;) * resultSelector:(&#39;?6193 -&gt; IObservable&lt;&#39;?6194&gt; -&gt; &#39;?6197)) -&gt; IObservable&lt;&#39;?6197&gt;<br />
-                          <strong>Type parameters:</strong> '?6193, '?6194, '?6195, '?6196, '?6197          </div>
+          <div class="tip" id="441">
+            <strong>Signature:</strong> (s1:IObservable&lt;&#39;?8083&gt; * s2:IObservable&lt;&#39;?8084&gt; * s1KeySelector:(&#39;?8083 -&gt; IObservable&lt;&#39;?8085&gt;) * s2KeySelector:(&#39;?8084 -&gt; IObservable&lt;&#39;?8086&gt;) * resultSelector:(&#39;?8083 -&gt; IObservable&lt;&#39;?8084&gt; -&gt; &#39;?8087)) -&gt; IObservable&lt;&#39;?8087&gt;<br />
+                          <strong>Type parameters:</strong> '?8083, '?8084, '?8085, '?8086, '?8087                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;groupJoin&quot;, AllowIntoPattern = true)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L88-88" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L90-90" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -255,15 +298,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '279', 279)" onmouseover="showTip(event, '279', 279)">
+          <code onmouseout="hideTip(event, '442', 442)" onmouseover="showTip(event, '442', 442)">
             GroupValBy(...)
           </code>
-          <div class="tip" id="279">
-            <strong>Signature:</strong> (s:IObservable&lt;&#39;?6183&gt; * resultSelector:(&#39;?6183 -&gt; &#39;?6184) * keySelector:(&#39;?6183 -&gt; &#39;?6185)) -&gt; IObservable&lt;IGroupedObservable&lt;&#39;?6185,&#39;?6184&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?6183, '?6184, '?6185          </div>
+          <div class="tip" id="442">
+            <strong>Signature:</strong> (s:IObservable&lt;&#39;?8073&gt; * resultSelector:(&#39;?8073 -&gt; &#39;?8074) * keySelector:(&#39;?8073 -&gt; &#39;?8075)) -&gt; IObservable&lt;IGroupedObservable&lt;&#39;?8075,&#39;?8074&gt;&gt;<br />
+                          <strong>Type parameters:</strong> '?8073, '?8074, '?8075                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;groupValBy&quot;, AllowIntoPattern = true)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L84-84" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L86-86" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -273,15 +320,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '280', 280)" onmouseover="showTip(event, '280', 280)">
+          <code onmouseout="hideTip(event, '443', 443)" onmouseover="showTip(event, '443', 443)">
             Head(s)
           </code>
-          <div class="tip" id="280">
-            <strong>Signature:</strong> s:IObservable&lt;&#39;?6160&gt; -&gt; &#39;?6160<br />
-                          <strong>Type parameters:</strong> '?6160          </div>
+          <div class="tip" id="443">
+            <strong>Signature:</strong> s:IObservable&lt;&#39;?8050&gt; -&gt; IObservable&lt;&#39;?8050&gt;<br />
+                          <strong>Type parameters:</strong> '?8050                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;head&quot;)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L66-66" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L68-68" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -291,15 +342,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '281', 281)" onmouseover="showTip(event, '281', 281)">
+          <code onmouseout="hideTip(event, '444', 444)" onmouseover="showTip(event, '444', 444)">
             HeadOrDefault(s)
           </code>
-          <div class="tip" id="281">
-            <strong>Signature:</strong> s:IObservable&lt;&#39;?6162&gt; -&gt; &#39;?6162<br />
-                          <strong>Type parameters:</strong> '?6162          </div>
+          <div class="tip" id="444">
+            <strong>Signature:</strong> s:IObservable&lt;&#39;?8052&gt; -&gt; IObservable&lt;&#39;?8052&gt;<br />
+                          <strong>Type parameters:</strong> '?8052                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;headOrDefault&quot;)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L68-68" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L70-70" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -309,15 +364,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '282', 282)" onmouseover="showTip(event, '282', 282)">
+          <code onmouseout="hideTip(event, '445', 445)" onmouseover="showTip(event, '445', 445)">
             Iter(s, selector)
           </code>
-          <div class="tip" id="282">
-            <strong>Signature:</strong> (s:IObservable&lt;&#39;?6203&gt; * selector:(&#39;?6203 -&gt; unit)) -&gt; IObservable&lt;&#39;?6203&gt;<br />
-                          <strong>Type parameters:</strong> '?6203          </div>
+          <div class="tip" id="445">
+            <strong>Signature:</strong> (s:IObservable&lt;&#39;?8093&gt; * selector:(&#39;?8093 -&gt; unit)) -&gt; IObservable&lt;&#39;?8093&gt;<br />
+                          <strong>Type parameters:</strong> '?8093                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;iter&quot;)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L94-94" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L96-96" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -327,15 +386,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '283', 283)" onmouseover="showTip(event, '283', 283)">
+          <code onmouseout="hideTip(event, '446', 446)" onmouseover="showTip(event, '446', 446)">
             Join(...)
           </code>
-          <div class="tip" id="283">
-            <strong>Signature:</strong> (s1:IObservable&lt;&#39;?6187&gt; * s2:IObservable&lt;&#39;?6188&gt; * s1KeySelector:(&#39;?6187 -&gt; IObservable&lt;&#39;?6189&gt;) * s2KeySelector:(&#39;?6188 -&gt; IObservable&lt;&#39;?6190&gt;) * resultSelector:(&#39;?6187 -&gt; &#39;?6188 -&gt; &#39;?6191)) -&gt; IObservable&lt;&#39;?6191&gt;<br />
-                          <strong>Type parameters:</strong> '?6187, '?6188, '?6189, '?6190, '?6191          </div>
+          <div class="tip" id="446">
+            <strong>Signature:</strong> (s1:IObservable&lt;&#39;?8077&gt; * s2:IObservable&lt;&#39;?8078&gt; * s1KeySelector:(&#39;?8077 -&gt; IObservable&lt;&#39;?8079&gt;) * s2KeySelector:(&#39;?8078 -&gt; IObservable&lt;&#39;?8080&gt;) * resultSelector:(&#39;?8077 -&gt; &#39;?8078 -&gt; &#39;?8081)) -&gt; IObservable&lt;&#39;?8081&gt;<br />
+                          <strong>Type parameters:</strong> '?8077, '?8078, '?8079, '?8080, '?8081                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;join&quot;, IsLikeJoin = true)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L86-86" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L88-88" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -345,15 +408,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '284', 284)" onmouseover="showTip(event, '284', 284)">
+          <code onmouseout="hideTip(event, '447', 447)" onmouseover="showTip(event, '447', 447)">
             Last(s)
           </code>
-          <div class="tip" id="284">
-            <strong>Signature:</strong> s:IObservable&lt;&#39;?6164&gt; -&gt; &#39;?6164<br />
-                          <strong>Type parameters:</strong> '?6164          </div>
+          <div class="tip" id="447">
+            <strong>Signature:</strong> s:IObservable&lt;&#39;?8054&gt; -&gt; IObservable&lt;&#39;?8054&gt;<br />
+                          <strong>Type parameters:</strong> '?8054                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;last&quot;)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L70-70" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L72-72" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -363,15 +430,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '285', 285)" onmouseover="showTip(event, '285', 285)">
+          <code onmouseout="hideTip(event, '448', 448)" onmouseover="showTip(event, '448', 448)">
             LastOrDefault(s)
           </code>
-          <div class="tip" id="285">
-            <strong>Signature:</strong> s:IObservable&lt;&#39;?6166&gt; -&gt; &#39;?6166<br />
-                          <strong>Type parameters:</strong> '?6166          </div>
+          <div class="tip" id="448">
+            <strong>Signature:</strong> s:IObservable&lt;&#39;?8056&gt; -&gt; IObservable&lt;&#39;?8056&gt;<br />
+                          <strong>Type parameters:</strong> '?8056                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;lastOrDefault&quot;)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L72-72" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L74-74" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -381,15 +452,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '286', 286)" onmouseover="showTip(event, '286', 286)">
+          <code onmouseout="hideTip(event, '449', 449)" onmouseover="showTip(event, '449', 449)">
             MaxBy(s, valueSelector)
           </code>
-          <div class="tip" id="286">
+          <div class="tip" id="449">
             <strong>Signature:</strong> (s:IObservable&lt;&#39;a&gt; * valueSelector:(&#39;a -&gt; &#39;b)) -&gt; IObservable&lt;IList&lt;&#39;a&gt;&gt;<br />
-                          <strong>Type parameters:</strong> 'a, 'b          </div>
+                          <strong>Type parameters:</strong> 'a, 'b                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;maxBy&quot;)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L74-74" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L76-76" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -399,15 +474,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '287', 287)" onmouseover="showTip(event, '287', 287)">
+          <code onmouseout="hideTip(event, '450', 450)" onmouseover="showTip(event, '450', 450)">
             MinBy(s, valueSelector)
           </code>
-          <div class="tip" id="287">
+          <div class="tip" id="450">
             <strong>Signature:</strong> (s:IObservable&lt;&#39;a&gt; * valueSelector:(&#39;a -&gt; &#39;b)) -&gt; IObservable&lt;IList&lt;&#39;a&gt;&gt;<br />
-                          <strong>Type parameters:</strong> 'a, 'b          </div>
+                          <strong>Type parameters:</strong> 'a, 'b                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;minBy&quot;)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L76-76" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L78-78" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -417,15 +496,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '288', 288)" onmouseover="showTip(event, '288', 288)">
+          <code onmouseout="hideTip(event, '451', 451)" onmouseover="showTip(event, '451', 451)">
             Nth(s, index)
           </code>
-          <div class="tip" id="288">
+          <div class="tip" id="451">
             <strong>Signature:</strong> (s:IObservable&lt;&#39;a&gt; * index:int) -&gt; IObservable&lt;&#39;a&gt;<br />
-                          <strong>Type parameters:</strong> 'a          </div>
+                          <strong>Type parameters:</strong> 'a                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;nth&quot;)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L78-78" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L80-80" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -435,15 +518,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '289', 289)" onmouseover="showTip(event, '289', 289)">
+          <code onmouseout="hideTip(event, '452', 452)" onmouseover="showTip(event, '452', 452)">
             Select(s, selector)
           </code>
-          <div class="tip" id="289">
-            <strong>Signature:</strong> (s:IObservable&lt;&#39;?6129&gt; * selector:(&#39;?6129 -&gt; &#39;?6130)) -&gt; IObservable&lt;&#39;?6130&gt;<br />
-                          <strong>Type parameters:</strong> '?6129, '?6130          </div>
+          <div class="tip" id="452">
+            <strong>Signature:</strong> (s:IObservable&lt;&#39;?8019&gt; * selector:(&#39;?8019 -&gt; &#39;?8020)) -&gt; IObservable&lt;&#39;?8020&gt;<br />
+                          <strong>Type parameters:</strong> '?8019, '?8020                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;select&quot;, AllowIntoPattern = true)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L38-38" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L40-40" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -453,15 +540,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '290', 290)" onmouseover="showTip(event, '290', 290)">
+          <code onmouseout="hideTip(event, '453', 453)" onmouseover="showTip(event, '453', 453)">
             Skip(s, count)
           </code>
-          <div class="tip" id="290">
-            <strong>Signature:</strong> (s:IObservable&lt;&#39;?6140&gt; * count:int) -&gt; IObservable&lt;&#39;?6140&gt;<br />
-                          <strong>Type parameters:</strong> '?6140          </div>
+          <div class="tip" id="453">
+            <strong>Signature:</strong> (s:IObservable&lt;&#39;?8030&gt; * count:int) -&gt; IObservable&lt;&#39;?8030&gt;<br />
+                          <strong>Type parameters:</strong> '?8030                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;skip&quot;, MaintainsVariableSpace = true, AllowIntoPattern = true)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L48-48" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L50-50" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -471,15 +562,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '291', 291)" onmouseover="showTip(event, '291', 291)">
+          <code onmouseout="hideTip(event, '454', 454)" onmouseover="showTip(event, '454', 454)">
             SkipWhile(s, predicate)
           </code>
-          <div class="tip" id="291">
-            <strong>Signature:</strong> (s:IObservable&lt;&#39;?6138&gt; * predicate:(&#39;?6138 -&gt; bool)) -&gt; IObservable&lt;&#39;?6138&gt;<br />
-                          <strong>Type parameters:</strong> '?6138          </div>
+          <div class="tip" id="454">
+            <strong>Signature:</strong> (s:IObservable&lt;&#39;?8028&gt; * predicate:(&#39;?8028 -&gt; bool)) -&gt; IObservable&lt;&#39;?8028&gt;<br />
+                          <strong>Type parameters:</strong> '?8028                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;skipWhile&quot;, MaintainsVariableSpace = true, AllowIntoPattern = true)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L46-46" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L48-48" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -489,15 +584,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '292', 292)" onmouseover="showTip(event, '292', 292)">
+          <code onmouseout="hideTip(event, '455', 455)" onmouseover="showTip(event, '455', 455)">
             SumBy(s, valueSelector)
           </code>
-          <div class="tip" id="292">
-            <strong>Signature:</strong> (s:IObservable&lt;&#39;?6176&gt; * valueSelector:(&#39;?6176 -&gt; ^?6177)) -&gt; IObservable&lt;^?6178&gt;<br />
-                          <strong>Type parameters:</strong> '?6176, ^?6177, ^?6178          </div>
+          <div class="tip" id="455">
+            <strong>Signature:</strong> (s:IObservable&lt;&#39;?8066&gt; * valueSelector:(&#39;?8066 -&gt; ^?8067)) -&gt; IObservable&lt;^?8068&gt;<br />
+                          <strong>Type parameters:</strong> '?8066, ^?8067, ^?8068                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;sumBy&quot;)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L80-80" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L82-82" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -507,15 +606,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '293', 293)" onmouseover="showTip(event, '293', 293)">
+          <code onmouseout="hideTip(event, '456', 456)" onmouseover="showTip(event, '456', 456)">
             Take(s, count)
           </code>
-          <div class="tip" id="293">
-            <strong>Signature:</strong> (s:IObservable&lt;&#39;?6136&gt; * count:int) -&gt; IObservable&lt;&#39;?6136&gt;<br />
-                          <strong>Type parameters:</strong> '?6136          </div>
+          <div class="tip" id="456">
+            <strong>Signature:</strong> (s:IObservable&lt;&#39;?8026&gt; * count:int) -&gt; IObservable&lt;&#39;?8026&gt;<br />
+                          <strong>Type parameters:</strong> '?8026                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;take&quot;, MaintainsVariableSpace = true, AllowIntoPattern = true)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L44-44" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L46-46" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -525,15 +628,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '294', 294)" onmouseover="showTip(event, '294', 294)">
+          <code onmouseout="hideTip(event, '457', 457)" onmouseover="showTip(event, '457', 457)">
             TakeWhile(s, predicate)
           </code>
-          <div class="tip" id="294">
-            <strong>Signature:</strong> (s:IObservable&lt;&#39;?6134&gt; * predicate:(&#39;?6134 -&gt; bool)) -&gt; IObservable&lt;&#39;?6134&gt;<br />
-                          <strong>Type parameters:</strong> '?6134          </div>
+          <div class="tip" id="457">
+            <strong>Signature:</strong> (s:IObservable&lt;&#39;?8024&gt; * predicate:(&#39;?8024 -&gt; bool)) -&gt; IObservable&lt;&#39;?8024&gt;<br />
+                          <strong>Type parameters:</strong> '?8024                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;takeWhile&quot;, MaintainsVariableSpace = true, AllowIntoPattern = true)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L42-42" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L44-44" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -543,15 +650,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '295', 295)" onmouseover="showTip(event, '295', 295)">
+          <code onmouseout="hideTip(event, '458', 458)" onmouseover="showTip(event, '458', 458)">
             Where(s, predicate)
           </code>
-          <div class="tip" id="295">
-            <strong>Signature:</strong> (s:IObservable&lt;&#39;?6132&gt; * predicate:(&#39;?6132 -&gt; bool)) -&gt; IObservable&lt;&#39;?6132&gt;<br />
-                          <strong>Type parameters:</strong> '?6132          </div>
+          <div class="tip" id="458">
+            <strong>Signature:</strong> (s:IObservable&lt;&#39;?8022&gt; * predicate:(&#39;?8022 -&gt; bool)) -&gt; IObservable&lt;&#39;?8022&gt;<br />
+                          <strong>Type parameters:</strong> '?8022                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;where&quot;, MaintainsVariableSpace = true, AllowIntoPattern = true)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L40-40" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L42-42" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -561,15 +672,15 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '296', 296)" onmouseover="showTip(event, '296', 296)">
+          <code onmouseout="hideTip(event, '459', 459)" onmouseover="showTip(event, '459', 459)">
             Yield(value)
           </code>
-          <div class="tip" id="296">
-            <strong>Signature:</strong> value:&#39;?6144 -&gt; IObservable&lt;&#39;?6144&gt;<br />
-                          <strong>Type parameters:</strong> '?6144          </div>
+          <div class="tip" id="459">
+            <strong>Signature:</strong> value:&#39;?8034 -&gt; IObservable&lt;&#39;?8034&gt;<br />
+                          <strong>Type parameters:</strong> '?8034                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L50-50" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L52-52" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -579,15 +690,15 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '297', 297)" onmouseover="showTip(event, '297', 297)">
+          <code onmouseout="hideTip(event, '460', 460)" onmouseover="showTip(event, '460', 460)">
             Zero()
           </code>
-          <div class="tip" id="297">
-            <strong>Signature:</strong> unit -&gt; IObservable&lt;&#39;?6142&gt;<br />
-                          <strong>Type parameters:</strong> '?6142          </div>
+          <div class="tip" id="460">
+            <strong>Signature:</strong> unit -&gt; IObservable&lt;&#39;?8032&gt;<br />
+                          <strong>Type parameters:</strong> '?8032                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L49-49" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L51-51" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -597,15 +708,19 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '298', 298)" onmouseover="showTip(event, '298', 298)">
+          <code onmouseout="hideTip(event, '461', 461)" onmouseover="showTip(event, '461', 461)">
             Zip(s1, s2, resultSelector)
           </code>
-          <div class="tip" id="298">
-            <strong>Signature:</strong> (s1:IObservable&lt;&#39;?6199&gt; * s2:IObservable&lt;&#39;?6200&gt; * resultSelector:(&#39;?6199 -&gt; &#39;?6200 -&gt; &#39;?6201)) -&gt; IObservable&lt;&#39;?6201&gt;<br />
-                          <strong>Type parameters:</strong> '?6199, '?6200, '?6201          </div>
+          <div class="tip" id="461">
+            <strong>Signature:</strong> (s1:IObservable&lt;&#39;?8089&gt; * s2:IObservable&lt;&#39;?8090&gt; * resultSelector:(&#39;?8089 -&gt; &#39;?8090 -&gt; &#39;?8091)) -&gt; IObservable&lt;&#39;?8091&gt;<br />
+                          <strong>Type parameters:</strong> '?8089, '?8090, '?8091                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;CustomOperation(&quot;zip&quot;, IsLikeZip = true)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/Observable.fs#L90-90" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L92-92" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -617,10 +732,10 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
 
         </div>
         <div class="span3">
-          <img src="/FSharp.Control.Reactive/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <img src="/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
           <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
             <li class="nav-header">FSharp.Control.Reactive</li>
-            <li><a href="/FSharp.Control.Reactive/index.html">Home page</a></li>
+            <li><a href="/index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="https://www.nuget.org/packages/FSharp.Control.Reactive">Get Library via NuGet</a></li>
             <li><a href="http://github.com/fsprojects/FSharp.Reactive">Source Code on GitHub</a></li>
@@ -628,10 +743,11 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
             <li><a href="http://github.com/fsprojects/FSharp.Reactive/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
             
             <li class="nav-header">Getting started</li>
-            <li><a href="/FSharp.Control.Reactive/tutorial.html">Sample tutorial</a></li>
+            <li><a href="/introduction.html">Introduction</a></li>
+            <li><a href="/tutorial.html">Sample tutorial</a></li>
 
             <li class="nav-header">Documentation</li>
-            <li><a href="/FSharp.Control.Reactive/reference/index.html">API Reference</a></li>
+            <li><a href="/reference/index.html">API Reference</a></li>
           </ul>
         </div>
       </div>

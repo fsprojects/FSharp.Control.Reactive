@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Builders - FSharp.Control.Reactive</title>
+    <title>WaitHandle - FSharp.Control.Reactive</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Ryan Riley, Steffen Forkmann, and Jared Heseter"/>
@@ -35,7 +35,7 @@
 
 
 
-<h1>Builders</h1>
+<h1>WaitHandle</h1>
 <p>
   <span>Namespace: FSharp.Control.Reactive</span><br />
         <span>
@@ -48,38 +48,6 @@
 </div>
 
 <!-- Render nested types and modules, if there are any -->
-  <h2>Nested types and modules</h2>
-  <div>
-      <table class="table table-bordered type-list">
-    <thead>
-      <tr><td>Type</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td class="type-name">
-            <a href="fsharp-control-reactive-buildersmodule-observablebuilder.html">ObservableBuilder</a>
-          </td>
-          <td class="xmldoc">
-          <p>An Observable computation builder.</p>
-
-
-          </td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fsharp-control-reactive-buildersmodule-rxquerybuilder.html">RxQueryBuilder</a>
-          </td>
-          <td class="xmldoc">
-          <p>A reactive query builder.
-See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html">http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html</a></p>
-
-
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  </div>
 
   <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
@@ -90,37 +58,61 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1', 1)" onmouseover="showTip(event, '1', 1)">
-            observe 
+          <code onmouseout="hideTip(event, '382', 382)" onmouseover="showTip(event, '382', 382)">
+            flag s
           </code>
-          <div class="tip" id="1">
-            <strong>Signature:</strong> ObservableBuilder<br />
+          <div class="tip" id="382">
+            <strong>Signature:</strong> s:EventWaitHandle -&gt; unit<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L33-33" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Disposable.fs#L64-64" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Sets the state of the event to signaled, allowing one or more waiting threads to proceed.</p>
+
+
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)">
-            rxquery 
+          <code onmouseout="hideTip(event, '383', 383)" onmouseover="showTip(event, '383', 383)">
+            signal 
           </code>
-          <div class="tip" id="2">
-            <strong>Signature:</strong> RxQueryBuilder<br />
+          <div class="tip" id="383">
+            <strong>Signature:</strong> ManualResetEvent<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L98-98" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Disposable.fs#L61-61" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Initializes a new instance of the ManualResetEvent class with initial state set to 'false'.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '384', 384)" onmouseover="showTip(event, '384', 384)">
+            wait s
+          </code>
+          <div class="tip" id="384">
+            <strong>Signature:</strong> s:WaitHandle -&gt; unit<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Disposable.fs#L67-67" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Blocks the current thread until the WaitHandle receives a signal.</p>
+
+
         </td>
       </tr>
     </tbody>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>TestSchedule - FSharp.Control.Reactive</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Ryan Riley, Steffen Forkmann, and Jared Heseter"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/content/style.css" />
+    <script type="text/javascript" src="/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="http://github.com/fsprojects/FSharp.Reactive">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/index.html">FSharp.Control.Reactive</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>TestSchedule</h1>
+<p>
+  <span>Namespace: FSharp.Control.Reactive.Testing</span><br />
+        <span>
+          Attributes:<br />
+[&lt;CompilationRepresentation(4)&gt;]<br />
+          
+      </span>
+</p>
+<div class="xmldoc">
+<p>The Reactive module provides operators for working with TestScheduler in F#.</p>
+
+</div>
+
+<!-- Render nested types and modules, if there are any -->
+
+  <h3>Functions and values</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Function or value</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '405', 405)" onmouseover="showTip(event, '405', 405)">
+            advanceBy s time
+          </code>
+          <div class="tip" id="405">
+            <strong>Signature:</strong> s:TestScheduler -&gt; time:int64 -&gt; TestScheduler<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive.Testing/TestSchedule.fs#L22-22" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Advances the scheduler's clock by the specified relative time, running all work scheduled for that timespan.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '406', 406)" onmouseover="showTip(event, '406', 406)">
+            advanceTo s time
+          </code>
+          <div class="tip" id="406">
+            <strong>Signature:</strong> s:TestScheduler -&gt; time:int64 -&gt; TestScheduler<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive.Testing/TestSchedule.fs#L26-26" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Advances the scheduler's clock to the specified time, running all work till that point.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '407', 407)" onmouseover="showTip(event, '407', 407)">
+            coldObservable s arg2
+          </code>
+          <div class="tip" id="407">
+            <strong>Signature:</strong> s:TestScheduler -&gt; TestNotifications&lt;&#39;a&gt; -&gt; ITestableObservable&lt;&#39;a&gt;<br />
+                          <strong>Type parameters:</strong> 'a                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive.Testing/TestSchedule.fs#L14-14" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Creates a cold observable using the specified timestamped notification messages.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '408', 408)" onmouseover="showTip(event, '408', 408)">
+            createObserver s
+          </code>
+          <div class="tip" id="408">
+            <strong>Signature:</strong> s:TestScheduler -&gt; ITestableObserver&lt;&#39;a&gt;<br />
+                          <strong>Type parameters:</strong> 'a                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive.Testing/TestSchedule.fs#L30-30" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Creates an observer that records received notification messages and timestamps those.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '409', 409)" onmouseover="showTip(event, '409', 409)">
+            hotObservable s arg2
+          </code>
+          <div class="tip" id="409">
+            <strong>Signature:</strong> s:TestScheduler -&gt; TestNotifications&lt;&#39;?8971&gt; -&gt; ITestableObservable&lt;&#39;?8971&gt;<br />
+                          <strong>Type parameters:</strong> '?8971                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive.Testing/TestSchedule.fs#L18-18" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Creates a hot observable using the specified timestamped notification messages.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '410', 410)" onmouseover="showTip(event, '410', 410)">
+            schedule s state dueTime f
+          </code>
+          <div class="tip" id="410">
+            <strong>Signature:</strong> s:TestScheduler -&gt; state:&#39;?8977 -&gt; dueTime:DateTimeOffset -&gt; f:(IScheduler -&gt; &#39;?8977 -&gt; IDisposable) -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> '?8977                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;Obsolete(&quot;Use the &#39;Schedule&#39; module for scheduling actions&quot;)&gt;]<br />
+          </span>
+          </div>
+        </td>
+        <td class="xmldoc">
+              <div class="alert alert-warning">
+              <strong>WARNING: </strong> This API is obsolete
+              <p>Use the &#39;Schedule&#39; module for scheduling actions</p>
+              </div> 
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive.Testing/TestSchedule.fs#L35-35" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules an action to be executed at dueTime</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '411', 411)" onmouseover="showTip(event, '411', 411)">
+            start s
+          </code>
+          <div class="tip" id="411">
+            <strong>Signature:</strong> s:TestScheduler -&gt; TestScheduler<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive.Testing/TestSchedule.fs#L39-39" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Starts the virtual time scheduler.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '412', 412)" onmouseover="showTip(event, '412', 412)">
+            startObservable s source
+          </code>
+          <div class="tip" id="412">
+            <strong>Signature:</strong> s:TestScheduler -&gt; source:IObservable&lt;&#39;?8980&gt; -&gt; ITestableObserver&lt;&#39;?8980&gt;<br />
+                          <strong>Type parameters:</strong> '?8980                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive.Testing/TestSchedule.fs#L43-43" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Starts the test scheduler and uses default virtual times to "ReactiveTest.Created", to "ReactiveTest.Subscribed", and to "ReactiveTest.Disposed".</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '413', 413)" onmouseover="showTip(event, '413', 413)">
+            subscribeBeforeAfter sch source f
+          </code>
+          <div class="tip" id="413">
+            <strong>Signature:</strong> sch:TestScheduler -&gt; source:&#39;?8986 -&gt; f:(&#39;?8986 -&gt; &#39;?8988) -&gt; ITestableObserver&lt;&#39;?8987&gt; * ITestableObserver&lt;&#39;?8987&gt;<br />
+                          <strong>Type parameters:</strong> '?8986, '?8987, '?8988                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive.Testing/TestSchedule.fs#L59-59" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Subscribes before and after and specified function to the observable with an observer that records received notification messasges and timestamps those.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '414', 414)" onmouseover="showTip(event, '414', 414)">
+            subscribeTestObserver sch source
+          </code>
+          <div class="tip" id="414">
+            <strong>Signature:</strong> sch:TestScheduler -&gt; source:IObservable&lt;&#39;?8982&gt; -&gt; ITestableObserver&lt;&#39;?8982&gt;<br />
+                          <strong>Type parameters:</strong> '?8982                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive.Testing/TestSchedule.fs#L47-47" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Subscribes to the observable with an observer that records received notification messages and timestamps those.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '415', 415)" onmouseover="showTip(event, '415', 415)">
+            subscribeTestObserverStart sch source
+          </code>
+          <div class="tip" id="415">
+            <strong>Signature:</strong> sch:TestScheduler -&gt; source:IObservable&lt;&#39;?8984&gt; -&gt; ITestableObserver&lt;&#39;?8984&gt;<br />
+                          <strong>Type parameters:</strong> '?8984                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive.Testing/TestSchedule.fs#L53-53" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Subscribes (before starting) to the observable with an observer that records received notification messages and timestamps those.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '416', 416)" onmouseover="showTip(event, '416', 416)">
+            usage f
+          </code>
+          <div class="tip" id="416">
+            <strong>Signature:</strong> f:(TestScheduler -&gt; &#39;?8967) -&gt; &#39;?8967<br />
+                          <strong>Type parameters:</strong> '?8967                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive.Testing/TestSchedule.fs#L10-10" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Virtual time scheduler used for testing applications and libraries built using Reactive Extensions.</p>
+
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <img src="/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">FSharp.Control.Reactive</li>
+            <li><a href="/index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="https://www.nuget.org/packages/FSharp.Control.Reactive">Get Library via NuGet</a></li>
+            <li><a href="http://github.com/fsprojects/FSharp.Reactive">Source Code on GitHub</a></li>
+            <li><a href="http://github.com/fsprojects/FSharp.Reactive/blob/master/LICENSE.txt">License</a></li>
+            <li><a href="http://github.com/fsprojects/FSharp.Reactive/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+            
+            <li class="nav-header">Getting started</li>
+            <li><a href="/introduction.html">Introduction</a></li>
+            <li><a href="/tutorial.html">Sample tutorial</a></li>
+
+            <li class="nav-header">Documentation</li>
+            <li><a href="/reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="http://github.com/fsprojects/FSharp.Reactive"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>
+

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Builders - FSharp.Control.Reactive</title>
+    <title>TestObserver - FSharp.Control.Reactive</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Ryan Riley, Steffen Forkmann, and Jared Heseter"/>
@@ -35,9 +35,9 @@
 
 
 
-<h1>Builders</h1>
+<h1>TestObserver</h1>
 <p>
-  <span>Namespace: FSharp.Control.Reactive</span><br />
+  <span>Namespace: FSharp.Control.Reactive.Testing</span><br />
         <span>
           Attributes:<br />
 [&lt;CompilationRepresentation(4)&gt;]<br />
@@ -45,41 +45,11 @@
       </span>
 </p>
 <div class="xmldoc">
+<p>The Reactive module provides operators for working with TestObserver<_> in F#.</p>
+
 </div>
 
 <!-- Render nested types and modules, if there are any -->
-  <h2>Nested types and modules</h2>
-  <div>
-      <table class="table table-bordered type-list">
-    <thead>
-      <tr><td>Type</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td class="type-name">
-            <a href="fsharp-control-reactive-buildersmodule-observablebuilder.html">ObservableBuilder</a>
-          </td>
-          <td class="xmldoc">
-          <p>An Observable computation builder.</p>
-
-
-          </td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fsharp-control-reactive-buildersmodule-rxquerybuilder.html">RxQueryBuilder</a>
-          </td>
-          <td class="xmldoc">
-          <p>A reactive query builder.
-See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html">http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f-30.html</a></p>
-
-
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  </div>
 
   <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
@@ -90,37 +60,61 @@ See <a href="http://mnajder.blogspot.com/2011/09/when-reactive-framework-meets-f
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1', 1)" onmouseover="showTip(event, '1', 1)">
-            observe 
+          <code onmouseout="hideTip(event, '402', 402)" onmouseover="showTip(event, '402', 402)">
+            all o
           </code>
-          <div class="tip" id="1">
-            <strong>Signature:</strong> ObservableBuilder<br />
-                                  </div>
+          <div class="tip" id="402">
+            <strong>Signature:</strong> o:ITestableObserver&lt;&#39;a&gt; -&gt; TestNotifications&lt;&#39;a&gt;<br />
+                          <strong>Type parameters:</strong> 'a                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L33-33" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive.Testing/TestObserver.fs#L8-8" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Gets recorded timestamped notification messages received by the observer.</p>
+
+
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)">
-            rxquery 
+          <code onmouseout="hideTip(event, '403', 403)" onmouseover="showTip(event, '403', 403)">
+            errors o
           </code>
-          <div class="tip" id="2">
-            <strong>Signature:</strong> RxQueryBuilder<br />
-                                  </div>
+          <div class="tip" id="403">
+            <strong>Signature:</strong> o:ITestableObserver&lt;&#39;a&gt; -&gt; exn list<br />
+                          <strong>Type parameters:</strong> 'a                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Observable.fs#L98-98" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive.Testing/TestObserver.fs#L16-16" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Gets recorded timestamped "OnError" notification messages received by the observer.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '404', 404)" onmouseover="showTip(event, '404', 404)">
+            nexts o
+          </code>
+          <div class="tip" id="404">
+            <strong>Signature:</strong> o:ITestableObserver&lt;&#39;a&gt; -&gt; &#39;a list<br />
+                          <strong>Type parameters:</strong> 'a                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive.Testing/TestObserver.fs#L12-12" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Gets recorded timestamped "OnNext" notification messages received by the observer.</p>
+
+
         </td>
       </tr>
     </tbody>

@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Schedule - FSharp.Control.Reactive</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Ryan Riley, Steffen Forkmann, and Jared Heseter"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/content/style.css" />
+    <script type="text/javascript" src="/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="http://github.com/fsprojects/FSharp.Reactive">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/index.html">FSharp.Control.Reactive</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>Schedule</h1>
+<p>
+  <span>Namespace: FSharp.Control.Reactive</span><br />
+  </p>
+<div class="xmldoc">
+<p>The Reactive module provides operators for working with IScheduler<_> in F#.</p>
+
+</div>
+
+<!-- Render nested types and modules, if there are any -->
+
+  <h3>Functions and values</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Function or value</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '337', 337)" onmouseover="showTip(event, '337', 337)">
+            action f sch
+          </code>
+          <div class="tip" id="337">
+            <strong>Signature:</strong> f:(unit -&gt; unit) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L40-40" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules an function to be executed.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '338', 338)" onmouseover="showTip(event, '338', 338)">
+            actionAccOffsetRec state dueTime ff sch
+          </code>
+          <div class="tip" id="338">
+            <strong>Signature:</strong> state:&#39;state -&gt; dueTime:DateTimeOffset -&gt; ff:(&#39;state -&gt; (&#39;state -&gt; DateTimeOffset -&gt; unit) -&gt; unit) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> 'state                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L91-91" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules an function to be executed recursively at a specified absolute due time.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '339', 339)" onmouseover="showTip(event, '339', 339)">
+            actionAccRec state ff sch
+          </code>
+          <div class="tip" id="339">
+            <strong>Signature:</strong> state:&#39;state -&gt; ff:(&#39;state -&gt; (&#39;state -&gt; unit) -&gt; unit) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> 'state                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L79-79" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules an function to be executed recursively.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '340', 340)" onmouseover="showTip(event, '340', 340)">
+            actionAccSpanRec state dueTime ff sch
+          </code>
+          <div class="tip" id="340">
+            <strong>Signature:</strong> state:&#39;state -&gt; dueTime:TimeSpan -&gt; ff:(&#39;state -&gt; (&#39;state -&gt; TimeSpan -&gt; unit) -&gt; unit) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> 'state                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L83-83" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules an function to be executed recursively after a specified relative due time.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '341', 341)" onmouseover="showTip(event, '341', 341)">
+            actionLong f sch
+          </code>
+          <div class="tip" id="341">
+            <strong>Signature:</strong> f:(ICancelable -&gt; unit) -&gt; sch:ISchedulerLongRunning -&gt; IDisposable<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L47-47" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules an function to be executed.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '342', 342)" onmouseover="showTip(event, '342', 342)">
+            actionLongState state f sch
+          </code>
+          <div class="tip" id="342">
+            <strong>Signature:</strong> state:&#39;?7922 -&gt; f:(&#39;?7922 -&gt; ICancelable -&gt; &#39;?7923) -&gt; sch:ISchedulerLongRunning -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> '?7922, '?7923                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L51-51" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules a long-running piece of work.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '343', 343)" onmouseover="showTip(event, '343', 343)">
+            actionOffset offset f sch
+          </code>
+          <div class="tip" id="343">
+            <strong>Signature:</strong> offset:DateTimeOffset -&gt; f:(unit -&gt; unit) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L43-43" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules an function to be executed at a specified absolute time.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '344', 344)" onmouseover="showTip(event, '344', 344)">
+            actionOffsetRec dueTime ff sch
+          </code>
+          <div class="tip" id="344">
+            <strong>Signature:</strong> dueTime:DateTimeOffset -&gt; ff:((unit -&gt; unit) -&gt; unit) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L87-87" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules an function to be executed recursively at a specified absolute due time.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '345', 345)" onmouseover="showTip(event, '345', 345)">
+            actionRec ff sch
+          </code>
+          <div class="tip" id="345">
+            <strong>Signature:</strong> ff:((unit -&gt; unit) -&gt; unit) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L71-71" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules an function to be executed recursively.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '346', 346)" onmouseover="showTip(event, '346', 346)">
+            actionSpanRec time ff sch
+          </code>
+          <div class="tip" id="346">
+            <strong>Signature:</strong> time:TimeSpan -&gt; ff:(TimeSpan -&gt; (TimeSpan -&gt; unit) -&gt; unit) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L75-75" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules an function to be executed recursively.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '347', 347)" onmouseover="showTip(event, '347', 347)">
+            asAsync cta
+          </code>
+          <div class="tip" id="347">
+            <strong>Signature:</strong> cta:SchedulerOperation -&gt; Async&lt;unit&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L137-137" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '348', 348)" onmouseover="showTip(event, '348', 348)">
+            asTask ct async
+          </code>
+          <div class="tip" id="348">
+            <strong>Signature:</strong> ct:CancellationToken -&gt; async:Async&lt;&#39;T&gt; -&gt; Task&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L169-169" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '349', 349)" onmouseover="showTip(event, '349', 349)">
+            async f sch
+          </code>
+          <div class="tip" id="349">
+            <strong>Signature:</strong> f:(IScheduler -&gt; CancellationToken -&gt; Async&lt;&#39;?7958&gt;) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> '?7958                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L180-180" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules the work using an asynchonous function, allowing for cooperative scheduling in a imperative coding style.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '350', 350)" onmouseover="showTip(event, '350', 350)">
+            asyncAccOffsetResult state dueTime f sch
+          </code>
+          <div class="tip" id="350">
+            <strong>Signature:</strong> state:&#39;state -&gt; dueTime:DateTimeOffset -&gt; f:(IScheduler -&gt; &#39;state -&gt; CancellationToken -&gt; Async&lt;IDisposable&gt;) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> 'state                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L246-246" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules the work using an asynchonous function, allowing for cooperative scheduling in a imperative coding style.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '351', 351)" onmouseover="showTip(event, '351', 351)">
+            asyncAccOffsetUnit state dueTime f sch
+          </code>
+          <div class="tip" id="351">
+            <strong>Signature:</strong> state:&#39;state -&gt; dueTime:DateTimeOffset -&gt; f:(IScheduler -&gt; &#39;state -&gt; CancellationToken -&gt; Async&lt;&#39;?7978&gt;) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> 'state, '?7978                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L240-240" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules the work using an asynchonous function, allowing for cooperative scheduling in a imperative coding style.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '352', 352)" onmouseover="showTip(event, '352', 352)">
+            asyncAccResult state f sch
+          </code>
+          <div class="tip" id="352">
+            <strong>Signature:</strong> state:&#39;state -&gt; f:(IScheduler -&gt; &#39;state -&gt; CancellationToken -&gt; Async&lt;IDisposable&gt;) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> 'state                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L198-198" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules the work using an asynchonous function, allowing for cooperative scheduling in a imperative coding style.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '353', 353)" onmouseover="showTip(event, '353', 353)">
+            asyncAccSpanResult state dueTime f sch
+          </code>
+          <div class="tip" id="353">
+            <strong>Signature:</strong> state:&#39;state -&gt; dueTime:TimeSpan -&gt; f:(IScheduler -&gt; &#39;state -&gt; CancellationToken -&gt; Async&lt;IDisposable&gt;) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> 'state                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L234-234" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules the work using an asynchonous function, allowing for cooperative scheduling in a imperative coding style.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '354', 354)" onmouseover="showTip(event, '354', 354)">
+            asyncAccSpanUnit state dueTime f sch
+          </code>
+          <div class="tip" id="354">
+            <strong>Signature:</strong> state:&#39;state -&gt; dueTime:TimeSpan -&gt; f:(IScheduler -&gt; &#39;state -&gt; CancellationToken -&gt; Async&lt;&#39;?7973&gt;) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> 'state, '?7973                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L228-228" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules the work using an asynchonous function, allowing for cooperative scheduling in a imperative coding style.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '355', 355)" onmouseover="showTip(event, '355', 355)">
+            asyncAccUnit state f sch
+          </code>
+          <div class="tip" id="355">
+            <strong>Signature:</strong> state:&#39;state -&gt; f:(IScheduler -&gt; &#39;state -&gt; CancellationToken -&gt; Async&lt;&#39;?7962&gt;) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> 'state, '?7962                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L192-192" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules the work using an asynchonous function, allowing for cooperative scheduling in a imperative coding style.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '356', 356)" onmouseover="showTip(event, '356', 356)">
+            asyncOffsetResult dueTime f sch
+          </code>
+          <div class="tip" id="356">
+            <strong>Signature:</strong> dueTime:DateTimeOffset -&gt; f:(IScheduler -&gt; CancellationToken -&gt; Async&lt;IDisposable&gt;) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L222-222" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules the work using an asynchonous function, allowing for cooperative scheduling in a imperative coding style.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '357', 357)" onmouseover="showTip(event, '357', 357)">
+            asyncOffsetUnit dueTime f sch
+          </code>
+          <div class="tip" id="357">
+            <strong>Signature:</strong> dueTime:DateTimeOffset -&gt; f:(IScheduler -&gt; CancellationToken -&gt; Async&lt;&#39;?7969&gt;) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> '?7969                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L216-216" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules the work using an asynchonous function, allowing for cooperative scheduling in a imperative coding style.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '358', 358)" onmouseover="showTip(event, '358', 358)">
+            asyncResult f sch
+          </code>
+          <div class="tip" id="358">
+            <strong>Signature:</strong> f:(IScheduler -&gt; CancellationToken -&gt; Async&lt;IDisposable&gt;) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L186-186" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules the work using an asynchonous function, allowing for cooperative scheduling in a imperative coding style.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '359', 359)" onmouseover="showTip(event, '359', 359)">
+            asyncSpanResult dueTime f sch
+          </code>
+          <div class="tip" id="359">
+            <strong>Signature:</strong> dueTime:TimeSpan -&gt; f:(IScheduler -&gt; CancellationToken -&gt; Async&lt;IDisposable&gt;) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L210-210" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules the work using an asynchonous function, allowing for cooperative scheduling in a imperative coding style.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '360', 360)" onmouseover="showTip(event, '360', 360)">
+            asyncSpanUnit dueTime f sch
+          </code>
+          <div class="tip" id="360">
+            <strong>Signature:</strong> dueTime:TimeSpan -&gt; f:(IScheduler -&gt; CancellationToken -&gt; Async&lt;&#39;?7966&gt;) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> '?7966                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L204-204" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules the work using an asynchonous function, allowing for cooperative scheduling in a imperative coding style.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '361', 361)" onmouseover="showTip(event, '361', 361)">
+            catch f sch
+          </code>
+          <div class="tip" id="361">
+            <strong>Signature:</strong> f:(&#39;?7947 -&gt; bool) -&gt; sch:IScheduler -&gt; IScheduler<br />
+                          <strong>Type parameters:</strong> '?7947                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L131-131" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Returns a scheduler that wraps the original scheduler, adding exception handling for scheduled actions.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '362', 362)" onmouseover="showTip(event, '362', 362)">
+            disableOptimizations arg00
+          </code>
+          <div class="tip" id="362">
+            <strong>Signature:</strong> arg00:IScheduler -&gt; IScheduler<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L124-124" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Returns a scheduler that represents the original scheduler, without any of its interface-based optimizations (e.g. long running scheduling).</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '363', 363)" onmouseover="showTip(event, '363', 363)">
+            disableOptimizationsTypes (...)
+          </code>
+          <div class="tip" id="363">
+            <strong>Signature:</strong> optimizationInterfaces:Type list -&gt; sch:IScheduler -&gt; IScheduler<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L127-127" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Returns a scheduler that represents the original scheduler, without any of its interface-based optimizations (e.g. long running scheduling).</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '364', 364)" onmouseover="showTip(event, '364', 364)">
+            func state f sch
+          </code>
+          <div class="tip" id="364">
+            <strong>Signature:</strong> state:&#39;?7925 -&gt; f:(IScheduler -&gt; &#39;?7925 -&gt; IDisposable) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> '?7925                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L55-55" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules a function to be executed.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '365', 365)" onmouseover="showTip(event, '365', 365)">
+            funcOffset state dueTime f sch
+          </code>
+          <div class="tip" id="365">
+            <strong>Signature:</strong> state:&#39;?7929 -&gt; dueTime:DateTimeOffset -&gt; f:(IScheduler -&gt; &#39;?7929 -&gt; IDisposable) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> '?7929                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L63-63" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules a function to be executed at dueTime.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '366', 366)" onmouseover="showTip(event, '366', 366)">
+            funcSpan state dueTime f sch
+          </code>
+          <div class="tip" id="366">
+            <strong>Signature:</strong> state:&#39;?7927 -&gt; dueTime:TimeSpan -&gt; f:(IScheduler -&gt; &#39;?7927 -&gt; IDisposable) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> '?7927                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L59-59" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules a function to be executed after dueTime.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '367', 367)" onmouseover="showTip(event, '367', 367)">
+            multiple fs sch
+          </code>
+          <div class="tip" id="367">
+            <strong>Signature:</strong> fs:(IScheduler -&gt; IDisposable) list -&gt; sch:IScheduler -&gt; IDisposable<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L32-32" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedule multiple 'schedule' operations together</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '368', 368)" onmouseover="showTip(event, '368', 368)">
+            periodicAcc state period f sch
+          </code>
+          <div class="tip" id="368">
+            <strong>Signature:</strong> state:&#39;?7940 -&gt; period:TimeSpan -&gt; f:(&#39;?7940 -&gt; &#39;?7940) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> '?7940                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L102-102" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules a periodic piece  of work by dynamically discovering the scheduler's capabilities.
+If the scheduler supports periodic scheduling, the request will be forwarded to the periodic scheduling implementation.
+If the scheduler provides stopwatch functionality, the periodic task will be emulated using recursive scheduling with a stopwatch to correct for time slippage.
+Otherwise, the periodic task will be emulated using recursive scheduling.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '369', 369)" onmouseover="showTip(event, '369', 369)">
+            periodicAccAction state period f sch
+          </code>
+          <div class="tip" id="369">
+            <strong>Signature:</strong> state:&#39;?7942 -&gt; period:TimeSpan -&gt; f:(&#39;?7942 -&gt; unit) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> '?7942                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L109-109" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules a periodic piece  of work by dynamically discovering the scheduler's capabilities.
+If the scheduler supports periodic scheduling, the request will be forwarded to the periodic scheduling implementation.
+If the scheduler provides stopwatch functionality, the periodic task will be emulated using recursive scheduling with a stopwatch to correct for time slippage.
+Otherwise, the periodic task will be emulated using recursive scheduling.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '370', 370)" onmouseover="showTip(event, '370', 370)">
+            periodicAction period f sch
+          </code>
+          <div class="tip" id="370">
+            <strong>Signature:</strong> period:TimeSpan -&gt; f:(unit -&gt; unit) -&gt; sch:IScheduler -&gt; IDisposable<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L116-116" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Schedules a periodic piece  of work by dynamically discovering the scheduler's capabilities.
+If the scheduler supports periodic scheduling, the request will be forwarded to the periodic scheduling implementation.
+If the scheduler provides stopwatch functionality, the periodic task will be emulated using recursive scheduling with a stopwatch to correct for time slippage.
+Otherwise, the periodic task will be emulated using recursive scheduling.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '371', 371)" onmouseover="showTip(event, '371', 371)">
+            sleep dueTime sch
+          </code>
+          <div class="tip" id="371">
+            <strong>Signature:</strong> dueTime:TimeSpan -&gt; sch:IScheduler -&gt; Async&lt;unit&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L155-155" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Suspends execution of the current work item on the scheduler for the specified duration.
+The caller should await the result of calling 'sleep' to schedule the remainder of the current work item (known as the continuation) after the specified duration.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '372', 372)" onmouseover="showTip(event, '372', 372)">
+            sleepCancel dueTime ct sch
+          </code>
+          <div class="tip" id="372">
+            <strong>Signature:</strong> dueTime:TimeSpan -&gt; ct:CancellationToken -&gt; sch:IScheduler -&gt; Async&lt;unit&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L159-159" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Suspends execution of the current work item on the scheduler for the specified duration.
+The caller should await the result of calling 'sleep' to schedule the remainder of the current work item (known as the continuation) after the specified duration.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '373', 373)" onmouseover="showTip(event, '373', 373)">
+            sleepOffset dueTime sch
+          </code>
+          <div class="tip" id="373">
+            <strong>Signature:</strong> dueTime:DateTimeOffset -&gt; sch:IScheduler -&gt; Async&lt;unit&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L163-163" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Suspends execution of the current work item on the scheduler for the specified duration.
+The caller should await the result of calling 'sleep' to schedule the remainder of the current work item (known as the continuation) after the specified due time.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '374', 374)" onmouseover="showTip(event, '374', 374)">
+            sleepOffsetCancel dueTime ct sch
+          </code>
+          <div class="tip" id="374">
+            <strong>Signature:</strong> dueTime:DateTimeOffset -&gt; ct:CancellationToken -&gt; sch:IScheduler -&gt; Async&lt;unit&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L167-167" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Suspends execution of the current work item on the scheduler for the specified duration.
+The caller should await the result of calling 'sleep' to schedule the remainder of the current work item (known as the continuation) after the specified due time.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '375', 375)" onmouseover="showTip(event, '375', 375)">
+            yield_ x
+          </code>
+          <div class="tip" id="375">
+            <strong>Signature:</strong> x:IScheduler -&gt; Async&lt;unit&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L147-147" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Yields execution of the current work item on the scheduler to another work item on the scheduler.
+The caller should await the result of calling 'yield' to schedule the remainder of the current work item (known as the continuation).</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '376', 376)" onmouseover="showTip(event, '376', 376)">
+            yieldCancel ct sch
+          </code>
+          <div class="tip" id="376">
+            <strong>Signature:</strong> ct:CancellationToken -&gt; sch:IScheduler -&gt; Async&lt;unit&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Scheduler.fs#L151-151" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Yields execution of the current work item on the scheduler to another work item on the scheduler.
+The caller should await the result of calling 'yield' to schedule the remainder of the current work item (known as the continuation).</p>
+
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <img src="/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">FSharp.Control.Reactive</li>
+            <li><a href="/index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="https://www.nuget.org/packages/FSharp.Control.Reactive">Get Library via NuGet</a></li>
+            <li><a href="http://github.com/fsprojects/FSharp.Reactive">Source Code on GitHub</a></li>
+            <li><a href="http://github.com/fsprojects/FSharp.Reactive/blob/master/LICENSE.txt">License</a></li>
+            <li><a href="http://github.com/fsprojects/FSharp.Reactive/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+            
+            <li class="nav-header">Getting started</li>
+            <li><a href="/introduction.html">Introduction</a></li>
+            <li><a href="/tutorial.html">Sample tutorial</a></li>
+
+            <li class="nav-header">Documentation</li>
+            <li><a href="/reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="http://github.com/fsprojects/FSharp.Reactive"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>
+
