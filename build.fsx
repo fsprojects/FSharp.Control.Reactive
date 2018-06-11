@@ -244,10 +244,8 @@ open Fake.Core.TargetOperators
 
 "CleanDocs"
   ==> "GenerateDocs"
-(*    
 "ReleaseDocs"
   ==> "Release"
-*)
 "Push"
   ==> "Release"
 
