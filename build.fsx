@@ -123,6 +123,7 @@ Target.create "Push" (fun _ ->
 Target.create "GenerateDocs" (fun _ ->
     
     let githubLink = "https://github.com/fsprojects/FSharp.Control.Reactive"
+    let root = "/FSharp.Control.Reactive"
     // Paths with template/source/output locations
 
     let content    = docsDir @@ "content"
@@ -138,7 +139,8 @@ Target.create "GenerateDocs" (fun _ ->
     let layoutRoots = [ templates; formatting @@ "templates"
                         formatting @@ "templates/reference" ]
     let info =
-      [ "project-name", "FSharp.Control.Reactive"
+      [ "root", root
+        "project-name", "FSharp.Control.Reactive"
         "project-author", "Ryan Riley, Steffen Forkmann, and Jared Heseter"
         "project-summary", "A F#-friendly wrapper for the Reactive Extensions."
         "project-github", "http://github.com/fsprojects/FSharp.Reactive"
