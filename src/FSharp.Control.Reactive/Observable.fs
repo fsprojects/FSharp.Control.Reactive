@@ -122,7 +122,7 @@ module Observable =
             Observer.Create(Action<_> onNext, Action<_> onError, Action onCompleted)
 
         /// Creates an observer that ignores the incoming emits from 'OnNext', 'OnError', and 'OnCompleted'.
-        static member Noop =
+        static member Empty =
             (fun () -> Observer.Create(Action<_> ignore, Action<_> ignore, Action (fun () -> ()))) ()
 
     type Observable with
