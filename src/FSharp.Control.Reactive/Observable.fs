@@ -101,6 +101,8 @@ module Builders =
 /// The Reactive module provides operators for working with IObservable<_> in F#.
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Observable =
+    open System.Reactive.Concurrency
+    open System.Reactive.Linq
 
     type Observer with
         /// Creates an observer from the specified onNext function.
@@ -119,6 +121,10 @@ module Observable =
         static member Create(onNext, onError, onCompleted) =
             Observer.Create(Action<_> onNext, Action<_> onError, Action onCompleted)
 
+        /// Creates an observer that ignores the incoming emits from 'OnNext', 'OnError', and 'OnCompleted'.
+        static member Empty =
+            (fun () -> Observer.Create(Action<_> ignore, Action<_> ignore, Action (fun () -> ()))) ()
+
     type Observable with
         /// Creates an observable sequence from the specified Subscribe method implementation.
         static member Create (subscribe: IObserver<'T> -> unit -> unit) =
@@ -127,6 +133,10 @@ module Observable =
         /// Creates an observable sequence from the specified Subscribe method implementation.
         static member Create subscribe =
             Observable.Create(Func<_,IDisposable> subscribe)
+        
+        /// Creates an observable sequence from the specified asynchronous Subscribe method implementation.
+        static member CreateAsync subscribe =
+            Observable.Create(Func<IObserver<'T>, System.Threading.Tasks.Task<IDisposable>> (subscribe >> Async.StartAsTask))
         
     type IObservable<'T> with
         /// Subscribes to the Observable with just a next-function.
@@ -295,6 +305,23 @@ module Observable =
     /// by an exception with the next observable sequence.
     let catch (second: IObservable<'T>) first =
         Observable.Catch(first, second) 
+    
+
+    /// Continues an observable sequence that is terminated by an exception
+    /// with an optional as result type.
+    let catchOption (source : IObservable<_>) =
+        let some = source.Select(Func<_, _> Some)
+        let none _ = Observable.Return None
+        Observable.Catch(some, none)
+
+
+    /// Continues an observable sequence that is terminated by an exception of
+    /// the specified type with the observable sequence produced by the handler, 
+    /// wrapped in a 'Result' type.
+    let catchResult handler (source : IObservable<_>)  =
+        let normal = source.Select(Func<_, _> Result.Ok)
+        let error ex = handler ex |> fun (o : IObservable<_>) -> o.Select(Func<_, _> Result.Error)
+        Observable.Catch(normal, error)
 
 
     /// Continues an observable sequence that is terminated by an exception of
@@ -1102,6 +1129,16 @@ module Observable =
         Observable.Do( source,observer )   
 
 
+    /// Correlates the elements of two sequences based on overlapping durations.
+    let join right f left =
+        Observable.Join( left, right, Func<_, _> Observable.Return, Func<_, _> Observable.Return, Func<_, _, _> f )
+
+    
+    /// Correlates the elements of two sequences based on overlapping durations.
+    let joinMap right fLeft fRight fResult left =
+        Observable.Join( left, right, Func<_, _> fLeft, Func<_, _> fRight, Func<_, _, _> fResult )
+
+
     /// Joins together the results from several patterns
     let joinWhen (plans:seq<Joins.Plan<'T>>): IObservable<'T> = 
         Observable.When( plans )
@@ -1148,6 +1185,15 @@ module Observable =
 
     /// Maps two observables to the specified function.
     let map2 f a b = apply (apply f a) b
+
+
+    /// Combines 'map' and 'fold'. Builds an observable whose emits are the result of applying the given function to each of the emits of the source observable.
+    /// The function is also used to accumulate a final value.
+    let mapFold (f : 'TState -> 'T -> 'TResult * 'TState) (init : 'TState) source =
+        Observable.Aggregate(source, ([], init), 
+            Func<_, _, _> (fun (ys, state) x -> 
+                let y, state = f state x
+                y :: ys, state))
 
     
     /// Maps every emission to a constant value.
@@ -1329,16 +1375,29 @@ module Observable =
     let onErrorConcatSeq ( sources:seq<IObservable<'Source>> ) : IObservable<'Source> =
         Observable.OnErrorResumeNext( sources )
 
-        
+
     /// Iterates through the observable and performs the given side-effect
     let perform f source =
         let inner x = f x
         Observable.Do(source, inner)
-     
+
+    /// Logs the incoming emits with a given prefix to a specified target.
+    let logTo prefix f source =
+        let onNext = Action<_> (fun x -> f (sprintf "%s - OnNext(%A)" prefix x))
+        let onError = Action<exn> (fun ex -> 
+            f (sprintf "%s - OnError:" prefix)
+            f (sprintf "\t %A" ex))
+        let onCompleted = Action (fun () -> f (sprintf "%s - OnCompleted()" prefix))
+        Observable.Do(source, onNext, onError, onCompleted)
+
+    /// Logs the incoming emits with a given prefix to the console.
+    let log prefix source =
+        logTo prefix Console.WriteLine source
+
 
     /// Invokes the finally action after source observable sequence terminates normally or by an exception.
     let performFinally f source = Observable.Finally(source, Action f)
-
+   
 
     /// Returns a connectable observable sequence (IConnectableObsevable) that shares
     /// a single subscription to the underlying sequence. This operator is a 
@@ -1434,6 +1493,10 @@ module Observable =
     let replay ( source:IObservable<'Source>) : Subjects.IConnectableObservable<'Source> =        
         Observable.Replay( source )   
 
+    /// Returns a connectable observable sequence that shares a single subscription to the 
+    /// underlying sequence replaying all notifications.
+    let replayOn ( sch:IScheduler ) source =
+        Observable.Replay( source, sch )
 
     /// Returns a connectable observable sequence that shares a single subscription to the underlying sequence 
     /// replaying notifications subject to a maximum element count for the replay buffer.
@@ -1682,6 +1745,36 @@ module Observable =
     let subscribeOnContext (context:Threading.SynchronizationContext) (source:IObservable<'Source>) : IObservable<'Source> =
         Observable.SubscribeOn( source, context )
 
+    
+    /// Subscribes to the specified source, re-routing synchronous exceptions during invocation of the
+    /// Subscribe function to the observer's 'OnError channel. This function is typically used to write query operators.
+    let subscribeSafe onNext (source : IObservable<_>) =
+        source.SubscribeSafe (Observer.Create (Action<_> onNext, Action<_> ignore, Action ignore))
+
+    
+    /// Subscribes to the specified source, re-routing synchronous exceptions during invocation of the
+    /// Subscribe function to the observer's 'OnError channel. This function is typically used to write query operators.
+    let subscribeSafeWithError onNext onError (source : IObservable<_>) =
+        source.SubscribeSafe (Observer.Create (Action<_> onNext, Action<_> onError, Action ignore))
+
+
+    /// Subscribes to the specified source, re-routing synchronous exceptions during invocation of the
+    /// Subscribe function to the observer's 'OnError channel. This function is typically used to write query operators.
+    let subscribeSafeWithCompletion onNext onCompleted (source : IObservable<_>) =
+        source.SubscribeSafe (Observer.Create (Action<_> onNext, Action<_> ignore, Action ignore))
+
+
+    /// Subscribes to the specified source, re-routing synchronous exceptions during invocation of the
+    /// Subscribe function to the observer's 'OnError channel. This function is typically used to write query operators.
+    let subscribeSafeObserver observer (source : IObservable<_>) =
+        source.SubscribeSafe observer
+
+
+    /// Subscribes to the specified source, re-routing synchronous exceptions during invocation of the
+    /// Subscribe function to the observer's 'OnError channel. This function is typically used to write query operators.
+    let subscribeSafeWithCallbacks onNext onError onCompleted (source : IObservable<_>) =
+        source.SubscribeSafe (Observer.Create (Action<_> onNext, Action<_> onError, Action onCompleted))
+
 
     /// Transforms an observable sequence of observable sequences into an 
     /// observable sequence producing values only from the most recent 
@@ -1698,6 +1791,12 @@ module Observable =
         Observable.Switch( sources )
 
 
+    /// Transforms an observable sequence of tasks into an observable sequence 
+    /// producing values only from the most recent observable sequence.
+    /// Each time a new task is received, the previous task's result is ignored.
+    let switchAsync (sources:IObservable<_>) =
+        Observable.Switch( sources.Select(Async.StartAsTask) )
+
 
     /// Synchronizes the observable sequence so that notifications cannot be delivered concurrently
     /// this overload is useful to "fix" an observable sequence that exhibits concurrent 
@@ -1713,6 +1812,10 @@ module Observable =
     let synchronizeGate (gate:obj)  (source:IObservable<'Source>): IObservable<'Source> =
         Observable.Synchronize( source, gate )
 
+    
+    /// Bypasses the first element in an observable sequence and then returns the remaining elements.
+    let tail source = skip 1 source
+    
 
     /// Takes n elements (from the beginning of an observable sequence? )
     let take (n: int) source : IObservable<'Source> = 
@@ -2066,6 +2169,15 @@ module Observable =
     /// lifetime is tied to the resulting observable sequence's lifetime.
     let using ( resourceFactory: unit ->'TResource ) (observableFactory: 'TResource -> IObservable<'Result> ) : IObservable<'Result> =
         Observable.Using ( Func<_> resourceFactory, Func<_,_> observableFactory )
+
+    
+    /// Constructs an observable sequence that depends on a resource object, whose 
+    /// lifetime is tied to the resulting observable sequence's lifetime.
+    /// The resource is obtained and used through asynchronous functions. 
+    /// The cancellation token passed to the asyncrhonous functions is tied to the returned disposable subscription,
+    /// allowing best-effor cancellation at any stage of the resource acquisition or usage.
+    let usingAsync resourceFactory observableFactory =
+        Observable.Using ( Func<_, _> (resourceFactory >> Async.StartAsTask), Func< _, _, _> (fun d ct -> observableFactory d ct |> Async.StartAsTask))
 
 
     /// waits for the observable sequence to complete and returns the last
