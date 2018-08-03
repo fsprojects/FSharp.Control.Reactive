@@ -53,6 +53,8 @@ module Disposable =
         d.Disposable <- indirection
         indirection.Disposable <- disposableFactory ()
 
+    let setInnerDisposalOf (d : SerialDisposable) x = d.Disposable <- x
+
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module WaitHandle =
     open System.Threading
