@@ -11,6 +11,15 @@ module Disposables =
              disposables 
              |> Seq.iter(fun x -> x.Dispose()))
 
+type Disposable () =
+    
+    /// Creates a new composite disposable with no disposables contained initially.
+    static member composite with get () = new CompositeDisposable ()
+
+    /// Represents a disposable resource whose underlying disposable resource can be replaced by another disposable resource, 
+    /// causing automatic disposal of the previous underlying disposable resource.
+    static member serial with get () = new SerialDisposable ()
+
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 /// Operators to work on disposable types
 module Disposable =
@@ -32,9 +41,6 @@ module Disposable =
 
     /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
     let dispose (x : IDisposable) = x.Dispose ()
-
-    /// Creates a new composite disposable with no disposables contained initially.
-    let composite = (fun () -> new CompositeDisposable ()) () :> IDisposable
 
     /// Compose two disposables together so they are both disposed when disposed is called on the 'composite' disposable.
     let compose (x : IDisposable) (d : IDisposable) =

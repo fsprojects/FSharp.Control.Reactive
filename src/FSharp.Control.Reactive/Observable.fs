@@ -2332,7 +2332,6 @@ module Observable =
     let pollOn sch period source =
         timerOn sch period
         |> bind (fun _ -> source)
-        |> map Result.Ok
         |> catchWith (Result.Error >> single)
         |> repeat
 
@@ -2421,20 +2420,22 @@ module Observable =
         Observable.Create (fun (o : IObserver<'a>) ->
             let subscribeSource self =
                 let onError ex = 
-                    if callOnError ex then self () 
-                    else o.OnError ex
+                    if callOnError ex then o.OnError ex
+                    else self () 
                 sourceFactory ()
                 |> subscribeSafeWithCallbacks 
                     o.OnNext onError self
 
-            [ 1..max ]
-            |> List.fold (fun acc _ -> 
+            let com = Disposable.composite
+            for _ in 1..max do
                 let current = new SerialDisposable ()
-                acc |> Disposable.compose current 
-                    |> ignore
-                sch |> Schedule.actionRec (fun self -> 
-                       Disposable.setIndirectly (fun () -> subscribeSource self) current)
-                    |> Disposable.compose <| acc) Disposable.composite)
+                com.Add current
+                sch |> Schedule.actionRec (fun self ->
+                        current
+                        |> Disposable.setIndirectly 
+                            (fun () -> subscribeSource self))
+                        |> com.Add
+            com :> IDisposable)
 
     /// **Description**
     /// Concurrently invokes the specified factory to create observables as fast and often as possible and subscribes to all of them
@@ -2471,7 +2472,7 @@ module Observable =
     /// - `max` - The maximum number of observables to be subscribed simultaneously.
     /// - `sourceFactory` - Function that returns the observable to invoke concurrently.
     let serveOn sch max sourceFactory =
-        serveCustomOn sch max (fun _ -> false) sourceFactory
+        serveCustomOn sch max (fun _ -> true) sourceFactory
 
     /// **Description**
     /// Concurrently invokes the specified factory to create observables as fast and often as possible and subscribes to all of them
