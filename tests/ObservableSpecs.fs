@@ -10,6 +10,10 @@ open Microsoft.Reactive.Testing
 open System.Reactive.Subjects
 open System.Reactive.Concurrency
 open FSharp.Control.Reactive.Observable
+open FSharp.Control.Reactive.Testing
+open TestNotification
+open FSharp.Control.Reactive.Testing.TestNotification
+open System.Threading
 
 
 let ``should be`` expectedNext expectedError expectedCompleted (observable:'a IObservable) =
@@ -613,3 +617,123 @@ let ``filteri should be equivalent to mapi then filter`` () =
             |> Seq.toArray
 
         filtered = filtered'
+
+[<Test>]
+let ``serve subscribes to all created observables`` () =
+    TestSchedule.usage <| fun sch ->
+        Observable.serve 1 (fun () -> Observable.range 0 10)
+        |> Observable.takeUntilOther (Observable.timerSpan (TimeSpan.FromMilliseconds 100.))
+        |> TestSchedule.subscribeTestObserver sch
+        |> TestObserver.nexts
+        |> fun xs -> Assert.Greater (xs.Length, 10)
+
+[<TestFixture>]
+type ObservableTests_WithTestNotifications () =
+    
+    let ``concat nexts with first error`` (TestNotifications ms) =
+        let nexts = List.takeWhile isNext ms
+        let fstError = List.tryFind isError ms |> Option.toList
+        nexts @ fstError
+
+    static member Exceptions = Gen.constant (exn "Test Exception") |> Arb.fromGen
+
+    [<SetUp>]
+    member __.Setup () =
+        Arb.register<GenTestNotification> () |> ignore
+        Arb.register<ObservableTests_WithTestNotifications> () |> ignore
+
+    [<Test>]
+    member __. ``choose should only pick 'Some' emits`` () =
+        Check.QuickThrowOnFailure <| 
+        fun (f : int -> int option) ms -> 
+            TestSchedule.usage <| fun sch ->
+                TestSchedule.hotObservable sch ms
+                |> Observable.retry
+                |> Observable.choose f
+                |> TestSchedule.subscribeTestObserverStart sch
+                |> TestObserver.nexts
+                |> (=) (TestNotification.nexts ms |> List.choose f)
+
+    [<Test>]
+    member __.``switchMap maps to new observable`` () =
+        Check.QuickThrowOnFailure <|
+        fun (xs : int list) (ys : int list) ->
+            TestSchedule.usage <| fun sch ->
+                Observable.ofSeq xs
+                |> Observable.switchMap (fun _ -> Observable.ofSeq ys)
+                |> TestSchedule.subscribeTestObserverStart sch
+                |> TestObserver.nexts
+                |> fun zs -> 
+                    let emptyWhenAnyEmpty = (xs = [] || ys = []) = (zs = [])
+                    let collectWhenGreater = (List.collect (fun _ -> ys) xs) = zs
+                    emptyWhenAnyEmpty .|. collectWhenGreater
+                    |> Prop.collect (printfn "Source: %A, Inner: %A, Result: %A" xs ys zs)
+    
+    [<Test>]
+    member __.``exhaustMap maps all incoming source emits`` () =
+        Check.QuickThrowOnFailure <|
+        fun (xs : int list) (f : int -> int) ->
+        TestSchedule.usage <| fun sch ->
+            let inner  = xs |> List.map f
+            Observable.ofSeq xs
+            |> Observable.exhaustMap (fun _ -> Observable.ofSeq inner)
+            |> TestSchedule.subscribeTestObserverStart sch
+            |> TestObserver.nexts = List.collect (fun _ -> inner) xs
+            
+    [<Test>]
+    member __.``exhaustMap with interval`` () =
+        let source = Observable.interval (TimeSpan.FromSeconds 1.)
+        source
+        |> Observable.delay (TimeSpan.FromMilliseconds 10.)
+        |> Observable.take 4
+        |> Observable.merge (Observable.single 1L)
+        |> Observable.exhaustMap (fun _ -> source |> Observable.take 5)
+        |> Observable.toEnumerable
+        |> Seq.toList
+        |> fun ys -> Assert.AreEqual ([0L..3L], ys)
+
+    [<Test>]
+    member __. ``catchOption maps to 'None' type when 'OnError'`` () =
+        Check.QuickThrowOnFailure <| fun xs -> 
+        TestSchedule.usage <| fun sch ->
+            TestSchedule.coldObservable sch xs
+            |> Observable.catchOption
+            |> TestSchedule.subscribeTestObserverStart sch
+            |> TestObserver.nexts
+            |> (=) (``concat nexts with first error`` xs
+                    |> List.map TestNotification.toOption)
+
+    [<Test>]
+    member __.``catchResult maps to 'Error' when 'OnError'`` () =
+        Check.QuickThrowOnFailure <| fun xs ->
+        TestSchedule.usage <| fun sch ->
+            TestSchedule.coldObservable sch xs
+            |> Observable.catchResult Observable.single
+            |> TestSchedule.subscribeTestObserverStart sch
+            |> TestObserver.nexts
+            |> (=) (``concat nexts with first error`` xs
+                    |> List.map TestNotification.toResult)
+
+    [<Test>]
+    member __.``consumes the emits by the producer: Test Hot Observable`` () =
+        Check.QuickThrowOnFailure <| fun ms x ->
+        TestSchedule.usage <| fun sch ->
+            TestSchedule.hotObservable sch ms
+            |> Observable.consumeMap (fun _ -> Observable.single x)
+            |> TestSchedule.subscribeTestObserverStart sch
+            |> TestObserver.nexts
+            |> fun xs -> (List.replicate xs.Length x) = xs
+
+    [<Test>]
+    member __.``consumes the optional emits by the producer: Test Hot Observable``() =
+        Check.QuickThrowOnFailure <| fun (xs : int list) (x : int) ->
+        (List.length xs >= 2) ==> lazy
+        TestSchedule.usage <| fun sch ->
+            let completeNow = ref false
+            Observable.ofSeq xs
+            |> Observable.consumeNextOn Scheduler.Immediate (fun _ -> 
+                if !completeNow then None
+                else completeNow := true; Some x)
+            |> TestSchedule.subscribeTestObserverStart sch
+            |> TestObserver.nexts
+            |> (=) [x]

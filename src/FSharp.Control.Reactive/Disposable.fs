@@ -11,6 +11,15 @@ module Disposables =
              disposables 
              |> Seq.iter(fun x -> x.Dispose()))
 
+type Disposable () =
+    
+    /// Creates a new composite disposable with no disposables contained initially.
+    static member Composite with get () = new CompositeDisposable ()
+
+    /// Represents a disposable resource whose underlying disposable resource can be replaced by another disposable resource, 
+    /// causing automatic disposal of the previous underlying disposable resource.
+    static member Serial with get () = new SerialDisposable ()
+
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 /// Operators to work on disposable types
 module Disposable =
@@ -33,9 +42,6 @@ module Disposable =
     /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
     let dispose (x : IDisposable) = x.Dispose ()
 
-    /// Creates a new composite disposable with no disposables contained initially.
-    let composite = (fun () -> new CompositeDisposable ()) () :> IDisposable
-
     /// Compose two disposables together so they are both disposed when disposed is called on the 'composite' disposable.
     let compose (x : IDisposable) (d : IDisposable) =
         match d, x with
@@ -53,15 +59,20 @@ module Disposable =
         d.Disposable <- indirection
         indirection.Disposable <- disposableFactory ()
 
-[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module WaitHandle =
-    open System.Threading
+    let setInnerDisposalOf (d : SerialDisposable) x = d.Disposable <- x
+
+open System.Threading
+
+type WaitHandle =
 
     /// Initializes a new instance of the ManualResetEvent class with initial state set to 'false'.
-    let signal = (fun () -> new ManualResetEvent (initialState=false)) ()
+    static member Signal with get () = new ManualResetEvent (initialState=false)
+
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+module WaitHandle =
     
     /// Sets the state of the event to signaled, allowing one or more waiting threads to proceed.
     let flag (s : EventWaitHandle) = s.Set () |> ignore
     
     /// Blocks the current thread until the WaitHandle receives a signal.
-    let wait (s : WaitHandle) = s.WaitOne () |> ignore
+    let wait (s : System.Threading.WaitHandle) = s.WaitOne () |> ignore
