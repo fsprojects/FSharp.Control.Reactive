@@ -14,11 +14,11 @@ module Disposables =
 type Disposable () =
     
     /// Creates a new composite disposable with no disposables contained initially.
-    static member composite with get () = new CompositeDisposable ()
+    static member Composite with get () = new CompositeDisposable ()
 
     /// Represents a disposable resource whose underlying disposable resource can be replaced by another disposable resource, 
     /// causing automatic disposal of the previous underlying disposable resource.
-    static member serial with get () = new SerialDisposable ()
+    static member Serial with get () = new SerialDisposable ()
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 /// Operators to work on disposable types
@@ -61,15 +61,18 @@ module Disposable =
 
     let setInnerDisposalOf (d : SerialDisposable) x = d.Disposable <- x
 
-[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module WaitHandle =
-    open System.Threading
+open System.Threading
+
+type WaitHandle =
 
     /// Initializes a new instance of the ManualResetEvent class with initial state set to 'false'.
-    let signal = (fun () -> new ManualResetEvent (initialState=false)) ()
+    static member Signal with get () = new ManualResetEvent (initialState=false)
+
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+module WaitHandle =
     
     /// Sets the state of the event to signaled, allowing one or more waiting threads to proceed.
     let flag (s : EventWaitHandle) = s.Set () |> ignore
     
     /// Blocks the current thread until the WaitHandle receives a signal.
-    let wait (s : WaitHandle) = s.WaitOne () |> ignore
+    let wait (s : System.Threading.WaitHandle) = s.WaitOne () |> ignore

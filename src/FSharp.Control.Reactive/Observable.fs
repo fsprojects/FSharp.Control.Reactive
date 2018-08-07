@@ -2426,7 +2426,7 @@ module Observable =
                 |> subscribeSafeWithCallbacks 
                     o.OnNext onError self
 
-            let com = Disposable.composite
+            let com = Disposable.Composite
             for _ in 1..max do
                 let current = new SerialDisposable ()
                 com.Add current
@@ -2644,12 +2644,11 @@ module Observable =
     /// An observable sequence that is the concatenation of the values returned by the consumeNext function.
     let consumeNextOn sch f source =
         let rec onNext (o : IObserver<_>) x =
-            let result =
-                try f x with | ex -> o.OnError ex; None
-            match result with
-            | Some next -> o.OnNext next; onNext o x
-            | None -> o.OnCompleted ()
-        
+            try f x 
+            with ex -> o.OnError ex; None
+            |> function
+                | Some next -> o.OnNext next; onNext o x
+                | None -> o.OnCompleted ()
         source
         |> consumeMap (fun x ->
             Observable.Create (fun o -> 
