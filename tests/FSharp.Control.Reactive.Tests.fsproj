@@ -10,6 +10,7 @@
     <None Include="paket.references" />
     <Compile Include="SchedulerSpecs.fs" />
     <Compile Include="ObservableSpecs.fs" />
+    <Compile Include="ObservableSpecs.xunit.fs" />
     <Compile Include="SubjectSpecs.fs" />
     <Compile Include="EmitsSpecs.fs" />
     <Compile Include="MarbleSpecs.fs" />

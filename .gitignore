@@ -37,3 +37,4 @@ tools/
 AssemblyInfo.fs
 .fake/
 paket-files/
+/.vs
