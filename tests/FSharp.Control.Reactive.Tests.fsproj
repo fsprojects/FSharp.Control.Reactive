@@ -10,10 +10,14 @@
     <None Include="paket.references" />
     <Compile Include="SchedulerSpecs.fs" />
     <Compile Include="ObservableSpecs.fs" />
-    <Compile Include="ObservableSpecs.xunit.fs" />
     <Compile Include="SubjectSpecs.fs" />
     <Compile Include="EmitsSpecs.fs" />
     <Compile Include="MarbleSpecs.fs" />
+    <Compile Include="Xunit_EmitsSpecs.fs" />
+    <Compile Include="Xunit_MarbleSpecs.fs" />
+    <Compile Include="Xunit_ObservableSpecs.fs" />
+    <Compile Include="Xunit_SchedulerSpecs.fs" />
+    <Compile Include="Xunit_SubjectSpecs.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\FSharp.Control.Reactive\FSharp.Control.Reactive.fsproj" />

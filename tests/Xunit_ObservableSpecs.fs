@@ -1,19 +1,21 @@
-﻿module FSharp.Reactive.Tests.ObservableSpecs
-
-open Xunit
+module FSharp.Reactive.Tests.Xunit_ObservableSpecs
 
 open System
 open System.Reactive.Linq
 open FSharp.Control.Reactive
 open Builders
+open Xunit
 open FsCheck
 open Microsoft.Reactive.Testing
 open System.Reactive.Subjects
 open System.Reactive.Concurrency
 open FSharp.Control.Reactive.Observable
 open FSharp.Control.Reactive.Testing
-
 open TestNotification
+open FSharp.Control.Reactive.Testing.TestNotification
+open System.Threading
+open System.Collections.Generic
+
 
 let ``should be`` expectedNext expectedError expectedCompleted (observable:'a IObservable) =
     let next = ref 0
@@ -123,7 +125,9 @@ let ``Test should show the stack overflow is fixed with Rx 2 beta``() =
             if x < 100000 then
                 yield! g (x + 1) }
         g 5 |> Observable.subscribeWithCallbacks ignore ignore ignore |> ignore
+    //Assert.DoesNotThrow(TestDelegate(fun () -> test()))
     test()
+    Assert.True(true)
 
 [<Fact>]
 let ``RxQueryBuilder.Head can return first item`` () =
@@ -160,8 +164,8 @@ let ``RxQueryBuilder.ExactlyOne throws when source contains more than one item``
         exactlyOne }
 
     Observable.subscribeWithError
-        (fun _ -> failwith("ExactlyOne should throw when source contains more than one element"))
-        (fun _ -> ())
+        (fun _ -> Assert.Null("ExactlyOne should throw when source contains more than one element"))
+        (fun _ -> Assert.True(true))
         query |> ignore
 
 [<Fact>]
@@ -184,13 +188,14 @@ let ``ZipWith on two observable sequences of different types creates a single zi
 
     Assert.Equal(result, expected)
 
+
 [<Fact>]
 let ``distinctKey uses the key function to decide whether an element has been seen before``() =
     let result   = ResizeArray()
     let obs      = Observable.ofSeq [ (1,3); (2,5); (2,7); (1,6); (3,5) ]
     let expected = [ (1,3); (2,5); (3,5) ]
     obs |> Observable.distinctKey fst
-        |> Observable.subscribe(result.Add)
+        |> Observable.subscribe(result.Add) 
         |> ignore
 
     Assert.Equal(result, expected)
@@ -204,7 +209,7 @@ let ``distinctKeyCompare uses the key function and the comparer to decide whethe
     let obs      = Observable.ofSeq [ (1,3); (2,5); (2,7); (1,6); (3,5) ]
     let expected = [ (1,3); (2,5) ]
     obs |> Observable.distinctKeyCompare fst comparer
-        |> Observable.subscribe(result.Add)
+        |> Observable.subscribe(result.Add) 
         |> ignore
 
     Assert.Equal(result, expected)
@@ -215,7 +220,7 @@ let ``distinctUntilChangedKey uses the key function to decide whether an element
     let obs      = Observable.ofSeq [ (1,3); (2,5); (2,7); (1,6); (3,5) ]
     let expected = [ (1,3); (2,5); (1,6); (3,5) ]
     obs |> Observable.distinctUntilChangedKey fst
-        |> Observable.subscribe(result.Add)
+        |> Observable.subscribe(result.Add) 
         |> ignore
 
     Assert.Equal(result, expected)
@@ -229,7 +234,7 @@ let ``distinctUntilChangedKeyCompare uses the key function and the comparer to d
     let obs      = Observable.ofSeq [ (1,3); (2,5); (2,7); (1,6); (3,5) ]
     let expected = [ (1,3); (2,5); (1,6) ]
     obs |> Observable.distinctUntilChangedKeyCompare fst comparer
-        |> Observable.subscribe(result.Add)
+        |> Observable.subscribe(result.Add) 
         |> ignore
 
     Assert.Equal(result, expected)
@@ -241,7 +246,7 @@ let ``ofSeqOn enumerates its sequence on the specified scheduler``() =
     let scheduler = TestScheduler()
 
     let obs       = items |> Observable.ofSeqOn scheduler
-    obs |> Observable.subscribe(result.Add)
+    obs |> Observable.subscribe(result.Add) 
         |> ignore
 
     Assert.Empty(result)
@@ -255,14 +260,14 @@ let ``intervalOn produces a value at the specified rate on the supplied schedule
     let oneSecond = TimeSpan.FromSeconds(1.).Ticks
 
     let obs = Observable.intervalOn scheduler (TimeSpan.FromSeconds(2.))
-    obs |> Observable.subscribe(result.Add)
+    obs |> Observable.subscribe(result.Add) 
         |> ignore
 
     Assert.Empty(result)
     scheduler.AdvanceBy oneSecond; Assert.Empty(result)
     scheduler.AdvanceBy oneSecond; Assert.Equal(result.Count, 1)
-    scheduler.AdvanceBy oneSecond; Assert.Equal((result).Count,1)
-    scheduler.AdvanceBy oneSecond; Assert.Equal((result).Count,2)
+    scheduler.AdvanceBy oneSecond; Assert.Equal(result.Count, 1)
+    scheduler.AdvanceBy oneSecond; Assert.Equal(result.Count, 2)
 
 [<Fact>]
 let ``throttleOn produces a value at the specified rate on the supplied scheduler``() =
@@ -272,7 +277,7 @@ let ``throttleOn produces a value at the specified rate on the supplied schedule
     let oneSecond = TimeSpan.FromSeconds(1.).Ticks
 
     obs |> Observable.throttleOn scheduler (TimeSpan.FromSeconds(2.))
-        |> Observable.subscribe(result.Add)
+        |> Observable.subscribe(result.Add) 
         |> ignore
 
     obs.OnNext(1);                 Assert.Empty(result)
@@ -294,7 +299,7 @@ let ``combineLatest calls map function with pairs of latest values``() =
     let map (x, y)  = x + (y / 2)
     Observable.combineLatest obs1 obs2
         |> Observable.map map
-        |> Observable.subscribe(result.Add)
+        |> Observable.subscribe(result.Add) 
         |> ignore
 
     Assert.Empty(result)
@@ -304,9 +309,9 @@ let ``combineLatest calls map function with pairs of latest values``() =
     Assert.Empty(result)
     obs2.OnNext 10
     Assert.Equal(result, [ 7 ] )
-    obs2.OnNext 20
+    obs2.OnNext 20                
     Assert.Equal(result, [ 7; 12 ] )
-    obs1.OnNext 3
+    obs1.OnNext 3                 
     Assert.Equal(result, [ 7; 12; 13 ] )
 
 [<Fact>]
@@ -315,7 +320,7 @@ let ``combineLatestArray produces arrays of latest values``() =
     use obs1     = new Subject<int>()
     use obs2     = new Subject<int>()
     Observable.combineLatestArray [| obs1; obs2 |]
-        |> Observable.subscribe(result.Add)
+        |> Observable.subscribe(result.Add) 
         |> ignore
 
     Assert.Empty(result)
@@ -324,10 +329,10 @@ let ``combineLatestArray produces arrays of latest values``() =
     obs1.OnNext 2
     Assert.Empty(result)
     obs2.OnNext 10
-    //Assert.Equal(result, [ [| 2; 10 |] ] )
-    obs2.OnNext 20
+    //Assert.Equal(List.ofSeq result, [ [| 2; 10 |] ] )
+    obs2.OnNext 20                
     //Assert.Equal(result, [ [| 2; 10 |]; [| 2; 20 |] ] )
-    obs1.OnNext 3
+    obs1.OnNext 3                 
     //Assert.Equal(result, [ [| 2; 10 |]; [| 2; 20 |]; [| 3; 20 |] ] )
 
 [<Fact>]
@@ -337,7 +342,7 @@ let ``combineLatestSeq produces lists of latest values``() =
     use obs2     = new Subject<int>()
     let sources  = [ obs1 :> IObservable<_>; obs2 :> IObservable<_>] |> Seq.ofList
     Observable.combineLatestSeq sources
-        |> Observable.subscribe(result.Add)
+        |> Observable.subscribe(result.Add) 
         |> ignore
 
     Assert.Empty(result)
@@ -347,9 +352,9 @@ let ``combineLatestSeq produces lists of latest values``() =
     Assert.Empty(result)
     obs2.OnNext 10
     //Assert.Equal(result, [ [2; 10] ] )
-    obs2.OnNext 20
+    obs2.OnNext 20                
     //Assert.Equal(result, [ [2; 10]; [2; 20] ] )
-    obs1.OnNext 3
+    obs1.OnNext 3                 
     //Assert.Equal(result, [ [2; 10]; [2; 20]; [3; 20] ] )
 
 [<Fact>]
@@ -360,7 +365,7 @@ let ``combineLatestSeqMap applies map function to latest values``() =
     let sources  = [ obs1 :> IObservable<_>; obs2 :> IObservable<_>] |> Seq.ofList
     let map xs   = xs |> Seq.sum
     Observable.combineLatestSeqMap map sources
-        |> Observable.subscribe(result.Add)
+        |> Observable.subscribe(result.Add) 
         |> ignore
 
     Assert.Empty(result)
@@ -370,45 +375,46 @@ let ``combineLatestSeqMap applies map function to latest values``() =
     Assert.Empty(result)
     obs2.OnNext 10
     Assert.Equal(result, [ 12 ] )
-    obs2.OnNext 20
+    obs2.OnNext 20                
     Assert.Equal(result, [ 12; 22 ] )
-    obs1.OnNext 3
+    obs1.OnNext 3                 
     Assert.Equal(result, [ 12; 22; 23 ] )
 
 [<Fact>]
 let ``replay replays all notifications upon subscription``() =
     let result   = ResizeArray()
     use subject  = new Subject<int>()
-
+    
     let obs = subject |> Observable.replay
-    obs |> Observable.connect
+    obs |> Observable.connect 
         |> ignore
-
+    
     subject.OnNext 1
     subject.OnNext 2
     subject.OnNext 3
-
-    obs |> Observable.subscribe(result.Add)
+    
+    obs |> Observable.subscribe(result.Add) 
         |> ignore
 
     Assert.Equal(result, [ 1; 2; 3 ] )
     subject.OnNext 4
     Assert.Equal(result, [ 1; 2; 3; 4 ] )
 
+
 [<Fact>]
 let ``replayBuffer replays only the required count of notifications upon subscription``() =
     let result   = ResizeArray()
     use subject  = new Subject<int>()
-
+    
     let obs = subject |> Observable.replayBuffer 2
-    obs |> Observable.connect
+    obs |> Observable.connect 
         |> ignore
-
+    
     subject.OnNext 1
     subject.OnNext 2
     subject.OnNext 3
-
-    obs |> Observable.subscribe(result.Add)
+    
+    obs |> Observable.subscribe(result.Add) 
         |> ignore
 
     Assert.Equal(result, [ 2; 3 ] )
@@ -423,7 +429,7 @@ let ``replayWindowOn replays only the required time range of notifications upon 
     let scheduler = TestScheduler()
 
     let obs = subject |> Observable.replayWindowOn scheduler (TimeSpan.FromSeconds(3.))
-    obs |> Observable.connect
+    obs |> Observable.connect 
         |> ignore
 
     scheduler.AdvanceBy(oneSecond); subject.OnNext 1
@@ -432,7 +438,7 @@ let ``replayWindowOn replays only the required time range of notifications upon 
     scheduler.AdvanceBy(oneSecond); subject.OnNext 4
     scheduler.AdvanceBy(oneSecond)
 
-    obs |> Observable.subscribe(result.Add)
+    obs |> Observable.subscribe(result.Add) 
         |> ignore
 
     scheduler.Start()
@@ -446,7 +452,7 @@ let ``replayBufferWindowOn replays only the required time range of notifications
     let scheduler = TestScheduler()
 
     let obs = subject |> Observable.replayBufferWindowOn scheduler 4 (TimeSpan.FromSeconds(3.))
-    obs |> Observable.connect
+    obs |> Observable.connect 
         |> ignore
 
     scheduler.AdvanceBy(oneSecond); subject.OnNext 1
@@ -455,7 +461,7 @@ let ``replayBufferWindowOn replays only the required time range of notifications
     scheduler.AdvanceBy(oneSecond); subject.OnNext 4
     scheduler.AdvanceBy(oneSecond)
 
-    obs |> Observable.subscribe(result.Add)
+    obs |> Observable.subscribe(result.Add) 
         |> ignore
 
     scheduler.Start()
@@ -469,7 +475,7 @@ let ``replayBufferWindowOn replays only the required count of notifications upon
     let scheduler = TestScheduler()
 
     let obs = subject |> Observable.replayBufferWindowOn scheduler 2 (TimeSpan.FromSeconds(3.))
-    obs |> Observable.connect
+    obs |> Observable.connect 
         |> ignore
 
     scheduler.AdvanceBy(oneSecond); subject.OnNext 1
@@ -478,7 +484,7 @@ let ``replayBufferWindowOn replays only the required count of notifications upon
     scheduler.AdvanceBy(oneSecond); subject.OnNext 4
     scheduler.AdvanceBy(oneSecond)
 
-    obs |> Observable.subscribe(result.Add)
+    obs |> Observable.subscribe(result.Add) 
         |> ignore
 
     scheduler.Start()
@@ -499,12 +505,12 @@ let ``timestampOn uses timestamps from the supplied scheduler``() =
     scheduler.AdvanceBy(oneSecond)
     let firstNotificationAt = scheduler.Now
     subject.OnNext 1
-
+    
     scheduler.AdvanceBy(oneSecond)
     let secondNotificationAt = scheduler.Now
     subject.OnNext 2
 
-    Assert.Equal((result).Count,2)
+    Assert.Equal(result.Count, 2)
     Assert.Equal(result.[0].Timestamp, firstNotificationAt)
     Assert.Equal(result.[1].Timestamp, secondNotificationAt)
 
@@ -537,7 +543,7 @@ let ``Observable.subscribeOn should run subscription on another thread`` () =
     scheduler.AdvanceBy(oneSecond)
     Assert.Equal(result.[0], expected)
     ()
-
+    
 [<Fact>]
 let ``FlatMapAsync should take F# async workflows and flatmap them to observables``() =
     let expected = "<head>fake header</head>"
@@ -546,7 +552,7 @@ let ``FlatMapAsync should take F# async workflows and flatmap them to observable
     let result    = ResizeArray()
     let subject = new Subject<string>()
 
-    use mapper = subject
+    use mapper = subject 
                     |> Observable.flatmapAsync fakeHttpRequest
                     |> Observable.subscribe result.Add
 
@@ -555,12 +561,12 @@ let ``FlatMapAsync should take F# async workflows and flatmap them to observable
     subject.OnNext("www.google.com")
     subject.OnNext("www.microsoft.com")
     subject.OnNext("www.apple.com")
-
+    
     System.Threading.Thread.Sleep 100
-    // HACK: Yes this is using a Thread.Sleep. This is a problem in the current version of Rx
+    // HACK: Yes this is using a Thread.Sleep. This is a problem in the current version of Rx 
     // interoping with other concurrency models. James World has a great Stackoverflow post
     // on the problems with this : http://stackoverflow.com/a/28236216
-    // Dave Sexton has made a pull request to try to resolve these issues:
+    // Dave Sexton has made a pull request to try to resolve these issues: 
     // https://github.com/Reactive-Extensions/Rx.NET/pull/65
     //
     // It looks like this will be in the next version of Rx to allow use of TestScheduler
@@ -573,7 +579,7 @@ let ``FlatMapAsync should take F# async workflows and flatmap them to observable
 
 [<Fact>]
 let ``Observable.mapi should be equivalent to Array.mapi`` ()=
-    Check.QuickThrowOnFailure <|
+    Check.QuickThrowOnFailure <| 
     fun (items : int array) ->
         items
         |> Observable.ofSeq
@@ -595,7 +601,7 @@ let ``Observable.mapTo always maps to constant`` () =
 [<Fact>]
 let ``filteri should be equivalent to mapi then filter`` () =
     Check.QuickThrowOnFailure <|
-    fun (items : int array) ->
+    fun (items : int array) ->    
         let predicate i x = (i % 2 = 0) && (x > 0)
 
         let filtered =
@@ -622,24 +628,27 @@ let ``filteri should be equivalent to mapi then filter`` () =
 //        |> Observable.takeUntilOther (Observable.timerSpan (TimeSpan.FromMilliseconds 100.))
 //        |> TestSchedule.subscribeTestObserver sch
 //        |> TestObserver.nexts
-//        |> fun xs -> Assert.True (xs.Length > 10)
+//        |> fun xs -> Assert.Equal (xs.Length > 10)
+
 
 type ObservableTests_WithTestNotifications () =
-    do
-        Arb.register<GenTestNotification> () |> ignore
-        Arb.register<ObservableTests_WithTestNotifications> () |> ignore
-
+    
     let ``concat nexts with first error`` (TestNotifications ms) =
         let nexts = List.takeWhile isNext ms
         let fstError = List.tryFind isError ms |> Option.toList
         nexts @ fstError
 
+    do
+        Arb.register<GenTestNotification> () |> ignore
+        Arb.register<ObservableTests_WithTestNotifications> () |> ignore
+
+
     static member Exceptions = Gen.constant (exn "Test Exception") |> Arb.fromGen
-    
+
     [<Fact>]
     member __. ``choose should only pick 'Some' emits`` () =
-        Check.QuickThrowOnFailure <|
-        fun (f : int -> int option) ms ->
+        Check.QuickThrowOnFailure <| 
+        fun (f : int -> int option) ms -> 
             TestSchedule.usage <| fun sch ->
                 TestSchedule.hotObservable sch ms
                 |> Observable.retry
@@ -657,12 +666,12 @@ type ObservableTests_WithTestNotifications () =
     //            |> Observable.switchMap (fun _ -> Observable.ofSeq ys)
     //            |> TestSchedule.subscribeTestObserverStart sch
     //            |> TestObserver.nexts
-    //            |> fun zs ->
+    //            |> fun zs -> 
     //                let emptyWhenAnyEmpty = (xs = [] || ys = []) = (zs = [])
     //                let collectWhenGreater = (List.collect (fun _ -> ys) xs) = zs
     //                emptyWhenAnyEmpty .|. collectWhenGreater
     //                |> Prop.collect (printfn "Source: %A, Inner: %A, Result: %A" xs ys zs)
-
+    
     //[<Fact>]
     //member __.``exhaustMap maps all incoming source emits`` () =
     //    Check.QuickThrowOnFailure <|
@@ -673,7 +682,7 @@ type ObservableTests_WithTestNotifications () =
     //        |> Observable.exhaustMap (fun _ -> Observable.ofSeq inner)
     //        |> TestSchedule.subscribeTestObserverStart sch
     //        |> TestObserver.nexts = List.collect (fun _ -> inner) xs
-
+            
     //[<Fact>]
     //member __.``exhaustMap with interval`` () =
     //    let source = Observable.interval (TimeSpan.FromSeconds 1.)
@@ -688,7 +697,7 @@ type ObservableTests_WithTestNotifications () =
 
     //[<Fact>]
     //member __. ``catchOption maps to 'None' type when 'OnError'`` () =
-    //    Check.QuickThrowOnFailure <| fun xs ->
+    //    Check.QuickThrowOnFailure <| fun xs -> 
     //    TestSchedule.usage <| fun sch ->
     //        TestSchedule.coldObservable sch xs
     //        |> Observable.catchOption
@@ -725,7 +734,7 @@ type ObservableTests_WithTestNotifications () =
     //    TestSchedule.usage <| fun sch ->
     //        let completeNow = ref false
     //        Observable.ofSeq xs
-    //        |> Observable.consumeNextOn Scheduler.Immediate (fun _ ->
+    //        |> Observable.consumeNextOn Scheduler.Immediate (fun _ -> 
     //            if !completeNow then None
     //            else completeNow := true; Some x)
     //        |> TestSchedule.subscribeTestObserverStart sch
