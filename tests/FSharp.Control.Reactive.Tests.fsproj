@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
@@ -13,8 +13,10 @@
     <Compile Include="SubjectSpecs.fs" />
     <Compile Include="EmitsSpecs.fs" />
     <Compile Include="MarbleSpecs.fs" />
+    <Compile Include="IOSpecs.fs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\src\FSharp.Control.Reactive.IO\FSharp.Control.Reactive.IO.fsproj" />
     <ProjectReference Include="..\src\FSharp.Control.Reactive\FSharp.Control.Reactive.fsproj" />
     <ProjectReference Include="..\src\FSharp.Control.Reactive.Testing\FSharp.Control.Reactive.Testing.fsproj" />
   </ItemGroup>

@@ -1,8 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Control.Reactive.Tests", "tests\FSharp.Control.Reactive.Tests.fsproj", "{A8EBB4A5-80ED-43D5-8D7D-6A0F4E228C2F}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharp.Control.Reactive.Tests", "tests\FSharp.Control.Reactive.Tests.fsproj", "{A8EBB4A5-80ED-43D5-8D7D-6A0F4E228C2F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{8961FBE9-1BE3-4A44-9610-5B4386DC5848}"
 	ProjectSection(SolutionItems) = preProject
@@ -45,9 +45,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "img", "img", "{5EB1DFE0-EC6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1C8DDC6C-C9CC-4349-AB08-B202F9D36065}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Control.Reactive", "src\FSharp.Control.Reactive\FSharp.Control.Reactive.fsproj", "{ED23F688-C0D0-4102-93D5-0D832633F66D}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharp.Control.Reactive", "src\FSharp.Control.Reactive\FSharp.Control.Reactive.fsproj", "{ED23F688-C0D0-4102-93D5-0D832633F66D}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Control.Reactive.Testing", "src\FSharp.Control.Reactive.Testing\FSharp.Control.Reactive.Testing.fsproj", "{BE128B51-FAD4-4431-A6C7-0FD08361A6BB}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharp.Control.Reactive.Testing", "src\FSharp.Control.Reactive.Testing\FSharp.Control.Reactive.Testing.fsproj", "{BE128B51-FAD4-4431-A6C7-0FD08361A6BB}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharp.Control.Reactive.IO", "src\FSharp.Control.Reactive.IO\FSharp.Control.Reactive.IO.fsproj", "{3171A4F7-342C-4270-B8FF-4A3A44B7FA08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,10 @@ Global
 		{BE128B51-FAD4-4431-A6C7-0FD08361A6BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE128B51-FAD4-4431-A6C7-0FD08361A6BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE128B51-FAD4-4431-A6C7-0FD08361A6BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3171A4F7-342C-4270-B8FF-4A3A44B7FA08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3171A4F7-342C-4270-B8FF-4A3A44B7FA08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3171A4F7-342C-4270-B8FF-4A3A44B7FA08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3171A4F7-342C-4270-B8FF-4A3A44B7FA08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
