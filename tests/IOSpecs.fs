@@ -55,9 +55,9 @@ let ``file should be appended during subscription`` () =
 
     Thread.Sleep (TimeSpan.FromMilliseconds 100.)
     File.AppendAllText (inTestFileName, "world!")
-    Assert.True (wait.WaitOne (TimeSpan.FromSeconds 5.))
+    Assert.True (wait.WaitOne (TimeSpan.FromSeconds 10.), "append event should flag handle")
     Thread.Sleep (TimeSpan.FromMilliseconds 100.)
-    Assert.True(File.ReadAllText outTestFileName |> fun s -> s.Contains "world!")
+    Assert.True((File.ReadAllText outTestFileName |> fun s -> s.Contains "world!"), "append event should append output file")
 
 [<Test>]
 [<Category("IO")>]
