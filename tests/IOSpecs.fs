@@ -53,6 +53,7 @@ let ``file should be appended during subscription`` () =
                   File.OpenRead x.FullPath)
     |> ignore
 
+    Thread.Sleep (TimeSpan.FromMilliseconds 100.)
     File.AppendAllText (inTestFileName, "world!")
     Assert.True (wait.WaitOne (TimeSpan.FromSeconds 5.))
     Thread.Sleep (TimeSpan.FromMilliseconds 100.)
