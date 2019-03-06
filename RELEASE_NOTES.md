@@ -1,3 +1,6 @@
+### New in 4.2.0 - (Released 2019/03/06)
+* Extensions to F# API
+
 ### New in 4.1.0 - (Released 2018/06/06)
 * Update to System.Reactive 4.0.
 
