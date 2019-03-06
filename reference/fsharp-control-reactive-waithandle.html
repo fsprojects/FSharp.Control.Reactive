@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Subject<'a> - FSharp.Control.Reactive</title>
+    <title>WaitHandle - FSharp.Control.Reactive</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Ryan Riley, Steffen Forkmann, and Jared Heseter"/>
@@ -35,7 +35,7 @@
 
 
 
-<h1>Subject<'a></h1>
+<h1>WaitHandle</h1>
 <p>
 
     <span>Namespace: FSharp.Control.Reactive</span><br />
@@ -51,88 +51,22 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '509', 509)" onmouseover="showTip(event, '509', 509)">
-            async
+          <code onmouseout="hideTip(event, '513', 513)" onmouseover="showTip(event, '513', 513)">
+            Signal
           </code>
-          <div class="tip" id="509">
-            <strong>Signature:</strong> AsyncSubject&lt;&#39;a&gt;<br />
+          <div class="tip" id="513">
+            <strong>Signature:</strong> ManualResetEvent<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Subject.fs#L14-14" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Disposable.fs#L69-69" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Represents the result of an asynchronous operation.
-The last value before the OnCompleted notification, or the error received through OnError, is sent to all subscribed observers.</p>
+          <p>Initializes a new instance of the ManualResetEvent class with initial state set to 'false'.</p>
 
 
-              <p>CompiledName: <code>get_async</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '510', 510)" onmouseover="showTip(event, '510', 510)">
-            behavior(x)
-          </code>
-          <div class="tip" id="510">
-            <strong>Signature:</strong> x:&#39;a -&gt; BehaviorSubject&lt;&#39;a&gt;<br />
-                                  </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Subject.fs#L24-24" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Represents a value that changes over time.
-Observers can subscribe to the subject to receive the last (or initial) value and all subsequent notifications.</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '511', 511)" onmouseover="showTip(event, '511', 511)">
-            broadcast
-          </code>
-          <div class="tip" id="511">
-            <strong>Signature:</strong> Subject&lt;&#39;a&gt;<br />
-                                  </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Subject.fs#L9-9" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Represents and object that is both an observable sequence as well as an observer.
-Each notification is broadcasted to all subscribed observers.</p>
-
-
-              <p>CompiledName: <code>get_broadcast</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '512', 512)" onmouseover="showTip(event, '512', 512)">
-            replay
-          </code>
-          <div class="tip" id="512">
-            <strong>Signature:</strong> ReplaySubject&lt;&#39;a&gt;<br />
-                                  </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Subject.fs#L19-19" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Represents an object that is both an observable sequence as well as an observer.
-Each notification is broadcasted to all subscribed and future observers, subject to buffer trimming policies.</p>
-
-
-              <p>CompiledName: <code>get_replay</code></p>
+              <p>CompiledName: <code>get_Signal</code></p>
         </td>
       </tr>
     </tbody>
