@@ -19,7 +19,7 @@ matrix:
       sudo: required
 
 script: 
-  - ./fake.sh build target pack
+  - ./fake.sh build --target pack
 
 branches:
   except:

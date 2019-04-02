@@ -2,7 +2,7 @@ image: Visual Studio 2017
 init:
   - git config --global core.autocrlf input
 build_script:
-  - ps: .\fake.cmd build target pack
+  - ps: .\fake.cmd build --target pack
 test: off
 version: '{build}'
 artifacts:
