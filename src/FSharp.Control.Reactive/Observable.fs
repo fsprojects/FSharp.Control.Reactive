@@ -101,8 +101,6 @@ module Builders =
 /// The Reactive module provides operators for working with IObservable<_> in F#.
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Observable =
-    open System.Reactive.Concurrency
-    open System.Reactive.Linq
 
     type Observer with
         /// Creates an observer from the specified onNext function.
@@ -128,15 +126,12 @@ module Observable =
     type Observable with
         /// Creates an observable sequence from the specified Subscribe method implementation.
         static member Create (subscribe: IObserver<'T> -> unit -> unit) =
-            Observable.Create(Func<_,_>(fun o -> Action(subscribe o)))
+            let subscribe o = Action(subscribe o)
+            Observable.Create(subscribe)
 
-        /// Creates an observable sequence from the specified Subscribe method implementation.
-        static member Create subscribe =
-            Observable.Create(Func<_,IDisposable> subscribe)
-        
         /// Creates an observable sequence from the specified asynchronous Subscribe method implementation.
-        static member CreateAsync subscribe =
-            Observable.Create(Func<IObserver<'T>, System.Threading.Tasks.Task<IDisposable>> (subscribe >> Async.StartAsTask))
+        static member CreateAsync (subscribe: IObserver<'T> -> Async<IDisposable>) =
+            Observable.Create(subscribe >> Async.StartAsTask)
         
     type IObservable<'T> with
         /// Subscribes to the Observable with just a next-function.
