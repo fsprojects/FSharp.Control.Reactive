@@ -785,8 +785,8 @@ module Observable =
     /// Converts a .NET event to an observable sequence, using a supplied event delegate type. 
     /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
     let fromEventHandler<'EventArgs when 'EventArgs:> EventArgs>
-        ( addHandler    : EventHandler<_> -> unit )
-        ( removeHandler : EventHandler<_> -> unit )  =
+        ( addHandler    : EventHandler<'EventArgs> -> unit )
+        ( removeHandler : EventHandler<'EventArgs> -> unit )  =
         {   
             new IObservable<_> with
                 member this.Subscribe( observer:IObserver<_> ) =
