@@ -38,7 +38,7 @@ let ``schedule immediate action`` () =
 
 [<Fact>]
 let ``schedule long-running`` () =
-    let x, e = WaitHandle.signal, WaitHandle.signal
+    let x, e = WaitHandle.Signal, WaitHandle.Signal
     TaskPoolScheduler.Default
     |> Scheduler.AsLongRunning
     |> Schedule.actionLongState 42 (fun _ c ->
@@ -50,7 +50,7 @@ let ``schedule long-running`` () =
 [<Fact>]
 let ``schedule periodic 1`` () =
     let n = ref 0
-    let e = WaitHandle.signal
+    let e = WaitHandle.Signal
     Scheduler.Default
     |> Schedule.periodicAction
         (TimeSpan.FromMilliseconds 50.)
@@ -59,7 +59,7 @@ let ``schedule periodic 1`` () =
 
 [<Fact>]
 let ``catch built-in swallow shallow`` () =
-    let finish = WaitHandle.signal
+    let finish = WaitHandle.Signal
     Scheduler.Default
     |> Schedule.catch (fun _ -> WaitHandle.flag finish; true)
     |> Schedule.action (fun () -> failwith "Something happend!")
@@ -86,7 +86,7 @@ let ``schedule async with due time`` () =
 
 [<Fact(Skip="sleep scheduler test hangs")>]
 let ``schedule sleep cancel`` () =
-    let e = WaitHandle.signal
+    let e = WaitHandle.Signal
     let cts = new CancellationTokenSource ()
     Scheduler.Default
     |> Schedule.sleepCancel (TimeSpan.FromHours 1.) cts.Token
