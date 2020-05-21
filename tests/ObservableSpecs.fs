@@ -1,19 +1,18 @@
 ﻿module FSharp.Reactive.Tests.ObservableSpecs
 
 open System
+open System.Reactive.Concurrency
+open System.Reactive.Disposables
 open System.Reactive.Linq
-open FSharp.Control.Reactive
-open Builders
+open Microsoft.Reactive.Testing
 open NUnit.Framework
 open FsCheck
-open Microsoft.Reactive.Testing
-open System.Reactive.Subjects
-open System.Reactive.Concurrency
+open FSharp.Control.Reactive
+open FSharp.Control.Reactive.Builders
 open FSharp.Control.Reactive.Observable
 open FSharp.Control.Reactive.Testing
-open TestNotification
 open FSharp.Control.Reactive.Testing.TestNotification
-open System.Threading
+open System.Reactive.Subjects
 
 
 let ``should be`` expectedNext expectedError expectedCompleted (observable:'a IObservable) =
@@ -514,10 +513,34 @@ let ``timestampOn uses timestamps from the supplied scheduler``() =
 [<Test>]
 let ``Observable.Create should support a simple observable returning fun () -> ()``() =
     let obs =
+        fun (o:IObserver<_>) ->
+            o.OnNext("xxx")
+            o.OnCompleted()
+            fun () -> ()
+        |> Observable.Create
+
+    use x = obs.Subscribe(fun result -> Assert.That(result, Is.EqualTo "xxx"))
+    ()
+
+[<Test>]
+let ``Observable.Create should support a simple observable returning ignore``() =
+    let obs =
         Observable.Create(fun (o : IObserver<_>) ->
             o.OnNext("xxx")
             o.OnCompleted()
             ignore)
+
+    use x = obs.Subscribe(fun result -> Assert.That(result, Is.EqualTo "xxx"))
+    ()
+
+[<Test>]
+let ``Observable.Create should support a simple observable returning Disposable.Empty``() =
+    let obs =
+        fun (o:IObserver<_>) ->
+            o.OnNext("xxx")
+            o.OnCompleted()
+            Disposable.Empty
+        |> Observable.Create
 
     use x = obs.Subscribe(fun result -> Assert.That(result, Is.EqualTo "xxx"))
     ()
