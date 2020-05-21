@@ -1,9 +1,15 @@
 image: Visual Studio 2017
+version: '{build}'
+clone_depth: 10
+environment:
+    CLI_VERSION: 3.1.300
 init:
   - git config --global core.autocrlf input
+install:
+  - ps: Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile "${env:TEMP}\dotnet-install.ps1"
+  - ps: '& "${env:TEMP}\dotnet-install.ps1" -Version 3.1.300'
 build_script:
-  - ps: .\fake.cmd build --target pack
+  - ps: .\fake.cmd --target pack
 test: off
-version: '{build}'
 artifacts:
   - path: bin\*.nupkg
