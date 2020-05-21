@@ -110,6 +110,7 @@ Target.create "Pack" (fun _ ->
             Configuration=DotNet.BuildConfiguration.Release
             OutputPath=Some buildDir
             NoBuild=true
+            NoRestore=true
         }))
 )
 
