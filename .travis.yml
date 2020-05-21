@@ -1,25 +1,21 @@
 language: csharp
 
 mono: 5.2.0
-dotnet : 2.1.300
+dotnet : 3.1.300
 
 install:
   - mozroots --import --sync
   - export FrameworkPathOverride=$(dirname $(which mono))/../lib/mono/4.5/
 matrix:
   include:
-    - os: linux # Ubuntu 14.04
-      dist: trusty
+    - os: linux
       sudo: required
-      dotnet : 2.1.300
     - os: osx # OSX 10.12
       osx_image: xcode9.1
-      dotnet : 2.1.300
-      dist: trusty
       sudo: required
 
 script: 
-  - ./fake.sh build --target pack
+  - ./fake.sh --target pack
 
 branches:
   except:
