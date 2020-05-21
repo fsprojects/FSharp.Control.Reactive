@@ -80,7 +80,8 @@ Target.create "CleanDocs" (fun _ ->
 Target.create "Build" (fun _ ->
     Environment.setEnvironVar "GenerateDocumentationFile" "true"
     projects
-    |> List.iter (DotNet.build id)
+    |> List.iter (DotNet.build (fun p ->
+        { p with Configuration=DotNet.BuildConfiguration.Release }))
 
 )
 
@@ -92,8 +93,8 @@ Target.create "CopyLicense" (fun _ ->
 // Run the unit tests using test runner
 
 Target.create "RunTests" (fun _ ->
-        DotNet.test (fun p -> { p with Configuration = DotNet.BuildConfiguration.Release}) "tests"
-        Trace.publish (ImportData.Nunit NunitDataVersion.Nunit3) buildDir
+    DotNet.test (fun p -> { p with Configuration=DotNet.BuildConfiguration.Release}) "tests"
+    Trace.publish (ImportData.Nunit NunitDataVersion.Nunit3) buildDir
 )
 
 // --------------------------------------------------------------------------------------
@@ -105,10 +106,10 @@ Target.create "Pack" (fun _ ->
     Environment.setEnvironVar "PackageReleaseNotes" (release.Notes |> String.toLines)
     projects
     |> List.iter (DotNet.pack (fun p -> 
-            { p with
-                OutputPath = Some buildDir
-                NoBuild = true
-            }) )
+        { p with
+            Configuration=DotNet.BuildConfiguration.Release
+            OutputPath=Some buildDir
+        }))
 )
 
 Target.create "Push" (fun _ ->

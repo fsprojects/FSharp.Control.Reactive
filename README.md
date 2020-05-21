@@ -1,6 +1,3 @@
-[![Issue Stats](http://issuestats.com/github/fsprojects/FSharp.Control.Reactive/badge/issue)](http://issuestats.com/github/fsprojects/FSharp.Control.Reactive)
-[![Issue Stats](http://issuestats.com/github/fsprojects/FSharp.Control.Reactive/badge/pr)](http://issuestats.com/github/fsprojects/FSharp.Control.Reactive)
-
 # FSharp.Control.Reactive
 
 F# wrappers for the [Reactive Extensions (Rx)](http://msdn.microsoft.com/en-us/data/gg577609.aspx)
