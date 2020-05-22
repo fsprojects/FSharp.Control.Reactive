@@ -12,7 +12,11 @@ matrix:
       sudo: required
 
 script: 
-  - ./fake.sh --target pack
+  - dotnet --info
+  - dotnet tool restore
+  - dotnet build -c Release
+  - dotnet test --no-restore --no-build -c Release tests/FSharp.Control.Reactive.Tests.fsproj
+  - dotnet pack --no-restore -c Release --include-symbols
 
 branches:
   except:

@@ -1,14 +1,39 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Version>4.2.0</Version>
+    <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
+    <VersionPrefix>4.3.0</VersionPrefix>
     <Authors>Ryan Riley;Steffen Forkmann;Jared Hester</Authors>
     <Summary>A F#-friendly wrapper for the Reactive Extensions.</Summary>
     <Description>A F#-friendly wrapper for the Reactive Extensions.</Description>
-    <PackageLicenseUrl>https://github.com/fsprojects/FSharp.Control.Reactive/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/fsprojects/FSharp.Control.Reactive</PackageProjectUrl>
-    <PackageIconUrl>http://fsprojects.github.io/FSharp.Control.Reactive/img/logo.png</PackageIconUrl>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageTags>F#;FSharp;Reactive Extensions;Rx</PackageTags>
     <RepositoryUrl>https://github.com/fsprojects/FSharp.Control.Reactive</RepositoryUrl>
+
+    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+ 
+    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+  
+    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>symbols.nupkg</SymbolPackageFormat>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+    <None Include="..\..\docs\files\img\logo.png" Pack="true" PackagePath="\" />
+    <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <!-- Read Release Notes from RELEASE_NOTES.md (cref https://dev.to/j_sakamoto/writing-a-nuget-package-release-notes-in-an-outside-of-a-csproj-file-3f94) -->
+  <Target Name="PreparePackageReleaseNotesFromFile" BeforeTargets="GenerateNuspec">
+    <ReadLinesFromFile File="..\..\RELEASE_NOTES.md">
+      <Output TaskParameter="Lines" ItemName="ReleaseNoteLines" />
+    </ReadLinesFromFile>
+    <PropertyGroup>
+      <PackageReleaseNotes>@(ReleaseNoteLines, '%0a')</PackageReleaseNotes>
+    </PropertyGroup>
+  </Target>
 </Project>

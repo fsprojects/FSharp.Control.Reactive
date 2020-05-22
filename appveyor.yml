@@ -6,7 +6,14 @@ environment:
 init:
   - git config --global core.autocrlf input
 build_script:
-  - ps: .\fake.cmd --target pack
+  - ps: |
+      .\build.ps1
+      if ($lastexitcode -ne 0){ exit $lastexitcode }
 test: off
 artifacts:
   - path: bin\*.nupkg
+deploy:
+- provider: Environment
+  name: FSharp.Control.Reactive
+  on:
+    APPVEYOR_REPO_TAG: true

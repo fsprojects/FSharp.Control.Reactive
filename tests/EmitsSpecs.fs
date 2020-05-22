@@ -20,7 +20,7 @@ type EmitTest () =
                 TestSchedule.usage <| fun sch ->
                     TestSchedule.coldObservable sch ms
                     |> TestSchedule.subscribeTestObserverStart sch
-                    |> TestObserver.all = ms
+                    |> TestObserver.messages = ms
 
     [<Test>]
     member __.``Functor Law of Observables`` () =
