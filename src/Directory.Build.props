@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
     <VersionPrefix>4.3.0</VersionPrefix>
     <Authors>Ryan Riley;Steffen Forkmann;Jared Hester</Authors>
     <Summary>A F#-friendly wrapper for the Reactive Extensions.</Summary>
@@ -18,8 +19,8 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
   
     <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
-    <!--<IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>-->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>symbols.nupkg</SymbolPackageFormat>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
