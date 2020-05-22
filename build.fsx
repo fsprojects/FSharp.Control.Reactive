@@ -11,7 +11,6 @@
 open Fake.Tools
 open Fake.Core
 open Fake.DotNet
-open Fake.BuildServer
 open Fake.IO
 open Fake.IO.FileSystemOperators
 open Fake.IO.Globbing.Operators
@@ -23,15 +22,11 @@ open System.Threading
 // Provide project-specific details below
 // --------------------------------------------------------------------------------------
 
-let projects = [ "src/FSharp.Control.Reactive/FSharp.Control.Reactive.fsproj" 
-                 "src/FSharp.Control.Reactive.Testing/FSharp.Control.Reactive.Testing.fsproj" ]
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted 
 let gitHome = "git@github.com:fsprojects"
 // The name of the project on GitHub
 let gitName = "FSharp.Control.Reactive"
-
-let buildDir = Path.GetFullPath "bin"
 
 let docsDir = Path.GetFullPath "docs"
 
@@ -42,80 +37,12 @@ let docsDir = Path.GetFullPath "docs"
 // Read additional information from the release notes document
 
 let release = ReleaseNotes.load  "RELEASE_NOTES.md"
-let isAppVeyorBuild = Environment.environVar "APPVEYOR" |> isNull |> not
-let isTaggedBuild = Environment.environVarAsBoolOrDefault "APPVEYOR_REPO_TAG" false
-let versionSuffix =
-    let buildVersion = BuildServer.buildVersion
-    if isTaggedBuild then ""
-    elif buildVersion = "LocalBuild" then "-LocalBuild"
-    else "-beta" + buildVersion
-let nugetVersion = release.NugetVersion + versionSuffix
-
-BuildServer.install [
-    AppVeyor.Installer
-]
-// Generate assembly info files with the right version & up-to-date information
-Target.create "BuildVersion" (fun _ ->
-    Shell.Exec("appveyor", sprintf "UpdateBuild -Version \"%s\"" nugetVersion) |> ignore
-)
 
 // --------------------------------------------------------------------------------------
 // Clean build results & restore NuGet packages
 
-Target.create "Clean" (fun _ ->
-    !! "src/**/bin"
-    ++ "src/**/obj"
-    ++ "bin"
-    ++ "temp"
-    |> Shell.cleanDirs 
-)
-
 Target.create "CleanDocs" (fun _ ->
     Shell.cleanDir "docs/output"
-)
-
-// --------------------------------------------------------------------------------------
-// Build library & test project
-
-Target.create "Build" (fun _ ->
-    Environment.setEnvironVar "GenerateDocumentationFile" "true"
-    projects
-    |> List.iter (DotNet.build (fun p ->
-        { p with Configuration=DotNet.BuildConfiguration.Release }))
-
-)
-
-Target.create "CopyLicense" (fun _ ->
-    [ "LICENSE.txt" ] |> Shell.copyTo "bin"
-)
-
-// --------------------------------------------------------------------------------------
-// Run the unit tests using test runner
-
-Target.create "RunTests" (fun _ ->
-    DotNet.test (fun p -> { p with Configuration=DotNet.BuildConfiguration.Release}) "tests"
-    Trace.publish (ImportData.Nunit NunitDataVersion.Nunit3) buildDir
-)
-
-// --------------------------------------------------------------------------------------
-// Build a NuGet package
-
-Target.create "Pack" (fun _ ->
-    Environment.setEnvironVar "PackageVersion" nugetVersion
-    Environment.setEnvironVar "Version" nugetVersion
-    Environment.setEnvironVar "PackageReleaseNotes" (release.Notes |> String.toLines)
-    projects
-    |> List.iter (DotNet.pack (fun p -> 
-        { p with
-            Configuration=DotNet.BuildConfiguration.Release
-            OutputPath=Some buildDir
-        }))
-)
-
-Target.create "Push" (fun _ ->
-    Paket.push (fun p -> 
-        { p with
-            WorkingDir = buildDir }) 
 )
 
 // --------------------------------------------------------------------------------------
@@ -217,7 +144,7 @@ Target.create "ReleaseDocs" (fun _ ->
     Git.Branches.push tempDocsDir
 )
 
-Target.create "Release" (fun _ ->
+Target.create "Tag" (fun _ ->
     Git.Staging.stageAll ""
     Git.Commit.exec "" (sprintf "Bump version to %s" release.NugetVersion)
     Git.Branches.push ""
@@ -232,24 +159,8 @@ Target.create "Release" (fun _ ->
 Target.create "All" ignore
 open Fake.Core.TargetOperators
 
-"Clean"
-  =?> ("BuildVersion", isAppVeyorBuild)
-  ==> "CopyLicense"
-  ==> "Build"
-  ==> "RunTests"
-  ==> "All"
-  =?> ("GenerateDocs", BuildServer.isLocalBuild && not Environment.isMono)
-  =?> ("ReleaseDocs", BuildServer.isLocalBuild && not Environment.isMono)
-
-"All" 
-  ==> "Pack"
-  ==> "Push"
-
 "CleanDocs"
   ==> "GenerateDocs"
-"ReleaseDocs"
-  ==> "Release"
-"Push"
-  ==> "Release"
+  ==> "ReleaseDocs"
 
 Target.runOrDefault "All"
