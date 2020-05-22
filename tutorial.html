@@ -6,7 +6,7 @@
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content="A F#-friendly wrapper for the Reactive Extensions."/>
-    <meta name="author" content="Ryan Riley, Steffen Forkmann, and Jared Heseter"/>
+    <meta name="author" content="Ryan Riley, Steffen Forkmann, and Jared Hester"/>
 
     <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
     <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
@@ -32,8 +32,7 @@
       <hr />
       <div class="row">
         <div class="span9" id="main">
-          
-<h1><a name="Getting-Started" class="anchor" href="#Getting-Started">Getting Started</a></h1>
+          <h1><a name="Getting-Started" class="anchor" href="#Getting-Started">Getting Started</a></h1>
 <p>The easiest way to get started using FSharp.Control.Reactive is to take a look at the <a href="https://github.com/fsprojects/FSharp.Control.Reactive/blob/master/tests/ObservableSpecs.fs">tests</a>. In general, you can consider the <code>Observable</code> module as providing a set of extensions to the built-in <code>Observable</code> module.</p>
 <h2><a name="Observable-Module" class="anchor" href="#Observable-Module">Observable Module</a></h2>
 <p>As a first, simple example, the built-in module does not include a <code>zip</code> operator, but FSharp.Control.Reactive fills in this gap:</p>
@@ -202,7 +201,7 @@ See: <a href="https://github.com/fsprojects/FSharp.Control.Reactive/blob/master/
 <div class="tip" id="fs30">val sch : Reactive.Testing.TestScheduler</div>
 <div class="tip" id="fs31">val s : System.Reactive.Subjects.Subject&lt;int&gt;</div>
 <div class="tip" id="fs32">Multiple items<br />module Subject<br /><br />from FSharp.Control.Reactive<br /><br />--------------------<br />type Subject&lt;&#39;a&gt; =<br />&#160;&#160;private new : unit -&gt; Subject&lt;&#39;a&gt;<br />&#160;&#160;static member behavior : x:&#39;a -&gt; BehaviorSubject&lt;&#39;a&gt;<br />&#160;&#160;static member async : AsyncSubject&lt;&#39;a&gt;<br />&#160;&#160;static member broadcast : Subject&lt;&#39;a&gt;<br />&#160;&#160;static member replay : ReplaySubject&lt;&#39;a&gt;</div>
-<div class="tip" id="fs33">property Subject.broadcast: System.Reactive.Subjects.Subject&lt;&#39;a&gt;</div>
+<div class="tip" id="fs33">property Subject.broadcast: System.Reactive.Subjects.Subject&lt;&#39;a&gt; with get</div>
 <div class="tip" id="fs34">val observer : Reactive.Testing.ITestableObserver&lt;int&gt;</div>
 <div class="tip" id="fs35">val subscribeTestObserver : sch:Reactive.Testing.TestScheduler -&gt; source:System.IObservable&lt;&#39;a&gt; -&gt; Reactive.Testing.ITestableObserver&lt;&#39;a&gt;</div>
 <div class="tip" id="fs36">val onNexts : xs:seq&lt;&#39;a&gt; -&gt; s:&#39;b -&gt; &#39;b (requires &#39;b :&gt; System.Reactive.Subjects.SubjectBase&lt;&#39;a&gt;)</div>
