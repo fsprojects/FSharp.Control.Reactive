@@ -24,7 +24,7 @@ open System.Threading
 
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted 
-let gitHome = "git@github.com:fsprojects"
+let gitHome = "https://github.com/fsprojects"
 // The name of the project on GitHub
 let gitName = "FSharp.Control.Reactive"
 
@@ -71,7 +71,7 @@ Target.create "GenerateDocs" (fun _ ->
         "project-name", "FSharp.Control.Reactive"
         "project-author", "Ryan Riley, Steffen Forkmann, and Jared Hester"
         "project-summary", "A F#-friendly wrapper for the Reactive Extensions."
-        "project-github", "http://github.com/fsprojects/FSharp.Reactive"
+        "project-github", "https://github.com/fsprojects/FSharp.Control.Reactive"
         "project-nuget", "https://www.nuget.org/packages/FSharp.Control.Reactive" ]
 
     Shell.copyDir output files FileFilter.allFiles
@@ -147,7 +147,10 @@ Target.create "ReleaseDocs" (fun _ ->
 // --------------------------------------------------------------------------------------
 // Run all targets by default. Invoke 'build <Target>' to override
 
-Target.create "All" ignore
+Target.create "All" (fun _ ->
+    Target.listAvailable()
+)
+
 open Fake.Core.TargetOperators
 
 "CleanDocs"

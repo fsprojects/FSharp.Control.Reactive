@@ -11,6 +11,7 @@
     <PackageIcon>logo.png</PackageIcon>
     <PackageTags>F#;FSharp;Reactive Extensions;Rx</PackageTags>
     <RepositoryUrl>https://github.com/fsprojects/FSharp.Control.Reactive</RepositoryUrl>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
     <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
