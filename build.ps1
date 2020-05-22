@@ -1,6 +1,6 @@
 [xml]$doc = Get-Content .\src\Directory.Build.props
 $version = $doc.Project.PropertyGroup.VersionPrefix # the version under development, update after a release
-$versionSuffix = 'build.0' # manually incremented for local builds
+$versionSuffix = '-build.0' # manually incremented for local builds
 
 function isVersionTag($tag){
     $v = New-Object Version
@@ -8,7 +8,7 @@ function isVersionTag($tag){
 }
 
 if ($env:appveyor){
-    $versionSuffix = 'build.' + $env:appveyor_build_number
+    $versionSuffix = '-build.' + $env:appveyor_build_number
     if ($env:appveyor_repo_tag -eq 'true' -and (isVersionTag($env:appveyor_repo_tag_name))){
         $version = $env:appveyor_repo_tag_name
         $versionSuffix = ''
@@ -17,6 +17,6 @@ if ($env:appveyor){
 }
 
 dotnet tool restore
-dotnet build -c Release --version-suffix $versionSuffix
+dotnet build -c Release /p:Version=$version$versionSuffix
 dotnet test --no-build -c Release tests
-dotnet pack --no-restore -c Release --version-suffix $versionSuffix -o $psscriptroot/bin
+dotnet pack --no-restore -c Release /p:Version=$version$versionSuffix -o $psscriptroot/bin
