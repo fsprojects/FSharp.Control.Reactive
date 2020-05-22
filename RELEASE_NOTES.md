@@ -1,5 +1,8 @@
 ### New in 4.3.0 - (Released 2020/05/21)
-* 
+* Fix issue [#115](https://github.com/fsprojects/FSharp.Control.Reactive/pull/128)
+* Fix issue [#126](https://github.com/fsprojects/FSharp.Control.Reactive/pull/127)
+* Fix issue [#129](https://github.com/fsprojects/FSharp.Control.Reactive/pull/130)
+* Add tests using Xunit [#118](https://github.com/fsprojects/FSharp.Control.Reactive/pull/118)
 
 ### New in 4.2.0 - (Released 2019/03/06)
 * Extensions to F# API
