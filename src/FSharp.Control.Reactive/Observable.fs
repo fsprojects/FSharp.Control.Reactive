@@ -2358,6 +2358,7 @@ module Observable =
     /// **Description**
     /// Projects each source value to an Observable which is merged in the output
     /// Observable, emitting values only from the most recently projected Observable.
+    /// Equivalent to a map followed by a switch.
     ///
     /// **Returns**
     /// Returns an Observable that emits items based on applying a function that you
@@ -2369,13 +2370,7 @@ module Observable =
     /// emitting items from the new one. It continues to behave like this for
     /// subsequent inner Observables.
     let switchMap f source =
-        let mutable innerSub = None
-        Observable.Create (fun (o : IObserver<_>) -> 
-            subscribeSafe (fun x -> 
-                innerSub |> Option.iter Disposable.dispose
-                f x |> subscribeSafeObserver o 
-                    |> Some
-                    |> fun x -> innerSub <- x) source)
+        source |> map f |> switch
 
     /// Projects each source value to an Observable which is merged in the output
     /// Observable only if the previous projected Observable has completed.
