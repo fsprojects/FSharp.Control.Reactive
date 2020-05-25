@@ -640,8 +640,8 @@ module Observable =
 
 
     /// Invokes a specified action after the source observable sequence
-    /// terminates gracefully of exceptionally
-    let finallyDo  finallyAction  source  =
+    /// terminates gracefully or exceptionally
+    let finallyDo finallyAction source =
         Observable.Finally( source, Action finallyAction ) 
 
 
