@@ -13,12 +13,6 @@ let ``Disposable.compose is immutable`` () =
     
     let groupa = Disposable.compose disp1 disp2
     let groupb = Disposable.compose disp1 disp2
-
-    //groupa and groupb are structurally equal
-    //this clause can be removed - it
-    //just exists to check the underlying type
-    Assert.That(groupa, Is.EqualTo(groupb))
-
     let groupc = Disposable.compose groupa disp3
 
     //groupa isn't mutated to groupc
@@ -37,9 +31,9 @@ let ``Disposable.compose follows ordering`` () =
     //apply compose recursively over range
     let composite =
         range
-        |> List.map(add) 
+        |> List.map add
         |> List.map Disposable.create 
-        |> List.reduce Disposable.compose
+        |> List.reduce (fun a b -> a |> Disposable.compose b)
     
     //dispose the entire range
     composite.Dispose()
@@ -56,8 +50,8 @@ let ``Disposals happen only once`` () =
         let disp2 = Disposable.create (add 2)
         let disp3 = Disposable.create (add 3)
 
-        let group1 = Disposable.compose disp1 disp2
-        let group2 = Disposable.compose group1 disp3
+        let group1 = disp1 |> Disposable.compose disp2
+        let group2 = group1 |> Disposable.compose disp3
 
         group1.Dispose()
         //group1 isn't mutated and disposes in order

@@ -42,32 +42,18 @@ module Disposable =
     /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
     let dispose (x : IDisposable) = x.Dispose ()
 
-    // This is a private type to wrap
-    // a list of disposables which can be cast to 
-    // IDisposable and back
-    type private ListDisposable = 
-        ListDisposable of IDisposable list with
-        interface IDisposable with
-            member this.Dispose() = 
-                let (ListDisposable disp) = this
-                disp |> List.iter dispose    
-
     /// Compose two disposables together so they are both disposed when disposed is called on the 'composite' disposable.
-    /// Equivalent to the append operator on collection types.
-    /// Note that 1 is disposed before 2.
-    let compose (disposable1 : IDisposable) (disposable2 : IDisposable) : IDisposable =
-        let tail (ListDisposable list) = list
-        let list = 
-            match disposable1, disposable2 with
-            | (:? ListDisposable as list1), (:? ListDisposable as list2) -> 
-                tail list1 @ tail list2
-            | :? ListDisposable as list, last -> 
-                tail list @ [last]
-            | head, (:? ListDisposable as list) ->                 
-                head::(tail list)
-            | a, b -> [a; b]
-
-        ListDisposable list :> IDisposable
+    /// The expected usage is disposable1 |> compose disposable2,
+    //  and disposable1 will be disposed before disposable2.
+    let compose (disposable2 : #IDisposable) (disposable1 : #IDisposable) : IDisposable =
+        // Do not replace Disposable.Create here
+        // with create. F# will convert the lambda to 
+        // one which returns unit (null), eliminating
+        // the possibility of any tail-call
+        Disposable.Create (fun () -> 
+            disposable1.Dispose()
+            disposable2.Dispose()
+        )
 
     /// Uses the double-indirection pattern to assign the disposable returned by the specified disposableFactory
     /// to the 'Disposable' property of the specified serial disposable.
