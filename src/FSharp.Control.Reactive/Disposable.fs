@@ -43,14 +43,17 @@ module Disposable =
     let dispose (x : IDisposable) = x.Dispose ()
 
     /// Compose two disposables together so they are both disposed when disposed is called on the 'composite' disposable.
-    let compose (x : IDisposable) (d : IDisposable) =
-        match d, x with
-        | :? CompositeDisposable as d, x -> d.Add x; d :> IDisposable
-        | d, (:? CompositeDisposable as x) -> x.Add d; x :> IDisposable
-        | d, x -> let acc = new CompositeDisposable ()
-                  acc.Add d
-                  acc.Add x
-                  acc :> IDisposable
+    /// The expected usage is disposable1 |> compose disposable2,
+    //  and disposable1 will be disposed before disposable2.
+    let compose (disposable2 : #IDisposable) (disposable1 : #IDisposable) : IDisposable =
+        // Do not replace Disposable.Create here
+        // with create. F# will convert the lambda to 
+        // one which returns unit (null), eliminating
+        // the possibility of any tail-call
+        Disposable.Create (fun () -> 
+            disposable1.Dispose()
+            disposable2.Dispose()
+        )
 
     /// Uses the double-indirection pattern to assign the disposable returned by the specified disposableFactory
     /// to the 'Disposable' property of the specified serial disposable.

@@ -11,6 +11,7 @@
     <Compile Include="SchedulerSpecs.fs" />
     <Compile Include="ObservableSpecs.fs" />
     <Compile Include="SubjectSpecs.fs" />
+    <Compile Include="DisposableSpecs.fs" />
     <Compile Include="EmitsSpecs.fs" />
     <Compile Include="MarbleSpecs.fs" />
     <Compile Include="Xunit_EmitsSpecs.fs" />
