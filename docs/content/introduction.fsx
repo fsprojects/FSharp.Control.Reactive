@@ -16,7 +16,7 @@ This is by no means a complete stable example and should only be used for demons
 
 The following example show how the Enabling/Disabling of a button can be controled by looking at the input of another input field (TextBox).
 
-![Enable Disable Button](../files/img/enable-disable.gif)
+![Enable Disable Button](img/enable-disable.gif)
 
 *)
 
@@ -46,7 +46,7 @@ buttonForm.Show ()
 Incoming emits can be transformed using the mapping functionality.
 Following example show how the input of a textbox can be transformed into the reversed value.
 
-![Reversed](../files/img/reversed.gif)
+![Reversed](img/reversed.gif)
 *)
 
 module String = 
@@ -70,7 +70,7 @@ reverseForm.Show ()
 Merging multiple events into one can be done with the `Observable.merge` primitive.
 Following example shows how we change the value of a label with the buttons ("Red" and "Green").
 
-![Red-Green](../files/img/red-green.gif)
+![Red-Green](img/red-green.gif)
 
 *)
 let redBtn = new Button()
