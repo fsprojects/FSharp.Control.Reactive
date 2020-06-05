@@ -657,6 +657,15 @@ type ObservableTests_WithTestNotifications () =
                 |> TestObserver.nexts
                 |> (=) (TestNotification.nexts ms |> List.choose f)
 
+    [<Fact>]
+    member __. ``throwing an exception in choose leads to the OnError event firing and does not lead to the exception flowing out even with a regular subscribe`` () =
+        let o = Observable.ofSeq [1;2;3] |> Observable.choose (fun _ -> failwith "qwe")
+        let error_flows_out = ref false
+        try o |> Observable.subscribe (printfn "%i") |> ignore
+        with _ -> error_flows_out := true
+        Assert.Equal(!error_flows_out, false)
+        o |> ``should be`` 0 true false
+
     //[<Fact>]
     //member __.``switchMap maps to new observable`` () =
     //    Check.QuickThrowOnFailure <|
