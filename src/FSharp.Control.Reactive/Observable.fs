@@ -2350,7 +2350,7 @@ module Observable =
     let choose f source =
         Observable.Create (fun (o : IObserver<_>) ->
             subscribeSafeWithCallbacks 
-                (fun x -> try f x |> Option.iter o.OnNext with ex -> o.OnError ex)
+                (fun x -> Option.iter o.OnNext (try f x with ex -> o.OnError ex; None))
                 o.OnError
                 o.OnCompleted
                 source)
