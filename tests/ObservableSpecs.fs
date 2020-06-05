@@ -679,7 +679,7 @@ type ObservableTests_WithTestNotifications () =
 
     [<Test>]
     member __. ``throwing an exception in choose leads to the OnError event firing and does not lead to the exception flowing out even with a regular subscribe`` () =
-        let o = Observable.ofSeq [1;2;3] |> choose (fun _ -> failwith "qwe")
+        let o = Observable.ofSeq [1;2;3] |> Observable.choose (fun _ -> failwith "qwe")
         let error_flows_out = ref false
         try o |> Observable.subscribe (printfn "%i") |> ignore
         with _ -> error_flows_out := true
