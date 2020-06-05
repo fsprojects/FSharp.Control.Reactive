@@ -83,6 +83,20 @@ let ``When subscribing to an observable that fires an exception using the Observ
     builder |> ``should be`` 0 true false
 
 [<Test>]
+let ``ObservableBuilder can run-time test, and try-catch the type of exception``() =
+    
+    let errorObservable =
+        observe {
+            try
+                InvalidOperationException() |> raise
+            with
+            | :? InvalidOperationException ->
+                yield 1
+    }
+
+    errorObservable |> ``should be`` 1 false true
+
+[<Test>]
 let ``When zip is defined with the applicative, it should match the result of Observable.zip``() =
     let inline (<*>) f m = Observable.apply f m
     let inline (<!>) f m = Observable.map f m
