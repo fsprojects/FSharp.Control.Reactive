@@ -2,7 +2,7 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
-    <VersionPrefix>4.3.1</VersionPrefix>
+    <VersionPrefix>4.3.2</VersionPrefix>
     <Authors>Ryan Riley;Steffen Forkmann;Jared Hester</Authors>
     <Summary>A F#-friendly wrapper for the Reactive Extensions.</Summary>
     <Description>A F#-friendly wrapper for the Reactive Extensions.</Description>

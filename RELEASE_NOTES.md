@@ -1,3 +1,6 @@
+### New in 4.3.2 - (Released 2020/06/05)
+* Fix issues [#139 and #140](https://github.com/fsprojects/FSharp.Control.Reactive/pull/141)
+
 ### New in 4.3.1 - (Released 2020/06/05)
 * Fix issue [#131](https://github.com/fsprojects/FSharp.Control.Reactive/pull/128)
 
