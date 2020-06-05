@@ -1,8 +1,12 @@
+### New in 4.3.3 - (Released 2020/06/05)
+* Fix try ... with in observe CE [#122](https://github.com/fsprojects/FSharp.Control.Reactive/pull/144)
+* Refine fix for Observable.choose [#143](https://github.com/fsprojects/FSharp.Control.Reactive/pull/143)
+
 ### New in 4.3.2 - (Released 2020/06/05)
-* Fix issues [#139 and #140](https://github.com/fsprojects/FSharp.Control.Reactive/pull/141)
+* Fix disposable composition [#139 and #140](https://github.com/fsprojects/FSharp.Control.Reactive/pull/141)
 
 ### New in 4.3.1 - (Released 2020/06/05)
-* Fix issue [#131](https://github.com/fsprojects/FSharp.Control.Reactive/pull/128)
+* Fix issue with Observable.choose [#131](https://github.com/fsprojects/FSharp.Control.Reactive/pull/128)
 
 ### New in 4.3.0 - (Released 2020/05/21)
 * Fix issue [#115](https://github.com/fsprojects/FSharp.Control.Reactive/pull/128)
