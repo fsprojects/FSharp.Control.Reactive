@@ -3,20 +3,20 @@
 open System
 open System.Reactive.Disposables
 
-module Disposables = 
-     
+module Disposables =
+
      /// Returns an IDisposable that disposes all the underlying disposables
      let compose (disposables: #seq<IDisposable>) =
-         Disposable.Create(fun _ -> 
-             disposables 
+         Disposable.Create(fun _ ->
+             disposables
              |> Seq.iter(fun x -> x.Dispose()))
 
 type Disposable () =
-    
+
     /// Creates a new composite disposable with no disposables contained initially.
     static member Composite with get () = new CompositeDisposable ()
 
-    /// Represents a disposable resource whose underlying disposable resource can be replaced by another disposable resource, 
+    /// Represents a disposable resource whose underlying disposable resource can be replaced by another disposable resource,
     /// causing automatic disposal of the previous underlying disposable resource.
     static member Serial with get () = new SerialDisposable ()
 
@@ -36,7 +36,7 @@ module Disposable =
     /// Execute and action with the resource while the disposable is still 'active'.
     /// The used resource will be disposed afterwards.
     let using f d =
-        use x = d 
+        use x = d
         f x
 
     /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -47,10 +47,10 @@ module Disposable =
     //  and disposable1 will be disposed before disposable2.
     let compose (disposable2 : #IDisposable) (disposable1 : #IDisposable) : IDisposable =
         // Do not replace Disposable.Create here
-        // with create. F# will convert the lambda to 
+        // with create. F# will convert the lambda to
         // one which returns unit (null), eliminating
         // the possibility of any tail-call
-        Disposable.Create (fun () -> 
+        Disposable.Create (fun () ->
             disposable1.Dispose()
             disposable2.Dispose()
         )
@@ -64,6 +64,11 @@ module Disposable =
 
     let setInnerDisposalOf (d : SerialDisposable) x = d.Disposable <- x
 
+    /// Registers a disposable object into a composite disposable object
+    /// ensuring it's disposition when composite disposable object is disposed.
+    let inline disposeWith (d: CompositeDisposable) x =
+        x.DisposeWith(d)
+
 open System.Threading
 
 type WaitHandle =
@@ -73,9 +78,9 @@ type WaitHandle =
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module WaitHandle =
-    
+
     /// Sets the state of the event to signaled, allowing one or more waiting threads to proceed.
     let flag (s : EventWaitHandle) = s.Set () |> ignore
-    
+
     /// Blocks the current thread until the WaitHandle receives a signal.
     let wait (s : System.Threading.WaitHandle) = s.WaitOne () |> ignore
