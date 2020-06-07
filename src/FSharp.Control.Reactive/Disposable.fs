@@ -67,7 +67,7 @@ module Disposable =
     /// Registers a disposable object into a composite disposable object
     /// ensuring it's disposition when composite disposable object is disposed.
     let inline disposeWith (d: CompositeDisposable) x =
-        x.DisposeWith(d)
+        d.Add x
 
 open System.Threading
 

@@ -4,6 +4,7 @@ open NUnit.Framework
 open FsCheck
 open FSharp.Control.Reactive
 open FSharp.Control.Reactive.Testing
+open System.Reactive.Disposables
 
 [<Test>]
 let ``Disposable.compose is immutable`` () =    
@@ -61,5 +62,25 @@ let ``Disposals happen only once`` () =
         //group1 has already been disposed,
         //so only disp3.Dispose() should happen
         Assert.That(contents (), Is.EqualTo([1; 2; 3]))
+        ()
+    
+[<Test>]
+let ``CompositeDispose disposes correctly inner disposables`` () =    
+        let mutlist = new ResizeArray<_>()
+        let add n = fun () -> mutlist.Add n
+        let contents () = mutlist |> List.ofSeq
+
+        let compDisp = new CompositeDisposable()
+        let disp1 = Disposable.create (add 1)
+        let disp2 = Disposable.create (add 2)
+        let disp3 = Disposable.create (add 3)
+
+        disp1 |> Disposable.disposeWith compDisp
+        disp2 |> Disposable.disposeWith compDisp
+        disp3 |> Disposable.disposeWith compDisp
+
+        compDisp.Dispose()
+        
+        Assert.That(contents (), Is.EqualTo([1; 2; 3;]))
         ()
 

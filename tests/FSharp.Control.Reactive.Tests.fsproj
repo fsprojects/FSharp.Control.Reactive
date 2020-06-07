@@ -19,6 +19,7 @@
     <Compile Include="Xunit_ObservableSpecs.fs" />
     <Compile Include="Xunit_SchedulerSpecs.fs" />
     <Compile Include="Xunit_SubjectSpecs.fs" />
+    <Compile Include="Xunit_DisposableSpecs.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\FSharp.Control.Reactive\FSharp.Control.Reactive.fsproj" />
