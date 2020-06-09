@@ -37,6 +37,10 @@ let ``When subscribing to an empty observable, only OnCompleted should be fired`
     Observable.Empty() |> ``should be`` 0 false true
 
 [<Test>]
+let ``All OnNext notifications are ignored``() =
+    Observable.range 1 10 |> Observable.ignoreElements |> ``should be`` 0 false true
+
+[<Test>]
 let ``When subscribing to an observable that fires an exception, only OnError should be fired``() =
     Observable.Throw(Exception()) |> ``should be`` 0 true false
 
