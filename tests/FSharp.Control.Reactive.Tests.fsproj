@@ -17,7 +17,6 @@
     <Compile Include="Xunit_EmitsSpecs.fs" />
     <Compile Include="Xunit_MarbleSpecs.fs" />
     <Compile Include="Xunit_ObservableSpecs.fs" />
-    <Compile Include="Xunit_DisposableSpecs.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\FSharp.Control.Reactive\FSharp.Control.Reactive.fsproj" />
