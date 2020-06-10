@@ -5,6 +5,3 @@ Microsoft.Reactive.Testing
 NUnit
 NUnit.Runners
 NUnit3TestAdapter
-FsCheck.Xunit
-xunit
-xunit.runner.visualstudio
