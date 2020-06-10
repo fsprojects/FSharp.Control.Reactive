@@ -120,10 +120,6 @@ let ``schedule with disabled optimazations isn't long-running`` () =
     |> Scheduler.asLongRunning
     |> equal None
 
-(***************************************************************
-* Historical 
-***************************************************************)
-
 let days i = (new DateTimeOffset(1979, 10, 31, 4, 30, 15, TimeSpan.Zero)).AddDays (float i)
 let stamped x stamp = new Timestamped<_> (x, stamp)
 
