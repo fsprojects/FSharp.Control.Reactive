@@ -1,3 +1,7 @@
+### New in 4.4.0 - (Released 2020/06/10)
+* Add `Disposable.disposeWith` [#145](https://github.com/fsprojects/FSharp.Control.Reactive/pull/146)
+* Add `Observable.ignoreElements` [#148](https://github.com/fsprojects/FSharp.Control.Reactive/pull/148)
+
 ### New in 4.3.3 - (Released 2020/06/05)
 * Fix try ... with in observe CE [#122](https://github.com/fsprojects/FSharp.Control.Reactive/pull/144)
 * Refine fix for Observable.choose [#143](https://github.com/fsprojects/FSharp.Control.Reactive/pull/143)
