@@ -574,6 +574,9 @@ module Observable =
     let elementAtOrDefault ( index:int )( source:IObservable<'Source> ) : IObservable<'Source> =
         Observable.ElementAt( source, index )
 
+    /// Ignores all elements in an observable sequence leaving only the completed/error notifications
+    let ignoreElements source = 
+        Observable.IgnoreElements (source)
 
     /// Returns an empty observable
     let empty<'T> = Observable.Empty<'T>()
