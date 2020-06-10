@@ -787,3 +787,5 @@ type ObservableTests_WithTestNotifications () =
             |> TestSchedule.subscribeTestObserverStart sch
             |> TestObserver.nexts
             |> (=) [x]
+
+
