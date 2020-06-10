@@ -58,18 +58,19 @@
       <tr>
         <td class="member-name">
           <code onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)">
-            compose x d
+            compose disposable2 disposable1
           </code>
           <div class="tip" id="3">
-            <strong>Signature:</strong> x:IDisposable -&gt; d:IDisposable -&gt; IDisposable<br />
-                                  </div>
+            <strong>Signature:</strong> disposable2:&#39;?8988 -&gt; disposable1:&#39;?8989 -&gt; IDisposable<br />
+                          <strong>Type parameters:</strong> '?8988, '?8989                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Disposable.fs#L46-46" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Disposable.fs#L48-48" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Compose two disposables together so they are both disposed when disposed is called on the 'composite' disposable.</p>
+          <p>Compose two disposables together so they are both disposed when disposed is called on the 'composite' disposable.
+The expected usage is disposable1 |&gt; compose disposable2,</p>
 
 
         </td>
@@ -115,11 +116,31 @@
       <tr>
         <td class="member-name">
           <code onmouseout="hideTip(event, '6', 6)" onmouseover="showTip(event, '6', 6)">
-            ignoring f d
+            disposeWith d x
           </code>
           <div class="tip" id="6">
-            <strong>Signature:</strong> f:(unit -&gt; &#39;?8983) -&gt; d:IDisposable -&gt; unit<br />
-                          <strong>Type parameters:</strong> '?8983                      </div>
+            <strong>Signature:</strong> d:CompositeDisposable -&gt; x:IDisposable -&gt; unit<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Disposable.fs#L69-69" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Registers a disposable object into a composite disposable object
+ensuring it's disposition when composite disposable object is disposed.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '7', 7)" onmouseover="showTip(event, '7', 7)">
+            ignoring f d
+          </code>
+          <div class="tip" id="7">
+            <strong>Signature:</strong> f:(unit -&gt; &#39;?8982) -&gt; d:IDisposable -&gt; unit<br />
+                          <strong>Type parameters:</strong> '?8982                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Disposable.fs#L32-32" class="github-link">
@@ -134,15 +155,15 @@ The used resource will be disposed afterwards.</p>
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '7', 7)" onmouseover="showTip(event, '7', 7)">
+          <code onmouseout="hideTip(event, '8', 8)" onmouseover="showTip(event, '8', 8)">
             setIndirectly disposableFactory d
           </code>
-          <div class="tip" id="7">
+          <div class="tip" id="8">
             <strong>Signature:</strong> disposableFactory:(unit -&gt; &#39;b) -&gt; d:SerialDisposable -&gt; unit<br />
                           <strong>Type parameters:</strong> 'b                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Disposable.fs#L57-57" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Disposable.fs#L60-60" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -154,15 +175,15 @@ to the 'Disposable' property of the specified serial disposable.</p>
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '8', 8)" onmouseover="showTip(event, '8', 8)">
+          <code onmouseout="hideTip(event, '9', 9)" onmouseover="showTip(event, '9', 9)">
             setInnerDisposalOf d x
           </code>
-          <div class="tip" id="8">
+          <div class="tip" id="9">
             <strong>Signature:</strong> d:SerialDisposable -&gt; x:IDisposable -&gt; unit<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Disposable.fs#L62-62" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Disposable.fs#L65-65" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -171,12 +192,12 @@ to the 'Disposable' property of the specified serial disposable.</p>
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '9', 9)" onmouseover="showTip(event, '9', 9)">
+          <code onmouseout="hideTip(event, '10', 10)" onmouseover="showTip(event, '10', 10)">
             using f d
           </code>
-          <div class="tip" id="9">
-            <strong>Signature:</strong> f:(&#39;?8985 -&gt; &#39;?8986) -&gt; d:&#39;?8985 -&gt; &#39;?8986<br />
-                          <strong>Type parameters:</strong> '?8985, '?8986                      </div>
+          <div class="tip" id="10">
+            <strong>Signature:</strong> f:(&#39;?8984 -&gt; &#39;?8985) -&gt; d:&#39;?8984 -&gt; &#39;?8985<br />
+                          <strong>Type parameters:</strong> '?8984, '?8985                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharp.Control.Reactive/tree/master/src/FSharp.Control.Reactive/Disposable.fs#L38-38" class="github-link">
