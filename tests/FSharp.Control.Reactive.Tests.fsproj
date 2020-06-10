@@ -14,7 +14,6 @@
     <Compile Include="DisposableSpecs.fs" />
     <Compile Include="EmitsSpecs.fs" />
     <Compile Include="MarbleSpecs.fs" />
-    <Compile Include="Xunit_MarbleSpecs.fs" />
     <Compile Include="Xunit_ObservableSpecs.fs" />
   </ItemGroup>
   <ItemGroup>
