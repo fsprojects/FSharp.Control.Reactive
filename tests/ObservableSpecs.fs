@@ -178,6 +178,38 @@ let ``groupBy in Rx builder matches GroupBy method`` () =
 
     Assert.IsTrue([0; 1; 2;] |> Observable.equalsSeq query |> Observable.wait)
 
+[<Test>]
+let ``groupByJoin in Rx builder matches GroupByJoin method`` () =
+    
+    let left = 
+        [
+        "2020-01-01 02:00:00", "Batch1" 
+        "2020-01-01 03:00:00", "Batch2" 
+        "2020-01-01 04:00:00", "Batch3" 
+        ] |> Observable.ofSeq
+    
+    let right = 
+        [
+        "2020-01-01 01:00:00", "Production=2" 
+        "2020-01-01 02:00:00", "Production=0" 
+        "2020-01-01 03:00:00", "Production=3" 
+        ] |> Observable.ofSeq
+    
+
+    let never = Observable.neverWitness 0
+
+    let query = rxquery {
+        for l in left do
+        groupJoin right never never (fun r' -> r', l) into (grouped, l)
+        for (rtime, rvalue) in grouped do
+        let (ltime, lvalue) = l 
+        where (ltime = rtime)
+        yield lvalue, rvalue
+    }
+
+    let expected = ["Batch1", "Production=0"; "Batch2", "Production=3"]
+    let actual = query |> Observable.take expected.Length 
+    Assert.IsTrue(expected |> Observable.equalsSeq actual |> Observable.wait)
 
 [<Test>]
 let ``RxQueryBuilder.ExactlyOne throws when source contains more than one item`` () =
