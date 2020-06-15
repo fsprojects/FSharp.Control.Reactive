@@ -168,6 +168,18 @@ let ``RxQueryBuilder.ExactlyOne can returns only one item`` () =
     query |> Observable.subscribe (fun x -> Assert.AreEqual(1, x)) |> ignore
 
 [<Test>]
+let ``groupBy in Rx builder matches GroupBy method`` () =
+    let nat = Observable.range 0 10
+    let query = rxquery {
+        for i in nat do
+        groupBy (i % 3) into grp
+        yield grp.Key        
+    }
+
+    Assert.IsTrue([0; 1; 2;] |> Observable.equalsSeq query |> Observable.wait)
+
+
+[<Test>]
 let ``RxQueryBuilder.ExactlyOne throws when source contains more than one item`` () =
     let test = observe {
         yield 1
