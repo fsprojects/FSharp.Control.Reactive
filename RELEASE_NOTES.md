@@ -1,3 +1,6 @@
+### New in 4.4.1 - (Released 2020/06/27)
+* Update to System.Reactive 4.4.1 [#151](https://github.com/fsprojects/FSharp.Control.Reactive/pull/151)
+
 ### New in 4.4.0 - (Released 2020/06/10)
 * Add `Disposable.disposeWith` [#145](https://github.com/fsprojects/FSharp.Control.Reactive/pull/146)
 * Add `Observable.ignoreElements` [#148](https://github.com/fsprojects/FSharp.Control.Reactive/pull/148)
