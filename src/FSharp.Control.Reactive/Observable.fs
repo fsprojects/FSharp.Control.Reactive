@@ -616,13 +616,9 @@ module Observable =
     let equalsSeqComparer ( comparer:IEqualityComparer<'Source> ) ( first:IObservable<'Source>  )( second:seq<'Source> ) : IObservable<bool> =
         Observable.SequenceEqual( first, second, comparer )
 
-
-    let error e =
-        { new IObservable<_> with
-            member this.Subscribe(observer:IObserver<_>) =
-                observer.OnError e
-                { new IDisposable with member this.Dispose() = () }
-        }
+    /// Immediately raises OnError on subscription
+    [<Obsolete("Use Observable.throw instead")>]
+    let error e = Observable.Throw e
 
 
     /// Determines whether an observable sequence contains a specified value
