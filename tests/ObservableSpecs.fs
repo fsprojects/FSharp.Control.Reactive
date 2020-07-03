@@ -740,10 +740,10 @@ type ObservableTests_WithTestNotifications () =
                 |> (=) (TestNotification.nexts ms |> List.choose f)
 
     [<Test>]
-    member __. ``throwing an exception in choose leads to the OnError event firing and does not lead to the exception flowing out even with a regular subscribe`` () =
+    member __. ``throwing an exception inside choose routes it to an OnError and does not lead to the exception flowing out`` () =
         let o = Observable.ofSeq [1;2;3] |> Observable.choose (fun _ -> failwith "qwe")
         let error_flows_out = ref false
-        try o |> Observable.subscribe (printfn "%i") |> ignore
+        try o |> Observable.subscribeWithError (printfn "%i") (printfn "%A") |> ignore
         with _ -> error_flows_out := true
         Assert.That(!error_flows_out, Is.EqualTo false)
         o |> ``should be`` 0 true false
@@ -769,10 +769,14 @@ type ObservableTests_WithTestNotifications () =
         fun (xs : int list) (f : int -> int) ->
         TestSchedule.usage <| fun sch ->
             let inner  = xs |> List.map f
-            Observable.ofSeq xs
-            |> Observable.exhaustMap (fun _ -> Observable.ofSeq inner)
-            |> TestSchedule.subscribeTestObserverStart sch
-            |> TestObserver.nexts = List.collect (fun _ -> inner) xs
+            let got = 
+                Observable.ofSeq xs
+                |> Observable.exhaustMap (fun _ -> Observable.ofSeq inner)
+                |> TestSchedule.subscribeTestObserverStart sch
+                |> TestObserver.nexts 
+            let expected = inner
+            
+            expected = got
             
     [<Test>]
     member __.``exhaustMap with interval`` () =

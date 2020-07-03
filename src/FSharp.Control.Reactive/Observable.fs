@@ -616,13 +616,9 @@ module Observable =
     let equalsSeqComparer ( comparer:IEqualityComparer<'Source> ) ( first:IObservable<'Source>  )( second:seq<'Source> ) : IObservable<bool> =
         Observable.SequenceEqual( first, second, comparer )
 
-
-    let error e =
-        { new IObservable<_> with
-            member this.Subscribe(observer:IObserver<_>) =
-                observer.OnError e
-                { new IDisposable with member this.Dispose() = () }
-        }
+    /// Immediately raises OnError on subscription
+    [<Obsolete("Use Observable.throw instead")>]
+    let error e = Observable.Throw e
 
 
     /// Determines whether an observable sequence contains a specified value
@@ -742,34 +738,26 @@ module Observable =
 
     /// Converts an generic Action-based .NET event to an observable sequence. Each event invocation is surfaced through an OnNext message in the resulting sequence.
     /// For conversion of events conforming to the standard .NET event pattern, use any of the FromEventPattern overloads instead.
-    let fromEventGeneric ( addHandler    : ('TEventArgs -> unit ) -> unit )
-                         ( removeHandler : ('TEventArgs -> unit ) -> unit ) : IObservable<'TEventArgs> =
-        Observable.FromEvent(Action<'TEventArgs->unit> addHandler, Action<'TEventArgs->unit> removeHandler )
+    let fromEventGeneric addHandler removeHandler : IObservable<'TEventArgs> =
+        Observable.FromEvent(Action<'TEventArgs -> unit> addHandler, Action<'TEventArgs -> unit> removeHandler)
 
     
     /// Converts an generic Action-based .NET event to an observable sequence. Each event invocation is surfaced through an OnNext message in the resulting sequence.
     /// For conversion of events conforming to the standard .NET event pattern, use any of the FromEventPattern overloads instead.
-    let fromEventGenericOn ( scheduler:IScheduler )
-                           ( addHandler    : ('TEventArgs -> unit ) -> unit )
-                           ( removeHandler : ('TEventArgs -> unit ) -> unit ) =
-        Observable.FromEvent(Action<'TEventArgs->unit> addHandler, Action<'TEventArgs->unit> removeHandler, scheduler)
+    let fromEventGenericOn scheduler addHandler removeHandler =
+        Observable.FromEvent(Action<#EventArgs -> unit> addHandler, Action<#EventArgs -> unit> removeHandler, scheduler)
 
 
     /// Converts a .NET event to an observable sequence, using a conversion function to obtain the event delegate. 
     /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
     /// For conversion of events conforming to the standard .NET event pattern, use any of the FromEventPattern functions instead.
-    let fromEventConversion<'EventArgs, 'Delegate when 'EventArgs:> EventArgs>
-            ( conversion   : ('EventArgs -> unit ) -> 'Delegate )
-            ( addHandler   : ('Delegate  -> unit )              )
-            ( removeHandler: ('Delegate  -> unit )              ) = 
-        { 
-          new IObservable<'EventArgs> with
-            member this.Subscribe(observer:IObserver<_>) =
-                let handler = observer.OnNext |> conversion
-                addHandler handler
-                let remove () = removeHandler handler
-                { new IDisposable with member this.Dispose() = remove () }
-        }
+    let fromEventConversion conversion addHandler removeHandler =          
+        Observable.FromEvent(
+            conversion = Func<Action<#EventArgs>, unit> (fun action -> conversion (fun args -> action.Invoke(args))),  
+            addHandler = Action<_> addHandler, 
+            removeHandler = Action<_> removeHandler
+        )
+        
 
 
     /// Converts a .NET event to an observable sequence, using a conversion function to obtain the event delegate, using a specified scheduler to run timers. 
@@ -782,25 +770,18 @@ module Observable =
 
     /// Converts a .NET event to an observable sequence, using a supplied event delegate type. 
     /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
-    let fromEventHandler<'EventArgs when 'EventArgs:> EventArgs>
-        ( addHandler    : EventHandler<'EventArgs> -> unit )
-        ( removeHandler : EventHandler<'EventArgs> -> unit )  =
-        {   
-            new IObservable<_> with
-                member this.Subscribe( observer:IObserver<_> ) =
-                    let handler = EventHandler<_>( fun _ x -> observer.OnNext x ) 
-                    addHandler handler
-                    let remove () = removeHandler handler
-                    {   new IDisposable with member this.Dispose() = remove ()  }
-        }
+    let fromEventHandler addHandler removeHandler =
+        Observable.FromEventPattern<#EventArgs> (
+                 Action<EventHandler<_>> addHandler, 
+                 Action<EventHandler<_>> removeHandler)
 
     
     /// Converts a .NET event to an observable sequence, using a supplied event delegate type on a specified scheduler. 
     /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
     let fromEventHandlerOn (scheduler:IScheduler) addHandler removeHandler =
-        Observable.FromEventPattern<'EventArgs> (
-            Action<EventHandler<'EventArgs>> addHandler, 
-            Action<EventHandler<'EventArgs>> removeHandler, 
+        Observable.FromEventPattern<#EventArgs> (
+            Action<EventHandler<_>> addHandler, 
+            Action<EventHandler<_>> removeHandler, 
             scheduler)
 
 
@@ -1063,17 +1044,14 @@ module Observable =
     /// after an observer is attached to the observable. This is useful to 
     /// make sure that events triggered by the function are handled. 
     let guard f (source:IObservable<'Args>) =  
-        {   
-            new IObservable<'Args> with  
-                member x.Subscribe( observer ) =  
-                    let rm = source.Subscribe( observer ) in f() 
-                    ( rm )
-        } 
+        Observable.Create (fun observer -> 
+            let disposable = source.Subscribe observer in f ()            
+            disposable
+        )
 
 
     /// Takes the first element of the observable sequence
     let head obs = Observable.FirstAsync(obs)
-
 
     /// Returns an observable sequence that produces a value after each period
     let interval period = 
@@ -1326,19 +1304,13 @@ module Observable =
  
 
     /// Returns the sequence as an observable
-    let ofSeq<'Item>(items:'Item seq) : IObservable<'Item> =
-        {   
-            new IObservable<_> with
-                member __.Subscribe( observer:IObserver<_> ) =
-                    for item in items do observer.OnNext item      
-                    observer.OnCompleted()     
-                    {   new IDisposable with member __.Dispose() = ()   }
-        }
+    let ofSeq<'Item>(source:'Item seq) : IObservable<'Item> =
+        Observable.ToObservable source
 
     
     /// Returns the sequence as an observable, using the specified scheduler to run the enumeration loop
     let ofSeqOn<'Item>(scheduler:Concurrency.IScheduler) (items:'Item seq) : IObservable<'Item> =
-        items.ToObservable(scheduler)
+        Observable.ToObservable (items, scheduler)
 
 
     /// Wraps the source sequence in order to run its observer callbacks on the specified scheduler.
@@ -1567,13 +1539,8 @@ module Observable =
     let retryCount (count:int) ( source:IObservable<'Source>) : IObservable<'Source> =
         Observable.Retry( source, count )
 
-    let result x : IObservable<_>=
-        { new IObservable<_> with
-            member this.Subscribe(observer:IObserver<_>) =
-                observer.OnNext x
-                observer.OnCompleted()
-                { new IDisposable with member this.Dispose() = () }
-        }
+    /// Returns an observable which emits a single value
+    let result x : IObservable<_> = Observable.Return x
         
     /// Samples the observable at the given interval
     let sample (interval: TimeSpan) source =
