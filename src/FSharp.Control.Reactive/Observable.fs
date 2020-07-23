@@ -126,7 +126,9 @@ module Observable =
     type Observable with
         /// Creates an observable sequence from the specified Subscribe method implementation.
         static member Create (subscribe: IObserver<'T> -> unit -> unit) =
-            let subscribe o = Action(subscribe o)
+            let subscribe o = 
+                let m = subscribe o
+                Action(m)
             Observable.Create(subscribe)
 
         /// Creates an observable sequence from the specified asynchronous Subscribe method implementation.
