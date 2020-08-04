@@ -695,7 +695,7 @@ module Observable =
     ///Turns an F# async workflow into an observable
     let ofAsync asyncOperation = 
         Observable.FromAsync
-            (fun (token : Threading.CancellationToken) -> Async.StartAsTask(asyncOperation,cancellationToken = token))
+            (fun (token : Threading.CancellationToken) -> Async.StartAsTask(asyncOperation, cancellationToken = token))
 
     ///Helper function for turning async workflows into observables
     let liftAsync asyncOperation =         
@@ -1754,15 +1754,16 @@ module Observable =
     /// Transforms an observable sequence of tasks into an observable sequence 
     /// producing values only from the most recent observable sequence.
     /// Each time a new task is received, the previous task's result is ignored.
-    let switchTask ( sources:IObservable<Threading.Tasks.Task<'Source>>) : IObservable<'Source> =
+    let switchTask (sources: IObservable<Threading.Tasks.Task<'Source>>) : IObservable<'Source> =
         Observable.Switch( sources )
 
 
-    /// Transforms an observable sequence of tasks into an observable sequence 
-    /// producing values only from the most recent observable sequence.
-    /// Each time a new task is received, the previous task's result is ignored.
+    /// Transforms an observable sequence of F# Asyncs into an observable sequence 
+    /// producing values only from the most recent Async.
+    /// Each time a new Async is received, the previous Async is cancelled,
+    /// and will not continue to run in the background.
     let switchAsync (sources:IObservable<_>) =
-        Observable.Switch( sources.Select(Async.StartAsTask) )
+        Observable.Switch(sources |> map ofAsync)
 
 
     /// Synchronizes the observable sequence so that notifications cannot be delivered concurrently
