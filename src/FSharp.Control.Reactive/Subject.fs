@@ -42,3 +42,23 @@ module Subject =
     /// Notifies all subscribed observers about the end of the sequence.
     let onCompleted (s : SubjectBase<'a>) =
         s.OnCompleted (); s
+    
+    /// An empty subject representing a null-sink
+    /// combining an Observable.empty and Observer.empty
+    let empty = { new System.Reactive.Subjects.ISubject<_> with
+        // we use an object expression here because
+        // Observable.empty and Observer.empty haven't been declared yet
+        member _.OnCompleted() = ()
+        member _.OnError(_) = ()
+        member _.OnNext(_) = ()
+        member _.Subscribe(_) = Disposable.empty
+    }
+    
+    /// An empty subject representing a null-sink
+    /// for IObserver<'source> and IObservable<'result>
+    let empty2 = { new System.Reactive.Subjects.ISubject<_,_> with
+        member _.OnCompleted() = ()
+        member _.OnError(_) = ()
+        member _.OnNext(_) = ()
+        member _.Subscribe(_) = Disposable.empty 
+    }    
