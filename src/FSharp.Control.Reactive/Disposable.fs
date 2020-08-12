@@ -27,6 +27,9 @@ module Disposable =
     /// Creates an disposable object that invokes the specified function when disposed.
     let create f = Disposable.Create (Action f)
 
+    /// An empty disposable which does nothing when disposed
+    let empty = Disposable.Empty
+
     /// Execute and action without the resource while the disposable is still 'active'.
     /// The used resource will be disposed afterwards.
     let ignoring f d =
