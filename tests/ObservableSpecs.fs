@@ -479,6 +479,34 @@ let ``replayBuffer replays only the required count of notifications upon subscri
     subject.OnNext 4
     Assert.That(result, Is.EqualTo [ 2; 3; 4 ] )
 
+
+[<Test>]
+let ``replayBufferOn replays only the required count of notifications upon subscription``() =
+    let oneSecond = TimeSpan.FromSeconds(1.).Ticks
+    let result   = ResizeArray()
+    use subject  = new Subject<int>()
+    let scheduler = TestScheduler()
+    
+    let obs = subject |> Observable.replayBufferOn scheduler 2
+    obs |> Observable.connect 
+        |> ignore
+    
+    scheduler.AdvanceBy(oneSecond); subject.OnNext 1
+    scheduler.AdvanceBy(oneSecond); subject.OnNext 2
+    scheduler.AdvanceBy(oneSecond); subject.OnNext 3
+    scheduler.AdvanceBy(oneSecond);
+
+    obs |> Observable.subscribe(result.Add) 
+        |> ignore
+
+    scheduler.Start()
+    Assert.That(result, Is.EqualTo [ 2; 3 ] )
+    scheduler.AdvanceBy(oneSecond); subject.OnNext 4
+    scheduler.AdvanceBy(oneSecond);
+    printf "9: %A\n" (result |> List.ofSeq)
+    Assert.That(result, Is.EqualTo [ 2; 3; 4 ] )
+    printf "10: %A\n" (result |> List.ofSeq)
+
 [<Test>]
 let ``replayWindowOn replays only the required time range of notifications upon subscription``() =
     let oneSecond = TimeSpan.FromSeconds(1.).Ticks

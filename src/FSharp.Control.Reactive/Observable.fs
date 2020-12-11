@@ -1475,6 +1475,11 @@ module Observable =
     let replayBuffer ( bufferSize:int )( source:IObservable<'Source>)  : Subjects.IConnectableObservable<'Source> =
             Observable.Replay( source, bufferSize )  
 
+    /// Returns a connectable observable sequence that shares a single subscription to the underlying sequence
+    /// replaying notifications subject to a maximum element count for the replay buffer and using the specified
+    /// scheduler to do the buffering on.
+    let replayBufferOn ( sch:IScheduler )( bufferSize:int )( source:IObservable<'Source>)  : Subjects.IConnectableObservable<'Source> =
+            Observable.Replay( source, bufferSize, sch )
 
     /// Returns an observable sequence that is the result of invoking the selector on a connectable observable 
     /// sequence that shares a single subscription to the underlying sequence replaying all notifications.
