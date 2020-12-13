@@ -2,7 +2,7 @@ image: Visual Studio 2019
 version: '{build}'
 clone_depth: 10
 environment:
-    CLI_VERSION: 3.1.100
+    CLI_VERSION: 5.0.100
 init:
   - git config --global core.autocrlf input
 build_script:
