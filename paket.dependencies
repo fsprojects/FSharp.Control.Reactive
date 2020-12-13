@@ -1,4 +1,4 @@
-version 5.241.2
+version 5.257.0
 source http://api.nuget.org/v3/index.json
 redirects: on
 storage: none
@@ -6,8 +6,8 @@ storage: none
 nuget fparsec
 nuget FsCheck.Xunit
 nuget FSharp.Core
-nuget System.Reactive ~> 4.0
-nuget Microsoft.Reactive.Testing ~> 4.0
+nuget System.Reactive ~> 5.0
+nuget Microsoft.Reactive.Testing ~> 5.0
 nuget Microsoft.NET.Test.Sdk
 nuget NUnit
 nuget NUnit.Runners
