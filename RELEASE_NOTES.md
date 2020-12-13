@@ -1,5 +1,9 @@
+### New in 4.5.0 - (Released 2020/12/12)
+* Add Observable.replayBufferOn [#157](https://github.com/fsprojects/FSharp.Control.Reactive/pull/157)
+* Add additional package targets for netstandard2.1 and net5.0
+
 ### New in 4.4.2 - (Released 2020/07/03)
-* Replace custom IObservable implementations with Rx native [152](https://github.com/fsprojects/FSharp.Control.Reactive/pull/152)
+* Replace custom IObservable implementations with Rx native [#152](https://github.com/fsprojects/FSharp.Control.Reactive/pull/152)
 
 ### New in 4.4.1 - (Released 2020/06/27)
 * Update to System.Reactive 4.4.1 [#151](https://github.com/fsprojects/FSharp.Control.Reactive/pull/151)
