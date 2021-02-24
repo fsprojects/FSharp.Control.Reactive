@@ -1,5 +1,7 @@
 ### New in 5.0.0 - (Released TBD)
-* Update Rx to 5.0
+* Update [System.Reactive to 5.0](https://github.com/dotnet/reactive/releases/tag/rxnet-v5.0.0)
+* Support for .Net Framework 4.6 has been removed, as it is no longer support by Rx 5.0
+* Exceptions rethrown inside Rx now are guaranteed to preserve the original stack trace by using ExceptionDispatchInfo consistently across the board. 
 
 ### New in 4.5.0 - (Released 2020/12/12)
 * Add Observable.replayBufferOn [#157](https://github.com/fsprojects/FSharp.Control.Reactive/pull/157)
