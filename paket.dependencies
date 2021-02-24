@@ -4,7 +4,6 @@ redirects: on
 storage: none
 
 nuget fparsec
-nuget FsCheck.Xunit
 nuget FSharp.Core
 nuget System.Reactive ~> 5.0
 nuget Microsoft.Reactive.Testing ~> 5.0
@@ -14,8 +13,6 @@ nuget NUnit.Runners
 nuget NUnit3TestAdapter
 nuget FsCheck
 nuget Unquote
-nuget xunit
-nuget xunit.runner.visualstudio
 
 // [ FAKE GROUP ]
 group Build

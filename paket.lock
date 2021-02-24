@@ -5,13 +5,10 @@ NUGET
     FParsec (1.1.1)
       FSharp.Core (>= 4.3.4) - restriction: || (>= net45) (>= netstandard2.0)
       System.ValueTuple (>= 4.4) - restriction: >= net45
-    FsCheck (2.14.3)
+    FsCheck (2.15)
       FSharp.Core (>= 4.0.0.1) - restriction: && (< net452) (>= netstandard1.0) (< netstandard1.6)
       FSharp.Core (>= 4.2.3) - restriction: || (>= net452) (>= netstandard1.6)
-    FsCheck.Xunit (2.14.3)
-      FsCheck (2.14.3)
-      xunit.extensibility.execution (>= 2.2 < 3.0)
-    FSharp.Core (4.7.2)
+    FSharp.Core (5.0.1)
     Microsoft.CodeCoverage (16.6.1) - restriction: || (>= net45) (>= netcoreapp2.1)
     Microsoft.CSharp (4.7) - restriction: || (&& (< netstandard1.3) (>= uap10.0)) (&& (< netstandard2.0) (>= uap10.0))
     Microsoft.DotNet.InternalAbstractions (1.0) - restriction: >= netcoreapp2.1
@@ -47,7 +44,7 @@ NUGET
     Microsoft.Win32.Registry (4.7) - restriction: && (< monoandroid) (>= netcoreapp2.1) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)
       System.Security.AccessControl (>= 4.7) - restriction: || (&& (>= monoandroid) (< netcoreapp2.0)) (&& (< monoandroid) (< net46) (< netcoreapp2.0) (>= netstandard2.0)) (&& (< monoandroid) (>= netcoreapp2.0)) (>= monotouch) (>= net461) (>= netcoreapp2.1) (>= xamarinios) (>= xamarinmac) (>= xamarintvos) (>= xamarinwatchos)
       System.Security.Principal.Windows (>= 4.7) - restriction: || (&& (>= monoandroid) (< netcoreapp2.0)) (&& (< monoandroid) (< net46) (< netcoreapp2.0) (>= netstandard2.0)) (&& (< monoandroid) (>= netcoreapp2.0)) (>= monotouch) (>= net461) (>= netcoreapp2.1) (>= xamarinios) (>= xamarinmac) (>= xamarintvos) (>= xamarinwatchos)
-    NETStandard.Library (2.0.3) - restriction: || (&& (< net35) (>= netstandard1.1) (< netstandard2.0)) (&& (< net35) (>= netstandard1.4) (< netstandard2.0)) (&& (< net35) (>= netstandard2.0)) (&& (< net452) (>= netstandard1.1)) (&& (< netstandard1.3) (>= uap10.0)) (&& (< netstandard2.0) (>= uap10.0))
+    NETStandard.Library (2.0.3) - restriction: || (&& (< net35) (>= netstandard1.4) (< netstandard2.0)) (&& (< net35) (>= netstandard2.0)) (&& (< netstandard1.3) (>= uap10.0)) (&& (< netstandard2.0) (>= uap10.0))
       Microsoft.NETCore.Platforms (>= 1.1) - restriction: || (&& (>= net45) (< netstandard1.3)) (&& (< net45) (>= netstandard1.1) (< netstandard1.2) (< win8)) (&& (< net45) (>= netstandard1.2) (< netstandard1.3) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.3) (< netstandard1.4) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.4) (< netstandard1.5) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.5) (< netstandard1.6) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.6) (< netstandard2.0) (< win8) (< wpa81)) (&& (< net45) (>= netstandard2.0)) (&& (>= net46) (< netstandard1.4)) (>= net461) (>= netcoreapp2.0) (&& (>= netstandard1.0) (< portable-net45+win8+wpa81)) (&& (< netstandard1.0) (>= portable-net45+win8) (< win8)) (&& (< netstandard1.0) (< portable-net45+win8) (>= portable-net45+win8+wpa81)) (&& (< netstandard1.0) (>= portable-net45+win8+wp8+wpa81) (< portable-net45+win8+wpa81)) (&& (< netstandard1.0) (>= win8)) (&& (< netstandard1.3) (< win8) (>= wpa81)) (&& (< netstandard1.5) (>= uap10.0)) (>= uap10.1) (>= wp8)
       Microsoft.Win32.Primitives (>= 4.3) - restriction: || (&& (< net45) (>= netstandard1.3) (< netstandard1.4) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.4) (< netstandard1.5) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.5) (< netstandard1.6) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.6) (< netstandard2.0) (< win8) (< wpa81)) (&& (>= net46) (< netstandard1.4)) (&& (< netstandard1.5) (>= uap10.0) (< uap10.1))
       System.AppContext (>= 4.3) - restriction: || (&& (< net45) (>= netstandard1.3) (< netstandard1.4) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.4) (< netstandard1.5) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.5) (< netstandard1.6) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.6) (< netstandard2.0) (< win8) (< wpa81)) (&& (>= net46) (< netstandard1.4)) (&& (< netstandard1.5) (>= uap10.0) (< uap10.1))
@@ -718,25 +715,6 @@ NUGET
       System.Xml.XPath (>= 4.3) - restriction: || (&& (< monoandroid) (< monotouch) (>= netstandard1.3) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (>= net46)
     Unquote (5.0)
       FSharp.Core (>= 4.6.2) - restriction: || (>= net45) (>= netstandard2.0)
-    xunit (2.4.1)
-      xunit.analyzers (>= 0.10)
-      xunit.assert (2.4.1)
-      xunit.core (2.4.1)
-    xunit.abstractions (2.0.3) - restriction: >= netstandard1.1
-      NETStandard.Library (>= 1.6) - restriction: && (< net35) (>= netstandard1.0) (< netstandard2.0)
-    xunit.analyzers (0.10)
-    xunit.assert (2.4.1)
-      NETStandard.Library (>= 1.6.1) - restriction: && (< net452) (>= netstandard1.1)
-    xunit.core (2.4.1)
-      xunit.extensibility.core (2.4.1)
-      xunit.extensibility.execution (2.4.1)
-    xunit.extensibility.core (2.4.1)
-      NETStandard.Library (>= 1.6.1) - restriction: && (< net452) (>= netstandard1.1)
-      xunit.abstractions (>= 2.0.3) - restriction: >= netstandard1.1
-    xunit.extensibility.execution (2.4.1)
-      NETStandard.Library (>= 1.6.1) - restriction: && (< net452) (>= netstandard1.1)
-      xunit.extensibility.core (2.4.1) - restriction: >= netstandard1.1
-    xunit.runner.visualstudio (2.4.2)
 
 GROUP Build
 NUGET
