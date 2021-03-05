@@ -8,7 +8,7 @@ NUGET
     FsCheck (2.15)
       FSharp.Core (>= 4.0.0.1) - restriction: && (< net452) (>= netstandard1.0) (< netstandard1.6)
       FSharp.Core (>= 4.2.3) - restriction: || (>= net452) (>= netstandard1.6)
-    FSharp.Core (5.0.1)
+    FSharp.Core (4.7.2)
     Microsoft.CodeCoverage (16.6.1) - restriction: || (>= net45) (>= netcoreapp2.1)
     Microsoft.CSharp (4.7) - restriction: || (&& (< netstandard1.3) (>= uap10.0)) (&& (< netstandard2.0) (>= uap10.0))
     Microsoft.DotNet.InternalAbstractions (1.0) - restriction: >= netcoreapp2.1
