@@ -1,3 +1,7 @@
+### New in 5.0.2 - (Released 2021/3/6)
+
+* Downgrade FSharp.Core requirement 4.7.2 upwards
+
 ### New in 5.0.1 - (Released 2021/3/5)
 
 * Update TFMs to align with System.Reactive [#161](https://github.com/fsprojects/FSharp.Control.Reactive/pull/161)
