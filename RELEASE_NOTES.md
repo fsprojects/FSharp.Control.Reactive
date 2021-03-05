@@ -1,4 +1,10 @@
+### New in 5.0.1 - (Released 2021/3/5)
+
+* Update TFMs to align with System.Reactive [#161](https://github.com/fsprojects/FSharp.Control.Reactive/pull/161)
+* Now targets .NET Framework 4.7.2, .NET Standard 2.0, .NET Core 3.1 and .NET 5.0
+
 ### New in 5.0.0 - (Released 2021/2/24)
+
 * Update [System.Reactive to 5.0](https://github.com/dotnet/reactive/releases/tag/rxnet-v5.0.0)
 * Support for .Net Framework 4.6 has been removed, as it is no longer support by Rx 5.0
 * Exceptions rethrown inside Rx now are guaranteed to preserve the original stack trace by using ExceptionDispatchInfo consistently across the board. 
