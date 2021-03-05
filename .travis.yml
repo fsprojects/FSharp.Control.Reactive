@@ -1,11 +1,7 @@
 language: csharp
 
-mono: 5.2.0
 dotnet : 5.0.100
 
-install:
-  - mozroots --import --sync
-  - export FrameworkPathOverride=$(dirname $(which mono))/../lib/mono/4.5/
 matrix:
   include:
     - os: linux
