@@ -1998,7 +1998,7 @@ module Observable =
     let timeout2Duration ( timeout:IObservable<'Timeout> ) 
                          ( durationSelector              ) 
                          ( source:IObservable<'Source>   ) =
-        Observable.Timeout( source, Func<'Source, IObservable<'Timeout>> durationSelector)
+        Observable.Timeout( source, timeout, Func<'Source, IObservable<'Timeout>> durationSelector)
 
 
 
