@@ -1,3 +1,7 @@
+### New in 5.0.5 - (Released 2022/5/4)
+
+* No upward bounds on FSharp.Core
+
 ### New in 5.0.4 - (Released 2022/5/4)
 
 * Adds support for IL Trimming [#166](https://github.com/fsprojects/FSharp.Control.Reactive/pull/166)

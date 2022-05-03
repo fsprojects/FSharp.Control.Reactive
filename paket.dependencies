@@ -4,7 +4,7 @@ redirects: on
 storage: none
 
 nuget fparsec
-nuget FSharp.Core ~> 4.7.2
+nuget FSharp.Core >= 4.7.2
 nuget System.Reactive ~> 5.0
 nuget Microsoft.Reactive.Testing ~> 5.0
 nuget Microsoft.NET.Test.Sdk
