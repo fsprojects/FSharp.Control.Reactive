@@ -9,10 +9,10 @@
       ]
     },
     "fake-cli": {
-        "version": "5.20.4",
-        "commands": [
-            "fake"
-        ]
+      "version": "5.22.0",
+      "commands": [
+        "fake"
+      ]
     }
   }
 }
