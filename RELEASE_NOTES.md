@@ -1,6 +1,10 @@
+### New in 5.0.4 - (Released 2022/5/4)
+
+* Adds support for IL Trimming [#166](https://github.com/fsprojects/FSharp.Control.Reactive/pull/166)
+  
 ### New in 5.0.3 - (Released 2022/5/3)
 
-* Adds support for .NET 6.0
+* Adds support for .NET 6.0 [#165](https://github.com/fsprojects/FSharp.Control.Reactive/pull/165)
   
 ### New in 5.0.2 - (Released 2021/3/6)
 
