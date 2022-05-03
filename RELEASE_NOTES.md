@@ -1,3 +1,7 @@
+### New in 5.0.3 - (Released 2022/5/3)
+
+* Adds support for .NET 6.0
+  
 ### New in 5.0.2 - (Released 2021/3/6)
 
 * Downgrade FSharp.Core requirement 4.7.2 upwards
