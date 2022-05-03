@@ -1,4 +1,4 @@
-version 5.257.0
+version 7.1.5
 source http://api.nuget.org/v3/index.json
 redirects: on
 storage: none
