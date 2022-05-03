@@ -2,6 +2,14 @@
   <PropertyGroup>
      <TargetFrameworks>net472;netstandard2.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
   </PropertyGroup>
+  <Target Name="ConfigureTrimming" BeforeTargets="PrepareForILLink">
+    <ItemGroup>
+      <ManagedAssemblyToLink Condition="'%(Filename)' == 'FSharp.Control.Reactive'">
+        <TrimMode>link</TrimMode>
+        <IsTrimmable>true</IsTrimmable>
+      </ManagedAssemblyToLink>
+    </ItemGroup>
+  </Target>
   <ItemGroup>
     <None Include="paket.references" />
     <Compile Include="Disposable.fs" />
