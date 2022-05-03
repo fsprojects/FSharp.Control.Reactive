@@ -1,6 +1,6 @@
 language: csharp
 
-dotnet : 5.0.100
+dotnet : 6.0.200
 
 matrix:
   include:

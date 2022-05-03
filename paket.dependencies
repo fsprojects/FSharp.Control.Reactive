@@ -1,10 +1,10 @@
-version 5.257.0
+version 7.1.5
 source http://api.nuget.org/v3/index.json
 redirects: on
 storage: none
 
 nuget fparsec
-nuget FSharp.Core >= 4.7.2
+nuget FSharp.Core ~> 4.7.2
 nuget System.Reactive ~> 5.0
 nuget Microsoft.Reactive.Testing ~> 5.0
 nuget Microsoft.NET.Test.Sdk

@@ -1,8 +1,8 @@
-image: Visual Studio 2019
+image: Visual Studio 2022
 version: '{build}'
 clone_depth: 10
 environment:
-    CLI_VERSION: 5.0.100
+    CLI_VERSION: 6.0.200
 init:
   - git config --global core.autocrlf input
 build_script:
