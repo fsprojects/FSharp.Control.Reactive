@@ -5,7 +5,7 @@ storage: none
 
 nuget fparsec
 nuget FSharp.Core >= 4.7.2
-nuget System.Reactive ~> 5.0
+nuget System.Reactive
 nuget Microsoft.Reactive.Testing ~> 5.0
 nuget Microsoft.NET.Test.Sdk
 nuget NUnit
@@ -13,6 +13,41 @@ nuget NUnit.Runners
 nuget NUnit3TestAdapter
 nuget FsCheck
 nuget Unquote
+
+group Net472_or_less
+    source http://api.nuget.org/v3/index.json
+    framework: <= net472
+
+    nuget Microsoft.NETCore.Platforms < 6.0
+    nuget System.Reactive < 6.0
+
+group NetStandard2_0_or_less
+    source http://api.nuget.org/v3/index.json
+    framework: <= netstandard2.0
+
+    nuget Microsoft.NETCore.Platforms < 6.0
+    nuget System.Reactive < 6.0
+
+group NetCore3_1_or_less
+    source http://api.nuget.org/v3/index.json
+    framework: <= netcoreapp3.1
+
+    nuget Microsoft.NETCore.Platforms < 6.0
+    nuget System.Reactive < 6.0
+
+group Net5_0_or_less
+    source http://api.nuget.org/v3/index.json
+    framework: <= net5.0
+
+    nuget Microsoft.NETCore.Platforms < 6.0
+    nuget System.Reactive < 6.0
+
+group Net6_0
+    source http://api.nuget.org/v3/index.json
+    framework: net6.0
+
+    nuget Microsoft.NETCore.Platforms >= 6.0
+    nuget System.Reactive >= 6.0
 
 // [ FAKE GROUP ]
 group Build
