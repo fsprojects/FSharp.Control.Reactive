@@ -7,7 +7,7 @@ open Microsoft.Reactive.Testing
 
 /// Gets recorded timestamped notification messages received by the observer.
 [<Obsolete("Use 'messages' to get all the recored timestamped notifications")>]
-let all (o : ITestableObserver<'a>) = 
+let all (o : ITestableObserver<'a>) =
     o.Messages |> Seq.toList |> TestNotifications
 
 /// Gets recorded timestamped notification messages received by the observer.
@@ -15,7 +15,7 @@ let messages (o : ITestableObserver<'a>) =
     o.Messages |> Seq.toList |> TestNotifications
 
 /// Gets recorded timestamped "OnNext" notification messages received by the observer.
-let nexts (o : ITestableObserver<'a>) = 
+let nexts (o : ITestableObserver<'a>) =
     o.Messages |> Seq.toList |> TestNotifications |> TestNotification.nexts
 
 /// Gets recorded timestamped "OnError" notification messages received by the observer.
