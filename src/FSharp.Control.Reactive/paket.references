@@ -1,2 +1,20 @@
 FSharp.Core
-System.Reactive
+
+group Net472_or_less
+	System.Reactive
+	Microsoft.NETCore.Platforms
+
+group NetStandard2_0_or_less
+	System.Reactive
+	Microsoft.NETCore.Platforms
+
+group NetCore3_1_or_less
+	System.Reactive
+	Microsoft.NETCore.Platforms
+
+group Net5_0_or_less
+	System.Reactive
+	Microsoft.NETCore.Platforms
+
+group Net6_0
+	System.Reactive

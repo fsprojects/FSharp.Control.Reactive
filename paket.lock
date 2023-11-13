@@ -1,5 +1,6 @@
 REDIRECTS: ON
 STORAGE: NONE
+LOWEST_MATCHING: TRUE
 NUGET
   remote: http://api.nuget.org/v3/index.json
     FParsec (1.1.1)

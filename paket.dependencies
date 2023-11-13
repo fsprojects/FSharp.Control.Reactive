@@ -1,12 +1,14 @@
-version 7.1.5
+version 7.2.1
 source http://api.nuget.org/v3/index.json
 redirects: on
+lowest_matching: true
 storage: none
 
 nuget fparsec
 nuget FSharp.Core >= 4.7.2
-nuget System.Reactive ~> 5.0
-nuget Microsoft.Reactive.Testing ~> 5.0
+nuget System.Reactive >= 5.0
+nuget Microsoft.NETCore.Platforms >= 5.0
+nuget Microsoft.Reactive.Testing >= 5.0
 nuget Microsoft.NET.Test.Sdk
 nuget NUnit
 nuget NUnit.Runners
