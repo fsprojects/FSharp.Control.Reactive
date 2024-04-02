@@ -1,3 +1,7 @@
+### New in 6.0.0 - (Released 2024/4/3)
+
+* Release with relaxed support for System.Reactive 6.0 and above
+  
 ### New in 5.0.5 - (Released 2022/5/4)
 
 * No upward bounds on FSharp.Core
