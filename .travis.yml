@@ -7,7 +7,7 @@ matrix:
     - os: linux
       sudo: required
 
-script: 
+script:
   - dotnet --info
   - dotnet tool restore
   - dotnet build -c Release

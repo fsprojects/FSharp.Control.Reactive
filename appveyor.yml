@@ -2,14 +2,15 @@ image: Visual Studio 2022
 version: '{build}'
 clone_depth: 10
 environment:
-    CLI_VERSION: 6.0.200
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
 init:
   - git config --global core.autocrlf input
 build_script:
   - ps: |
       .\build.ps1
       if ($lastexitcode -ne 0){ exit $lastexitcode }
-test: off
+test: false
 artifacts:
   - path: bin\*.nupkg
 deploy:
