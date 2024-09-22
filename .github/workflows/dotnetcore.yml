@@ -51,21 +51,12 @@ jobs:
       id: extract_branch
     - name: Setup Version Suffix
       shell: pwsh
-      run: |
-          $buildId = $env:GITHUB_RUN_NUMBER.PadLeft(5, '0');
-          $versionSuffixPR = "PR${{ github.event.pull_request.number }}-$buildId";
-          $branchName = "${{ steps.extract_branch.outputs.branch }}".Replace("_","").Replace("/","-");
-          $versionSuffixBRANCH = "$($branchName)-CI$($buildId)"
-          $env:VersionSuffix = if ("${{ github.event.pull_request.number }}") { $versionSuffixPR } else { $versionSuffixBRANCH }
-          Write-Output "##[set-output name=version_suffix]$($env:VersionSuffix)"
-      id: version_suffix
-    - name: Package
-      run: dotnet pack -c Release -o ./bin --version-suffix ${{ steps.version_suffix.outputs.version_suffix }}
+      run: build.ps1
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: nupkg-${{ matrix.runs-on }}
-        path: ./bin/nupkg/*.nupkg
+        path: ./bin/*.nupkg
     - name: Push to GitHub Feed
       continue-on-error: true
       shell: bash
