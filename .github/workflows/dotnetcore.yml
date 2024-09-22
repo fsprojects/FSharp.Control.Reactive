@@ -60,7 +60,7 @@ jobs:
           Write-Output "##[set-output name=version_suffix]$($env:VersionSuffix)"
       id: version_suffix
     - name: Package
-      run: dotnet pack -c Release --version-suffix ${{ steps.version_suffix.outputs.version_suffix }}
+      run: dotnet pack -c Release -o ./bin --version-suffix ${{ steps.version_suffix.outputs.version_suffix }}
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
       with:
