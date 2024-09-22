@@ -1,3 +1,7 @@
+### New in 6.0.1 - (Released 2024/9/22)
+
+* Updated build system
+  
 ### New in 6.0.0 - (Released 2024/4/3)
 
 * Release with relaxed support for System.Reactive 6.0 and above
