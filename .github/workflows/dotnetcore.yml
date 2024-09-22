@@ -61,7 +61,7 @@ jobs:
       continue-on-error: true
       shell: bash
       run: |
-          for f in ./bin/nupkg/*.nupkg
+          for f in ./bin/*.nupkg
           do
             echo $f
             dotnet nuget push $f -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
