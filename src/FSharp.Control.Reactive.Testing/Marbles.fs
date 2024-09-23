@@ -2,7 +2,7 @@
 
 /// Reactive Marbles representation to make working with recorded test notifications like visualising the notifications as marbles.
 module Marbles =
-    
+
     open System
     open Microsoft.Reactive.Testing
     open FSharp.Control.Reactive.Testing
@@ -20,8 +20,8 @@ module Marbles =
         | Error (t, ex) -> Error (f t, ex)
         | Done t -> Done (f t)
 
-    let private toNotifications xs = 
-        List.fold (fun (time, ms) x -> 
+    let private toNotifications xs =
+        List.fold (fun (time, ms) x ->
             match x with
             | Next (t, v) -> time + t, onNext (time + t) v
             | Error (t, ex) -> time + t, onError (time + t) ex
@@ -31,53 +31,53 @@ module Marbles =
         |> List.rev
 
     type private Temperature = Hot | Cold
-    
+
     let private frameMultiplier = 10L
-    
-    let private frsToTime xs = 
+
+    let private frsToTime xs =
         List.map (fun _ -> frameMultiplier) xs
         |> List.fold (+) 0L
-    
+
     let private pframes = many (pchar '-')
-    
+
     let private parseMarbles temp txt =
         let txt = txt |> String.filter (fun c -> c <> ' ')
 
         let pvalueOne = noneOf [ '#'; '^'; '|'; '('; ')' ]
-        let pvalueMultiple = 
-            between 
-                (pchar '(') 
-                (pchar ')') 
+        let pvalueMultiple =
+            between
+                (pchar '(')
+                (pchar ')')
                 (many1 pvalueOne |>> (Array.ofList >> String))
 
         let pvaluewrap = (pvalueOne |>> string) <|> pvalueMultiple
-        let pframevalue = 
+        let pframevalue =
             pframes .>>. pvaluewrap
             |>> fun (frs, x) -> Next (frsToTime frs, x)
 
-        let pframeError = 
-            pframes .>> pchar '#' 
+        let pframeError =
+            pframes .>> pchar '#'
             |>> fun frs -> Error (frsToTime frs, exn "error")
 
-        let pemit = 
+        let pemit =
             attempt pframevalue
             <|> attempt pframeError
-    
-        let pdone = 
-            attempt (pframes .>> pchar '|' |>> (frsToTime >> Some)) 
+
+        let pdone =
+            attempt (pframes .>> pchar '|' |>> (frsToTime >> Some))
             <|> (pframes |>> fun _ -> None)
 
-        let pemitsdone = 
-            many pemit .>>. pdone 
-            |>> fun (cs, c) -> 
-                match c with 
+        let pemitsdone =
+            many pemit .>>. pdone
+            |>> fun (cs, c) ->
+                match c with
                 | Some x -> cs @ [Done x]
                 | None -> cs
 
-        let psub = 
-            pframes .>> pchar '^' 
+        let psub =
+            pframes .>> pchar '^'
             |>> (frsToTime >> (+) frameMultiplier)
-    
+
         let pemitssub =
             (many pemit) .>> psub .>>. pemitsdone
             |>> fun (xs, ys) ->
@@ -94,7 +94,7 @@ module Marbles =
 
     let private parseMarblesAsSubscription txt =
         let txt = txt |> String.filter (fun c -> c <> ' ')
-        let psub = pframes .>> pchar '^' |>> frsToTime 
+        let psub = pframes .>> pchar '^' |>> frsToTime
         let punsub = pframes .>> pchar '!' |>> (frsToTime >> (+) frameMultiplier)
         let psubscriptions = psub .>>. punsub |>> fun (s, u) -> Subscription (s, s + u)
 
@@ -104,7 +104,7 @@ module Marbles =
 
     /// Creates from the given marble representation a Cold Observable
     /// using the specified `TestScheduler`.
-    /// Note that the marble representation can't have a subscription marker (`^`), 
+    /// Note that the marble representation can't have a subscription marker (`^`),
     /// only Hot Observables can have these.
     ///
     /// ## Parameters
@@ -125,7 +125,7 @@ module Marbles =
         parseMarbles Cold txt
 
     /// Verifies that the given marble representation is indeed the same as the observed messages found in the given test observer.
-    let expectMessages sch txt obs = 
+    let expectMessages sch txt obs =
         TestSchedule.subscribeTestObserverStart sch obs
         |> TestObserver.messages =! (parseMarbles Cold txt)
 
@@ -136,9 +136,9 @@ module Marbles =
     let subscriptions = List.map parseMarblesAsSubscription
 
     /// Verifies that the given marble representation is indeed the same as the subscription found in the given test observable sequence.
-    let expectSubscription txt xs = 
+    let expectSubscription txt xs =
         subscription txt |> (=!) xs
 
     /// Verifies that the given marble representation is indeed the same as the subscriptions found in the given test observable sequence.
-    let expectSubscriptions txt xs = 
+    let expectSubscriptions txt xs =
         subscriptions txt |> (=!) xs

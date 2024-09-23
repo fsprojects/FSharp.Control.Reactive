@@ -7,21 +7,21 @@ open FSharp.Control.Reactive
 open Microsoft.Reactive.Testing
 
 /// Virtual time scheduler used for testing applications and libraries built using Reactive Extensions.
-let usage f = 
+let usage f =
     f <| TestScheduler ()
-    
+
 /// Creates a cold observable using the specified timestamped notification messages.
 let coldObservable (s : TestScheduler) (TestNotifications ms) =
     s.CreateColdObservable<'a> (ms |> List.toArray)
 
 /// Creates a hot observable using the specified timestamped notification messages.
-let hotObservable (s : TestScheduler) (TestNotifications ms) = 
+let hotObservable (s : TestScheduler) (TestNotifications ms) =
     s.CreateHotObservable (ms |> List.toArray)
-    
+
 /// Advances the scheduler's clock by the specified relative time, running all work scheduled for that timespan.
 let advanceBy (s : TestScheduler) time =
     s.AdvanceBy time; s
-    
+
 /// Advances the scheduler's clock to the specified time, running all work till that point.
 let advanceTo (s : TestScheduler) time =
     s.AdvanceTo time; s

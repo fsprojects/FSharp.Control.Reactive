@@ -9,10 +9,10 @@ type TestNotifications<'a> = TestNotifications of TestNotification<'a> list
 
 /// The Reactive module provides operators for working with TestObserver<_> in F#.
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module TestNotification =     
+module TestNotification =
     open System
 
-    let wrap = TestNotifications  
+    let wrap = TestNotifications
 
     /// Unwraps the 'TestNotifications' pattern into a 'TestNotification list'.
     let unwrap (TestNotifications xs) = xs
@@ -37,9 +37,9 @@ module TestNotification =
 
     /// Converts the incoming TestNotification to an Result with:
     /// 'OnNext()' notifications as Some and 'OnError()' and 'OnCompleted()' as Error.
-    let toResult = function 
-        | Next x -> Result.Ok x 
-        | Error ex -> Result.Error ex 
+    let toResult = function
+        | Next x -> Result.Ok x
+        | Error ex -> Result.Error ex
         | _ -> Result.Error (exn "'OnCompleted'")
 
     /// Filters the incoming TestNotifications on a given predicate function.
@@ -61,7 +61,7 @@ module TestNotification =
     let onCompleted t = ReactiveTest.OnCompleted t
 
     /// Filters the OnNexts recorded notifiation values of the specified list.
-    let nexts (TestNotifications xs) = 
+    let nexts (TestNotifications xs) =
         List.choose (function | Next x -> Some x | _ -> None) xs
 
     /// Maps the OnNext recorded notification values of the specified list to other values.
@@ -80,12 +80,12 @@ open TestNotification
 
 type GenTestNotification =
     static member GenNotifications<'a> () =
-        let nexts_errors = 
-            Gen.frequency [ 
+        let nexts_errors =
+            Gen.frequency [
                 (1, Gen.constant (fun t _ -> onError t (new System.Exception ())))
-                (2, Gen.constant onNext) ] 
+                (2, Gen.constant onNext) ]
             |> Gen.listOf
-            
+
         let emits =
             Gen.constant (fun h t -> h :: t)
             <*> Gen.constant (fun t _ -> onCompleted t)
@@ -93,17 +93,17 @@ type GenTestNotification =
             |> Gen.map List.rev
 
         let realisticMs = 100L
-        let growingNumbers l = 
+        let growingNumbers l =
             Arb.generate<int64 * 'a>
             |> Gen.map (fun (x, y) -> (abs x) + realisticMs, y)
             |> Gen.listOfLength l
             |> Gen.map (List.sortBy fst)
 
-        let zipGrowingNumbers es = 
+        let zipGrowingNumbers es =
             growingNumbers (List.length es)
             |> Gen.map (List.zip es)
-            
-        emits 
+
+        emits
         >>= zipGrowingNumbers
         |> Gen.map (List.map (fun (f, (x, y)) -> f x y) >> TestNotifications)
         |> Arb.fromGen
