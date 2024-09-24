@@ -21,9 +21,11 @@
     <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>symbols.nupkg</SymbolPackageFormat>
+
+    <!-- Workaround for building on machines with other frameworks installed https://github.com/GitTools/GitVersion/issues/4192 -->
+    <GitVersionTargetFramework>net6.0</GitVersionTargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
     <None Include="..\..\docs\files\img\logo.png" Pack="true" PackagePath="\" />
     <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="\" />
   </ItemGroup>
