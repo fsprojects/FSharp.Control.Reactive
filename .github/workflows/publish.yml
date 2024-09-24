@@ -31,6 +31,6 @@ jobs:
     - name: Test
       run: dotnet test --no-build -c Release tests
     - name: Pack
-      run: dotnet pack --no-build -c Release --include-symbols
+      run: dotnet pack -c Release --include-symbols -o bin
     - name: Push Package to NuGet.org
       run: dotnet nuget push bin/*.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
