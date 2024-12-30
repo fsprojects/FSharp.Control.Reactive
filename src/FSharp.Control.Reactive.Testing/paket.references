@@ -4,5 +4,4 @@ Microsoft.Reactive.Testing
 FsCheck
 fparsec
 Unquote
-GitVersion.MSBuild
 Microsoft.SourceLink.GitHub
