@@ -1,4 +1,4 @@
-name: NuGet Publish
+name: Private Publish
 
 env:
   # Stop wasting time caching packages
