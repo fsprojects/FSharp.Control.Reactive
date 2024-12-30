@@ -33,4 +33,4 @@ jobs:
     - name: Pack
       run: dotnet pack -c Release --include-symbols -o bin
     - name: Push Package to NuGet.org
-      run: dotnet nuget push bin/*.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+      run: dotnet nuget push bin/*nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_KEY }}
