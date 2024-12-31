@@ -15,7 +15,7 @@ nuget NUnit3TestAdapter
 nuget FsCheck
 nuget Unquote
 nuget GitVersion.MsBuild copy_local:true
-nuget Microsoft.SourceLink.GitHub 1.0 copy_local: true
+nuget Microsoft.SourceLink.GitHub copy_local: true
 
 // [ FAKE GROUP ]
 group Build

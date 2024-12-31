@@ -1,4 +1,4 @@
-name: NuGet Publish
+name: Private Publish
 
 env:
   # Stop wasting time caching packages
@@ -33,4 +33,4 @@ jobs:
     - name: Pack
       run: dotnet pack --no-build -c Release --include-symbols -o bin
     - name: Push Package to NuGet.org
-      run: dotnet nuget push bin\*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_KEY }}
+      run: dotnet nuget push bin\*.nupkg -s https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -k ${{ secrets.GITHUB_TOKEN }}

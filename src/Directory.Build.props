@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <VersionPrefix>6.0.0</VersionPrefix>
     <Authors>Ryan Riley;Steffen Forkmann;Jared Hester</Authors>
     <Summary>A F#-friendly wrapper for the Reactive Extensions.</Summary>
     <Description>A F#-friendly wrapper for the Reactive Extensions.</Description>
@@ -12,6 +11,8 @@
     <RepositoryUrl>https://github.com/fsprojects/FSharp.Control.Reactive</RepositoryUrl>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+
     <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
 
@@ -19,11 +20,10 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
 
     <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>symbols.nupkg</SymbolPackageFormat>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
-    <!-- Workaround for building on machines with other frameworks installed https://github.com/GitTools/GitVersion/issues/4192 -->
-    <GitVersionTargetFramework>net6.0</GitVersionTargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\docs\files\img\logo.png" Pack="true" PackagePath="\" />
