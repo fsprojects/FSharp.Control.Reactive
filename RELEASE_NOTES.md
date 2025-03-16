@@ -1,3 +1,7 @@
+### New in 6.1.1 - (Released 2025/3/16)
+
+- Fixed permission in NuGet to allow publishing FSharp.Control.Reactive.Testing
+
 ### New in 6.1.0 - (Released 2025/3/16)
 
 - Relaxed restriction for `System.Reactive` package to allow versions higher than 5.0 by @xperiandri in <https://github.com/fsprojects/FSharp.Control.Reactive/pull/172>

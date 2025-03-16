@@ -8,6 +8,7 @@
     <Description>A F#-friendly wrapper for the Reactive Extensions.</Description>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/fsprojects/FSharp.Control.Reactive</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>logo.png</PackageIcon>
     <PackageTags>F#;FSharp;Reactive Extensions;Rx</PackageTags>
     <RepositoryUrl>https://github.com/fsprojects/FSharp.Control.Reactive</RepositoryUrl>
@@ -30,6 +31,7 @@
   <ItemGroup>
     <None Include="..\..\docs\files\img\logo.png" Pack="true" PackagePath="\" />
     <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="\" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
   <!-- Read Release Notes from RELEASE_NOTES.md (cref https://dev.to/j_sakamoto/writing-a-nuget-package-release-notes-in-an-outside-of-a-csproj-file-3f94) -->
   <Target Name="PreparePackageReleaseNotesFromFile" BeforeTargets="GenerateNuspec">
