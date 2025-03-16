@@ -11,10 +11,6 @@
 - Create a github build with updated tools. by @marklam in <https://github.com/fsprojects/FSharp.Control.Reactive/pull/182>
 - Removed trailing whitespaces by @xperiandri in <https://github.com/fsprojects/FSharp.Control.Reactive/pull/174>
 
-## New Contributors
-
-- @xperiandri made their first contribution in <https://github.com/fsprojects/FSharp.Control.Reactive/pull/172>
-
 **Full Changelog**: <https://github.com/fsprojects/FSharp.Control.Reactive/compare/5.0.5...v6.1.0>
 
 ### New in 6.0.1 - (Released 2024/9/22)
