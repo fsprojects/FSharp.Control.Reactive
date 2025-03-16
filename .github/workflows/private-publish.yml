@@ -11,26 +11,25 @@ on:
 
 jobs:
   build:
-
     runs-on: windows-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: |
-          8.0.x
-    - name: Restore
-      run: dotnet tool restore
-    - name: Build
-      run: dotnet build -c Release
-    - name: Test
-      run: dotnet test --no-build -c Release tests
-    - name: Pack
-      run: dotnet pack -c Release --include-symbols -o bin
-    - name: Push Package to Local Feed
-      run: dotnet nuget push bin\*.nupkg -s https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -k ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+      - name: Restore
+        run: dotnet tool restore
+      - name: Build
+        run: dotnet build -c Release
+      - name: Test
+        run: dotnet test --no-build -c Release tests
+      - name: Pack
+        run: dotnet pack --no-restore -c Release --include-symbols -o bin
+      - name: Push Package to Local Feed
+        run: dotnet nuget push bin\*.nupkg -s https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -k ${{ secrets.GITHUB_TOKEN }}
