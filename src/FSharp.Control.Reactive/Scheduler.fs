@@ -12,9 +12,9 @@ open System.Threading.Tasks
 module Scheduler =
 
     /// Returns the 'ISchedulerLongRunning' implementation of the specified scheduler, or 'None' if no such implementation is available.
-    let asLongRunning (sch : IScheduler) = 
-        match sch.AsLongRunning () with 
-        | null -> None 
+    let asLongRunning (sch : IScheduler) =
+        match sch.AsLongRunning () with
+        | null -> None
         | x -> Some x
 
     type Scheduler () =
@@ -29,7 +29,7 @@ module Scheduler =
 module Schedule =
 
     /// Schedule multiple 'schedule' operations together
-    let multiple (fs : (IScheduler -> IDisposable) list) sch = 
+    let multiple (fs : (IScheduler -> IDisposable) list) sch =
         List.map (fun f -> f sch) fs |> Disposables.compose
 
     (***************************************************************
@@ -42,7 +42,7 @@ module Schedule =
     /// Schedules an function to be executed at a specified absolute time.
     let actionOffset offset f sch =
         Scheduler.Schedule (sch, (offset : DateTimeOffset), Action f)
-    
+
     /// Schedules an function to be executed.
     let actionLong f sch =
         Scheduler.ScheduleLongRunning (sch, Action<ICancelable> f)
@@ -106,7 +106,7 @@ module Schedule =
     /// If the scheduler supports periodic scheduling, the request will be forwarded to the periodic scheduling implementation.
     /// If the scheduler provides stopwatch functionality, the periodic task will be emulated using recursive scheduling with a stopwatch to correct for time slippage.
     /// Otherwise, the periodic task will be emulated using recursive scheduling.
-    let periodicAccAction state period f sch = 
+    let periodicAccAction state period f sch =
         Scheduler.SchedulePeriodic (sch, state, period, Action<_> f)
 
      /// Schedules a periodic piece  of work by dynamically discovering the scheduler's capabilities.
@@ -122,14 +122,14 @@ module Schedule =
 
     /// Returns a scheduler that represents the original scheduler, without any of its interface-based optimizations (e.g. long running scheduling).
     let disableOptimizations = Scheduler.DisableOptimizations
-    
+
     /// Returns a scheduler that represents the original scheduler, without any of its interface-based optimizations (e.g. long running scheduling).
     let disableOptimizationsTypes (optimizationInterfaces : Type list) sch =
         Scheduler.DisableOptimizations (sch, optimizationInterfaces |> List.toArray)
 
     /// Returns a scheduler that wraps the original scheduler, adding exception handling for scheduled actions.
     let catch f sch = Scheduler.Catch (sch, Func<_, _> f)
-   
+
     (***************************************************************
      * Async
      ***************************************************************)
@@ -153,7 +153,7 @@ module Schedule =
     /// Suspends execution of the current work item on the scheduler for the specified duration.
     /// The caller should await the result of calling 'sleep' to schedule the remainder of the current work item (known as the continuation) after the specified duration.
     let sleep dueTime sch = Scheduler.Sleep (sch, (dueTime : TimeSpan)) |> asAsync
-    
+
     /// Suspends execution of the current work item on the scheduler for the specified duration.
     /// The caller should await the result of calling 'sleep' to schedule the remainder of the current work item (known as the continuation) after the specified duration.
     let sleepCancel dueTime ct sch = Scheduler.Sleep (sch, (dueTime : TimeSpan), ct) |> asAsync
@@ -178,8 +178,8 @@ module Schedule =
 
     /// Schedules the work using an asynchonous function, allowing for cooperative scheduling in a imperative coding style.
     let async f sch =
-        let ff = Func<IScheduler, CancellationToken, Task> (fun sc ct -> 
-            f sc ct |> asTask ct :> Task) 
+        let ff = Func<IScheduler, CancellationToken, Task> (fun sc ct ->
+            f sc ct |> asTask ct :> Task)
         Scheduler.ScheduleAsync (sch, ff)
 
     /// Schedules the work using an asynchonous function, allowing for cooperative scheduling in a imperative coding style.
@@ -190,7 +190,7 @@ module Schedule =
 
     /// Schedules the work using an asynchonous function, allowing for cooperative scheduling in a imperative coding style.
     let asyncAccUnit state f sch =
-        let ff = Func<IScheduler, 'state, CancellationToken, Task> (fun sc st ct -> 
+        let ff = Func<IScheduler, 'state, CancellationToken, Task> (fun sc st ct ->
             f sc st ct |> asTask ct :> Task)
         Scheduler.ScheduleAsync (sch, state, ff)
 
@@ -205,7 +205,7 @@ module Schedule =
         let ff = Func<IScheduler, CancellationToken, Task> (fun sc ct ->
             f sc ct |> asTask ct :> Task)
         Scheduler.ScheduleAsync (sch, (dueTime : TimeSpan), ff)
-    
+
     /// Schedules the work using an asynchonous function, allowing for cooperative scheduling in a imperative coding style.
     let asyncSpanResult dueTime f sch =
         let ff = Func<IScheduler, CancellationToken, Task<IDisposable>> (fun sc ct ->
@@ -226,7 +226,7 @@ module Schedule =
 
     /// Schedules the work using an asynchonous function, allowing for cooperative scheduling in a imperative coding style.
     let asyncAccSpanUnit state dueTime f sch =
-        let ff = Func<IScheduler, 'state, CancellationToken, Task> (fun sc st ct -> 
+        let ff = Func<IScheduler, 'state, CancellationToken, Task> (fun sc st ct ->
             f sc st ct |> asTask ct :> Task)
         Scheduler.ScheduleAsync (sch, state, (dueTime : TimeSpan), ff)
 
@@ -248,4 +248,3 @@ module Schedule =
             f sc st ct |> asTask ct :> Task<_>)
         Scheduler.ScheduleAsync (sch, state, (dueTime : DateTimeOffset), ff)
 
-    
